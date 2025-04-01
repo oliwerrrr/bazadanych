@@ -5,7 +5,7 @@ import csv
 
 # Parametry generowania danych - możesz je dostosować
 nTeachers = random.randrange(90, 110)    # Około 100 nauczycieli
-nStudents = random.randrange(900, 1100)  # Około 1000 uczniów
+nStudents = random.randrange(9000, 11000)  # Około 1000 uczniów
 house_names = ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"]
 house_symbols = ["Lion", "Snake", "Badger", "Eagle"]
 grade_values = ["O", "E", "A", "P", "D", "T"]  # Oceny w Hogwarts: Outstanding, Exceeds Expectations, Acceptable, Poor, Dreadful, Troll

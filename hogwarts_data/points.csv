@@ -1,0 +1,2956 @@
+id;value;description;award_date;student_id;teacher_id
+0;-44;Using magic in corridors;2024-04-09;602;1
+1;-16;Disrespecting a teacher;2024-04-28;52;78
+2;-21;Being out after curfew;2023-01-24;185;12
+3;46;Helping another student;2023-02-01;415;8
+4;21;Outstanding spell performance;2023-04-10;283;38
+5;-6;Being late to class;2023-06-10;369;38
+6;40;Excellent classwork;2024-03-02;830;76
+7;18;Bravery in difficult situation;2023-12-20;721;83
+8;43;Answering correctly in class;2023-03-02;283;42
+9;16;Helping another student;2024-01-15;965;88
+10;35;Outstanding spell performance;2024-12-18;547;38
+11;-10;Disrespecting a teacher;2024-12-02;782;16
+12;21;Answering correctly in class;2024-09-20;234;41
+13;-48;Being out after curfew;2023-06-03;192;30
+14;41;Outstanding spell performance;2024-05-24;969;91
+15;-4;Being late to class;2024-11-09;269;87
+16;-7;Being late to class;2023-10-22;343;93
+17;-39;Disrespecting a teacher;2024-11-09;731;89
+18;6;Bravery in difficult situation;2024-10-19;64;4
+19;-10;Disrespecting a teacher;2023-07-05;506;99
+20;-43;Disrespecting a teacher;2024-03-13;335;44
+21;-14;Breaking school rules;2023-03-21;28;16
+22;-14;Being out after curfew;2024-11-16;540;17
+23;39;Bravery in difficult situation;2024-07-30;496;28
+24;36;Outstanding spell performance;2024-10-27;924;97
+25;39;Excellent classwork;2023-09-28;166;78
+26;26;Outstanding spell performance;2024-02-10;910;21
+27;-41;Using magic in corridors;2023-06-26;478;91
+28;28;Helping another student;2023-02-26;89;91
+29;-45;Being out after curfew;2023-05-07;916;6
+30;49;Bravery in difficult situation;2023-06-10;862;11
+31;3;Outstanding spell performance;2023-09-10;37;99
+32;-35;Being out after curfew;2023-06-24;150;93
+33;-45;Disrespecting a teacher;2023-09-11;92;1
+34;0;Using magic in corridors;2024-02-23;557;19
+35;5;Answering correctly in class;2023-12-25;385;0
+36;34;Excellent classwork;2024-06-02;866;96
+37;12;Answering correctly in class;2023-12-28;201;20
+38;15;Excellent classwork;2024-06-15;333;40
+39;10;Bravery in difficult situation;2023-11-28;574;0
+40;-6;Breaking school rules;2024-09-30;421;48
+41;15;Helping another student;2023-10-02;285;94
+42;-12;Disrespecting a teacher;2024-10-29;510;55
+43;41;Bravery in difficult situation;2024-01-18;167;61
+44;7;Outstanding spell performance;2023-08-12;504;27
+45;-2;Disrespecting a teacher;2023-01-23;673;55
+46;-6;Being out after curfew;2024-12-16;607;83
+47;47;Excellent classwork;2023-02-21;15;68
+48;-44;Using magic in corridors;2023-10-14;1;25
+49;6;Answering correctly in class;2024-08-21;785;36
+50;-28;Breaking school rules;2023-05-01;872;79
+51;26;Answering correctly in class;2023-06-05;378;97
+52;48;Helping another student;2024-05-21;251;83
+53;-33;Being late to class;2023-05-24;47;79
+54;-42;Using magic in corridors;2023-10-22;75;24
+55;11;Answering correctly in class;2023-05-15;844;84
+56;9;Excellent classwork;2023-06-12;115;85
+57;44;Answering correctly in class;2024-04-15;318;73
+58;-7;Disrespecting a teacher;2024-04-28;491;72
+59;-23;Being out after curfew;2023-09-06;956;35
+60;-20;Being out after curfew;2024-03-26;292;33
+61;-43;Disrespecting a teacher;2024-08-10;716;72
+62;31;Bravery in difficult situation;2023-07-19;505;42
+63;25;Outstanding spell performance;2024-12-21;333;65
+64;5;Outstanding spell performance;2024-10-27;978;87
+65;49;Bravery in difficult situation;2023-08-21;927;3
+66;-12;Being late to class;2023-01-27;522;42
+67;14;Helping another student;2024-06-22;726;57
+68;24;Outstanding spell performance;2023-12-08;1;57
+69;-14;Being late to class;2023-11-25;218;77
+70;-42;Being late to class;2024-10-16;676;93
+71;32;Bravery in difficult situation;2023-12-01;151;41
+72;-3;Using magic in corridors;2023-05-12;665;94
+73;-5;Using magic in corridors;2024-03-19;204;52
+74;27;Helping another student;2023-06-08;684;65
+75;25;Bravery in difficult situation;2023-03-31;911;55
+76;26;Helping another student;2024-02-17;2;89
+77;8;Outstanding spell performance;2024-09-25;831;6
+78;24;Bravery in difficult situation;2023-12-09;650;10
+79;20;Outstanding spell performance;2024-08-23;276;46
+80;-41;Being late to class;2024-03-29;936;28
+81;-14;Using magic in corridors;2024-04-06;277;83
+82;28;Excellent classwork;2023-12-26;357;1
+83;-45;Using magic in corridors;2024-01-26;348;32
+84;-29;Disrespecting a teacher;2024-09-27;980;13
+85;-46;Breaking school rules;2024-07-16;841;24
+86;-47;Being late to class;2024-08-14;668;78
+87;4;Answering correctly in class;2023-03-09;845;76
+88;-29;Being out after curfew;2024-11-18;747;81
+89;-4;Using magic in corridors;2023-01-31;659;25
+90;-45;Breaking school rules;2023-10-19;631;94
+91;-37;Disrespecting a teacher;2024-05-19;321;27
+92;42;Bravery in difficult situation;2023-07-27;205;55
+93;0;Breaking school rules;2023-09-22;624;54
+94;21;Outstanding spell performance;2023-09-17;422;55
+95;28;Outstanding spell performance;2023-10-18;486;48
+96;-49;Breaking school rules;2023-12-20;530;24
+97;-48;Being late to class;2023-10-27;772;81
+98;-35;Being late to class;2024-08-23;62;42
+99;24;Outstanding spell performance;2024-10-09;325;30
+100;-41;Disrespecting a teacher;2023-06-08;300;31
+101;-50;Being out after curfew;2023-01-10;772;71
+102;45;Outstanding spell performance;2024-11-20;695;31
+103;15;Bravery in difficult situation;2023-03-08;665;58
+104;27;Helping another student;2023-08-01;92;13
+105;-31;Using magic in corridors;2024-12-27;733;6
+106;-27;Breaking school rules;2023-09-24;454;27
+107;-1;Breaking school rules;2024-11-20;180;30
+108;-39;Using magic in corridors;2024-11-20;727;44
+109;-8;Disrespecting a teacher;2023-08-01;449;63
+110;33;Answering correctly in class;2024-08-18;423;77
+111;19;Bravery in difficult situation;2024-04-22;698;80
+112;48;Answering correctly in class;2023-02-07;836;84
+113;-2;Disrespecting a teacher;2023-12-23;268;85
+114;38;Excellent classwork;2024-06-10;480;30
+115;-48;Disrespecting a teacher;2023-08-18;557;70
+116;9;Helping another student;2023-01-04;775;39
+117;2;Answering correctly in class;2023-05-19;569;21
+118;-43;Breaking school rules;2023-04-12;673;42
+119;-6;Disrespecting a teacher;2023-02-25;638;97
+120;-21;Breaking school rules;2023-06-09;165;33
+121;28;Outstanding spell performance;2023-12-02;339;41
+122;14;Excellent classwork;2024-06-06;574;67
+123;-47;Using magic in corridors;2023-02-09;747;93
+124;-41;Using magic in corridors;2023-11-22;748;75
+125;8;Answering correctly in class;2024-11-12;125;96
+126;-22;Being late to class;2024-02-28;21;83
+127;11;Outstanding spell performance;2023-01-10;259;56
+128;21;Answering correctly in class;2023-11-14;342;2
+129;31;Excellent classwork;2024-05-17;542;52
+130;-21;Breaking school rules;2023-10-25;557;45
+131;28;Excellent classwork;2024-04-14;745;27
+132;-7;Disrespecting a teacher;2023-11-13;822;80
+133;-48;Being out after curfew;2024-02-04;558;87
+134;-27;Disrespecting a teacher;2023-09-10;66;35
+135;24;Outstanding spell performance;2024-02-04;887;74
+136;47;Bravery in difficult situation;2024-10-08;195;74
+137;-25;Being late to class;2023-12-07;792;64
+138;23;Helping another student;2023-07-17;632;97
+139;17;Excellent classwork;2023-02-12;489;48
+140;-18;Disrespecting a teacher;2023-04-26;603;84
+141;44;Outstanding spell performance;2023-01-13;310;50
+142;35;Bravery in difficult situation;2023-08-17;188;58
+143;43;Answering correctly in class;2023-11-13;831;54
+144;-31;Using magic in corridors;2024-08-19;222;6
+145;-13;Breaking school rules;2023-01-28;835;2
+146;-33;Being late to class;2024-06-20;898;41
+147;-11;Using magic in corridors;2023-02-23;204;22
+148;20;Excellent classwork;2023-10-15;375;10
+149;-24;Using magic in corridors;2024-02-27;573;36
+150;2;Outstanding spell performance;2024-05-20;243;33
+151;20;Helping another student;2024-06-30;881;5
+152;25;Bravery in difficult situation;2023-06-03;298;88
+153;-30;Breaking school rules;2023-09-10;201;2
+154;-40;Using magic in corridors;2024-01-18;834;31
+155;-15;Disrespecting a teacher;2023-05-22;244;14
+156;49;Answering correctly in class;2024-08-01;157;88
+157;48;Answering correctly in class;2024-03-28;206;52
+158;-31;Being late to class;2024-01-09;445;40
+159;50;Helping another student;2023-11-22;766;88
+160;1;Answering correctly in class;2024-01-23;746;11
+161;35;Outstanding spell performance;2023-08-09;727;75
+162;48;Excellent classwork;2024-05-18;63;5
+163;-34;Being late to class;2024-06-03;795;101
+164;42;Helping another student;2024-01-27;231;86
+165;48;Bravery in difficult situation;2024-01-25;446;70
+166;16;Answering correctly in class;2023-04-07;778;33
+167;47;Helping another student;2024-12-03;161;54
+168;31;Bravery in difficult situation;2024-08-19;694;1
+169;-12;Being late to class;2023-02-03;475;32
+170;-40;Being out after curfew;2023-03-07;602;77
+171;-10;Being late to class;2024-03-21;826;80
+172;48;Bravery in difficult situation;2024-09-24;973;62
+173;0;Being late to class;2023-08-29;754;83
+174;-22;Breaking school rules;2023-08-29;721;59
+175;-9;Using magic in corridors;2023-04-09;901;63
+176;47;Answering correctly in class;2024-04-29;583;53
+177;44;Helping another student;2023-12-22;542;13
+178;45;Helping another student;2023-09-04;304;30
+179;22;Bravery in difficult situation;2023-07-06;688;82
+180;50;Answering correctly in class;2024-08-08;829;6
+181;7;Answering correctly in class;2023-02-08;43;94
+182;-25;Being out after curfew;2023-08-03;666;92
+183;-12;Using magic in corridors;2024-06-18;560;14
+184;22;Excellent classwork;2024-09-13;367;95
+185;-4;Disrespecting a teacher;2023-07-30;65;55
+186;-28;Breaking school rules;2024-12-09;333;94
+187;-5;Being out after curfew;2023-02-10;332;14
+188;-35;Disrespecting a teacher;2024-05-11;723;101
+189;-29;Disrespecting a teacher;2024-03-09;693;80
+190;-3;Being late to class;2023-12-12;564;68
+191;-49;Breaking school rules;2024-01-02;491;56
+192;38;Outstanding spell performance;2024-07-10;176;29
+193;-43;Using magic in corridors;2023-11-21;842;19
+194;16;Answering correctly in class;2023-08-04;681;49
+195;-34;Using magic in corridors;2023-01-23;671;33
+196;-49;Breaking school rules;2024-04-16;649;64
+197;-19;Breaking school rules;2023-09-24;100;56
+198;-3;Breaking school rules;2024-09-29;607;42
+199;47;Helping another student;2024-03-23;630;90
+200;-35;Being out after curfew;2023-10-06;69;69
+201;-8;Disrespecting a teacher;2023-03-15;322;83
+202;47;Bravery in difficult situation;2024-04-06;399;91
+203;28;Outstanding spell performance;2024-03-23;982;44
+204;-21;Breaking school rules;2023-06-11;744;29
+205;-4;Being late to class;2024-05-10;743;49
+206;-35;Disrespecting a teacher;2024-01-30;5;86
+207;-2;Breaking school rules;2023-06-20;597;5
+208;-45;Being late to class;2024-06-18;242;53
+209;-21;Being late to class;2023-06-14;917;85
+210;27;Helping another student;2023-01-01;552;90
+211;47;Bravery in difficult situation;2024-05-09;258;55
+212;-17;Breaking school rules;2024-01-02;56;67
+213;23;Bravery in difficult situation;2023-01-15;3;0
+214;-1;Being late to class;2023-08-27;783;16
+215;43;Helping another student;2024-05-23;637;6
+216;-17;Breaking school rules;2023-12-06;3;18
+217;12;Excellent classwork;2024-09-21;345;73
+218;21;Excellent classwork;2024-10-10;299;42
+219;20;Outstanding spell performance;2023-11-10;542;4
+220;-12;Being late to class;2024-01-27;332;24
+221;-8;Being late to class;2024-11-02;287;11
+222;-1;Breaking school rules;2024-08-27;939;48
+223;18;Excellent classwork;2024-03-19;381;93
+224;6;Helping another student;2023-09-17;164;47
+225;-43;Breaking school rules;2024-09-12;81;7
+226;34;Answering correctly in class;2024-09-09;734;59
+227;-26;Disrespecting a teacher;2023-11-18;641;10
+228;-42;Using magic in corridors;2023-06-28;649;81
+229;-20;Using magic in corridors;2024-03-29;10;4
+230;24;Outstanding spell performance;2023-11-03;301;54
+231;0;Disrespecting a teacher;2024-07-18;464;12
+232;20;Helping another student;2023-05-14;257;18
+233;10;Answering correctly in class;2024-08-31;840;93
+234;-16;Breaking school rules;2024-02-06;578;101
+235;-46;Using magic in corridors;2024-04-04;200;38
+236;48;Excellent classwork;2024-05-06;145;46
+237;-48;Breaking school rules;2024-02-26;419;27
+238;-21;Being out after curfew;2023-12-04;929;18
+239;-35;Using magic in corridors;2024-01-05;341;68
+240;-33;Being late to class;2023-12-02;175;59
+241;5;Outstanding spell performance;2023-05-04;433;95
+242;26;Answering correctly in class;2023-05-07;131;52
+243;-13;Disrespecting a teacher;2024-12-23;83;59
+244;48;Outstanding spell performance;2024-05-24;630;28
+245;29;Bravery in difficult situation;2023-02-04;509;24
+246;-38;Being late to class;2024-11-07;756;30
+247;-40;Disrespecting a teacher;2024-02-29;477;30
+248;25;Answering correctly in class;2023-10-28;11;98
+249;29;Helping another student;2023-03-12;562;9
+250;-16;Being out after curfew;2024-01-15;204;85
+251;10;Excellent classwork;2023-02-11;446;65
+252;-1;Breaking school rules;2023-01-11;638;46
+253;45;Helping another student;2024-07-09;259;46
+254;-3;Being out after curfew;2023-07-12;684;69
+255;-20;Using magic in corridors;2024-08-02;721;37
+256;41;Answering correctly in class;2023-11-24;359;58
+257;-27;Being late to class;2023-02-18;135;15
+258;34;Outstanding spell performance;2024-10-30;907;68
+259;26;Bravery in difficult situation;2024-04-29;18;76
+260;-33;Disrespecting a teacher;2023-04-23;140;30
+261;-49;Breaking school rules;2024-02-21;305;58
+262;-47;Breaking school rules;2024-04-10;459;41
+263;23;Excellent classwork;2024-05-20;186;8
+264;31;Outstanding spell performance;2023-12-03;374;56
+265;35;Excellent classwork;2024-07-19;856;49
+266;-10;Disrespecting a teacher;2024-02-25;769;34
+267;-22;Disrespecting a teacher;2024-09-22;161;89
+268;4;Answering correctly in class;2024-09-20;157;91
+269;-41;Being late to class;2024-04-10;336;25
+270;-42;Being out after curfew;2023-12-01;405;97
+271;35;Bravery in difficult situation;2023-12-18;230;57
+272;6;Helping another student;2024-01-12;66;89
+273;11;Excellent classwork;2023-08-11;533;43
+274;36;Bravery in difficult situation;2023-03-05;440;27
+275;31;Bravery in difficult situation;2023-03-05;534;49
+276;7;Bravery in difficult situation;2024-07-05;726;49
+277;-5;Breaking school rules;2023-01-26;354;25
+278;-22;Breaking school rules;2023-05-20;53;54
+279;-24;Disrespecting a teacher;2023-10-17;829;10
+280;-3;Being out after curfew;2023-03-31;321;80
+281;42;Bravery in difficult situation;2024-07-23;869;96
+282;-12;Breaking school rules;2023-11-23;321;96
+283;-20;Disrespecting a teacher;2024-09-14;450;47
+284;50;Helping another student;2023-03-22;826;1
+285;-38;Being late to class;2024-12-19;913;25
+286;0;Breaking school rules;2023-12-20;423;30
+287;19;Bravery in difficult situation;2024-02-27;129;24
+288;36;Answering correctly in class;2023-05-24;942;88
+289;48;Excellent classwork;2023-04-01;706;0
+290;-29;Breaking school rules;2023-10-27;42;0
+291;7;Helping another student;2023-09-16;83;81
+292;38;Bravery in difficult situation;2024-08-07;762;91
+293;-38;Using magic in corridors;2023-02-14;593;94
+294;45;Bravery in difficult situation;2024-12-30;746;19
+295;-8;Breaking school rules;2024-12-15;303;45
+296;-50;Breaking school rules;2023-05-22;482;71
+297;9;Bravery in difficult situation;2024-08-07;192;45
+298;23;Excellent classwork;2023-12-15;350;52
+299;-30;Using magic in corridors;2023-12-24;326;41
+300;-27;Disrespecting a teacher;2024-08-20;867;53
+301;21;Excellent classwork;2023-11-07;32;44
+302;-34;Breaking school rules;2023-12-21;7;54
+303;11;Excellent classwork;2023-12-02;145;80
+304;33;Bravery in difficult situation;2023-08-09;552;41
+305;-22;Breaking school rules;2024-09-08;177;86
+306;-16;Breaking school rules;2023-08-05;798;73
+307;-9;Disrespecting a teacher;2024-10-12;843;100
+308;49;Bravery in difficult situation;2023-12-16;755;11
+309;-24;Being late to class;2024-03-20;189;60
+310;-33;Being late to class;2024-09-29;848;5
+311;-13;Breaking school rules;2024-01-09;68;91
+312;46;Answering correctly in class;2023-01-25;809;97
+313;-14;Disrespecting a teacher;2024-05-31;358;43
+314;-15;Being out after curfew;2023-11-03;834;43
+315;-33;Being out after curfew;2024-12-02;982;68
+316;-25;Breaking school rules;2024-05-15;267;28
+317;-21;Being late to class;2024-03-24;899;17
+318;-20;Being late to class;2023-01-24;437;70
+319;35;Bravery in difficult situation;2023-06-04;818;34
+320;39;Bravery in difficult situation;2023-10-09;863;23
+321;37;Bravery in difficult situation;2023-12-24;420;71
+322;-21;Being late to class;2023-06-17;220;32
+323;17;Excellent classwork;2023-03-02;125;19
+324;-38;Being out after curfew;2024-12-06;69;13
+325;-26;Being late to class;2023-08-15;132;57
+326;50;Excellent classwork;2023-12-08;876;21
+327;18;Bravery in difficult situation;2024-08-03;11;88
+328;-40;Being out after curfew;2024-04-18;417;0
+329;-45;Breaking school rules;2023-07-13;89;89
+330;-34;Being late to class;2023-01-04;111;20
+331;-8;Using magic in corridors;2023-09-19;614;93
+332;41;Helping another student;2023-05-10;684;55
+333;-8;Disrespecting a teacher;2024-06-05;792;14
+334;-31;Being late to class;2023-12-18;265;66
+335;38;Outstanding spell performance;2023-11-13;72;64
+336;-6;Being out after curfew;2024-09-22;629;71
+337;-6;Being out after curfew;2024-08-17;160;73
+338;29;Answering correctly in class;2023-03-27;327;14
+339;-28;Breaking school rules;2024-05-17;670;82
+340;20;Bravery in difficult situation;2023-11-25;211;9
+341;4;Bravery in difficult situation;2024-04-22;299;99
+342;46;Answering correctly in class;2024-11-08;117;51
+343;36;Bravery in difficult situation;2023-12-09;550;61
+344;-15;Using magic in corridors;2023-11-08;774;80
+345;-28;Breaking school rules;2023-10-03;553;63
+346;-18;Being out after curfew;2023-09-05;596;66
+347;-22;Using magic in corridors;2023-09-18;636;97
+348;-34;Being out after curfew;2023-02-25;391;37
+349;46;Outstanding spell performance;2024-10-02;425;32
+350;-42;Using magic in corridors;2023-06-17;258;27
+351;2;Helping another student;2024-07-20;770;4
+352;32;Outstanding spell performance;2023-12-28;185;81
+353;-39;Breaking school rules;2023-10-01;803;20
+354;-1;Breaking school rules;2023-08-28;93;38
+355;-36;Disrespecting a teacher;2023-12-20;703;35
+356;23;Bravery in difficult situation;2023-07-07;435;59
+357;-33;Using magic in corridors;2023-09-25;883;21
+358;-41;Being out after curfew;2023-09-05;55;58
+359;-28;Breaking school rules;2023-10-24;470;93
+360;-29;Being late to class;2023-05-12;67;73
+361;44;Outstanding spell performance;2023-01-26;174;78
+362;18;Helping another student;2023-02-24;759;93
+363;40;Excellent classwork;2023-05-17;764;48
+364;0;Being late to class;2023-06-18;143;45
+365;10;Outstanding spell performance;2024-12-10;402;65
+366;-25;Using magic in corridors;2023-02-10;76;80
+367;-27;Breaking school rules;2023-02-06;537;49
+368;-40;Being late to class;2023-05-19;933;21
+369;-16;Being late to class;2024-06-07;560;95
+370;28;Bravery in difficult situation;2024-03-17;384;82
+371;-45;Using magic in corridors;2024-05-18;332;7
+372;-14;Using magic in corridors;2023-10-06;12;73
+373;29;Excellent classwork;2023-08-23;310;71
+374;4;Outstanding spell performance;2024-10-31;393;76
+375;1;Outstanding spell performance;2024-12-09;13;23
+376;-12;Using magic in corridors;2024-07-19;743;69
+377;13;Answering correctly in class;2023-09-07;944;28
+378;17;Answering correctly in class;2023-11-23;650;8
+379;20;Outstanding spell performance;2023-09-03;202;2
+380;4;Bravery in difficult situation;2024-10-12;321;86
+381;5;Answering correctly in class;2024-06-10;230;28
+382;-21;Breaking school rules;2024-01-09;697;79
+383;33;Excellent classwork;2024-10-05;559;21
+384;-40;Being out after curfew;2024-06-24;611;30
+385;-43;Using magic in corridors;2023-02-15;790;94
+386;-44;Disrespecting a teacher;2024-03-16;474;34
+387;-43;Being late to class;2023-02-17;585;26
+388;7;Answering correctly in class;2024-01-18;557;21
+389;14;Answering correctly in class;2023-06-30;916;56
+390;49;Answering correctly in class;2023-07-25;362;62
+391;-8;Using magic in corridors;2023-01-05;728;78
+392;27;Bravery in difficult situation;2023-05-05;590;19
+393;-12;Being late to class;2024-04-04;953;79
+394;20;Bravery in difficult situation;2024-02-25;646;38
+395;-47;Being out after curfew;2024-06-11;375;84
+396;-48;Being out after curfew;2023-05-28;3;37
+397;6;Outstanding spell performance;2024-08-06;298;25
+398;48;Excellent classwork;2023-12-05;132;73
+399;-23;Being late to class;2023-06-04;142;75
+400;50;Bravery in difficult situation;2024-06-06;663;96
+401;29;Helping another student;2024-12-22;655;91
+402;-20;Breaking school rules;2023-03-14;95;16
+403;-28;Using magic in corridors;2024-11-06;968;26
+404;-40;Being out after curfew;2023-10-30;137;15
+405;49;Helping another student;2024-08-28;751;87
+406;35;Outstanding spell performance;2023-11-06;926;5
+407;4;Excellent classwork;2024-05-06;375;7
+408;16;Outstanding spell performance;2024-08-04;608;97
+409;23;Answering correctly in class;2024-12-12;658;68
+410;-42;Being late to class;2023-09-29;378;27
+411;33;Helping another student;2024-08-25;247;63
+412;-11;Being out after curfew;2023-04-07;896;41
+413;-14;Breaking school rules;2024-02-12;285;37
+414;-22;Being out after curfew;2024-03-26;431;30
+415;-32;Being out after curfew;2024-12-23;506;4
+416;-50;Disrespecting a teacher;2023-10-29;227;96
+417;-50;Disrespecting a teacher;2024-01-12;51;64
+418;-44;Being out after curfew;2023-02-14;39;55
+419;-16;Disrespecting a teacher;2023-05-24;440;36
+420;42;Outstanding spell performance;2023-05-30;69;2
+421;6;Helping another student;2023-06-10;637;47
+422;36;Helping another student;2023-09-12;501;95
+423;-30;Being late to class;2023-09-14;217;47
+424;22;Excellent classwork;2024-03-16;853;45
+425;43;Answering correctly in class;2024-07-16;949;64
+426;12;Bravery in difficult situation;2023-04-05;328;95
+427;-14;Breaking school rules;2024-11-19;139;39
+428;-31;Disrespecting a teacher;2024-08-04;594;85
+429;6;Bravery in difficult situation;2023-07-05;901;15
+430;1;Outstanding spell performance;2023-01-22;277;18
+431;-29;Breaking school rules;2023-09-01;971;41
+432;-15;Breaking school rules;2023-09-21;613;21
+433;-44;Breaking school rules;2023-07-26;355;80
+434;-50;Disrespecting a teacher;2023-12-06;215;6
+435;8;Answering correctly in class;2023-09-07;454;98
+436;9;Outstanding spell performance;2023-07-12;182;7
+437;-47;Breaking school rules;2023-08-14;20;32
+438;34;Answering correctly in class;2024-02-27;295;9
+439;-33;Using magic in corridors;2024-07-30;14;30
+440;12;Excellent classwork;2024-04-13;674;7
+441;-4;Using magic in corridors;2023-03-07;210;90
+442;-39;Breaking school rules;2024-06-02;911;13
+443;19;Outstanding spell performance;2023-06-01;580;48
+444;-15;Disrespecting a teacher;2024-07-24;896;73
+445;16;Outstanding spell performance;2023-07-04;129;28
+446;-32;Disrespecting a teacher;2024-08-20;116;27
+447;6;Outstanding spell performance;2023-07-03;202;63
+448;6;Bravery in difficult situation;2024-03-19;905;49
+449;8;Outstanding spell performance;2024-08-17;931;62
+450;50;Outstanding spell performance;2023-06-04;880;88
+451;-7;Disrespecting a teacher;2023-03-07;86;44
+452;12;Answering correctly in class;2023-02-14;952;53
+453;2;Excellent classwork;2024-01-26;739;45
+454;-47;Being late to class;2024-12-16;428;54
+455;-27;Being late to class;2023-10-14;849;62
+456;50;Outstanding spell performance;2023-10-31;723;41
+457;37;Helping another student;2024-09-10;773;63
+458;50;Bravery in difficult situation;2024-01-16;981;25
+459;37;Excellent classwork;2023-11-26;294;97
+460;-12;Being out after curfew;2024-01-22;763;51
+461;46;Excellent classwork;2024-01-26;346;2
+462;22;Helping another student;2024-09-15;239;12
+463;-35;Disrespecting a teacher;2023-10-19;693;57
+464;-30;Disrespecting a teacher;2023-08-17;117;41
+465;8;Outstanding spell performance;2023-07-02;677;82
+466;-3;Using magic in corridors;2024-05-03;518;45
+467;-18;Disrespecting a teacher;2023-02-14;764;90
+468;31;Answering correctly in class;2024-02-07;653;21
+469;-46;Being out after curfew;2023-09-03;383;14
+470;9;Answering correctly in class;2024-11-06;44;54
+471;38;Excellent classwork;2024-10-26;724;8
+472;-10;Breaking school rules;2024-10-07;70;58
+473;-32;Breaking school rules;2024-06-06;859;29
+474;-33;Being late to class;2024-08-11;252;5
+475;-23;Being late to class;2024-07-30;260;60
+476;7;Outstanding spell performance;2024-01-27;384;86
+477;-19;Being late to class;2024-03-14;637;64
+478;26;Helping another student;2023-01-24;299;57
+479;-8;Being late to class;2023-07-11;915;84
+480;0;Being late to class;2024-08-01;766;78
+481;48;Helping another student;2023-05-09;927;14
+482;24;Outstanding spell performance;2024-06-15;83;4
+483;-8;Being late to class;2023-02-07;911;61
+484;50;Excellent classwork;2024-07-31;910;11
+485;-26;Using magic in corridors;2023-10-21;308;93
+486;-33;Disrespecting a teacher;2023-09-09;372;66
+487;-39;Using magic in corridors;2023-11-05;207;37
+488;-14;Being late to class;2024-09-07;533;38
+489;0;Using magic in corridors;2024-11-29;473;81
+490;32;Bravery in difficult situation;2024-07-17;560;14
+491;-15;Disrespecting a teacher;2023-04-04;596;70
+492;-29;Using magic in corridors;2024-09-03;33;7
+493;-4;Disrespecting a teacher;2023-01-21;413;96
+494;-40;Being late to class;2023-05-04;697;55
+495;-19;Being out after curfew;2024-05-14;352;31
+496;-37;Being out after curfew;2024-07-14;769;46
+497;0;Being late to class;2023-03-06;684;62
+498;-27;Being late to class;2023-04-11;223;46
+499;-27;Disrespecting a teacher;2024-08-31;287;97
+500;44;Answering correctly in class;2024-08-27;363;91
+501;-22;Being out after curfew;2023-03-19;750;28
+502;46;Outstanding spell performance;2024-02-28;963;95
+503;15;Outstanding spell performance;2023-11-01;503;8
+504;-25;Being late to class;2024-10-28;564;68
+505;-39;Disrespecting a teacher;2024-11-27;185;0
+506;-11;Using magic in corridors;2023-07-27;408;15
+507;13;Excellent classwork;2024-05-08;254;101
+508;41;Helping another student;2024-01-20;845;73
+509;-31;Disrespecting a teacher;2024-06-05;711;101
+510;-43;Using magic in corridors;2023-05-31;309;81
+511;32;Answering correctly in class;2023-07-28;854;23
+512;24;Helping another student;2023-02-09;170;19
+513;9;Helping another student;2023-05-05;114;73
+514;12;Bravery in difficult situation;2023-12-26;806;44
+515;36;Bravery in difficult situation;2023-05-12;622;37
+516;-21;Disrespecting a teacher;2023-08-09;953;27
+517;12;Excellent classwork;2024-12-21;431;71
+518;23;Answering correctly in class;2023-10-26;47;17
+519;12;Excellent classwork;2023-08-08;536;3
+520;-21;Being late to class;2024-10-28;959;10
+521;-44;Disrespecting a teacher;2024-11-17;939;67
+522;-5;Using magic in corridors;2023-11-03;844;62
+523;-3;Being late to class;2024-03-24;430;0
+524;26;Answering correctly in class;2024-11-26;844;39
+525;25;Excellent classwork;2023-06-14;640;79
+526;-48;Using magic in corridors;2024-02-16;183;11
+527;-4;Using magic in corridors;2023-03-01;955;69
+528;-16;Being out after curfew;2024-10-26;128;84
+529;-33;Being out after curfew;2024-09-07;629;5
+530;-22;Disrespecting a teacher;2024-01-30;364;51
+531;-24;Disrespecting a teacher;2023-11-14;964;19
+532;-6;Breaking school rules;2023-06-14;959;75
+533;-37;Disrespecting a teacher;2024-11-23;182;75
+534;-25;Disrespecting a teacher;2023-08-15;9;23
+535;15;Bravery in difficult situation;2023-09-06;6;27
+536;-35;Using magic in corridors;2024-02-01;132;95
+537;7;Excellent classwork;2024-09-17;519;84
+538;39;Answering correctly in class;2023-03-23;358;18
+539;-16;Using magic in corridors;2024-12-07;951;99
+540;-31;Breaking school rules;2024-03-27;646;82
+541;25;Answering correctly in class;2023-06-08;950;91
+542;-11;Disrespecting a teacher;2023-12-20;505;40
+543;30;Helping another student;2024-01-18;322;47
+544;44;Answering correctly in class;2024-01-06;399;79
+545;36;Outstanding spell performance;2023-09-09;422;87
+546;-41;Being out after curfew;2024-03-08;841;20
+547;-24;Being late to class;2023-08-18;245;5
+548;-49;Breaking school rules;2023-07-31;185;3
+549;10;Answering correctly in class;2023-08-31;257;77
+550;-6;Disrespecting a teacher;2024-10-25;900;46
+551;-5;Using magic in corridors;2023-10-06;248;92
+552;-49;Using magic in corridors;2024-05-09;561;62
+553;1;Outstanding spell performance;2023-02-06;90;16
+554;39;Bravery in difficult situation;2024-02-07;396;97
+555;9;Answering correctly in class;2023-09-15;11;97
+556;20;Answering correctly in class;2023-11-14;560;55
+557;-18;Being out after curfew;2023-06-29;454;70
+558;-42;Using magic in corridors;2023-03-12;134;50
+559;26;Helping another student;2024-02-06;513;66
+560;26;Helping another student;2024-02-14;600;72
+561;2;Excellent classwork;2023-03-14;602;69
+562;11;Outstanding spell performance;2024-07-11;682;43
+563;35;Outstanding spell performance;2023-11-21;916;90
+564;-47;Being out after curfew;2024-09-18;733;101
+565;37;Bravery in difficult situation;2024-02-13;913;1
+566;42;Helping another student;2023-05-17;328;28
+567;10;Bravery in difficult situation;2023-03-28;433;85
+568;20;Answering correctly in class;2023-01-10;200;14
+569;21;Excellent classwork;2024-02-12;16;61
+570;-37;Using magic in corridors;2024-05-03;106;23
+571;-44;Breaking school rules;2024-12-16;774;61
+572;-43;Using magic in corridors;2024-02-09;741;46
+573;-2;Being out after curfew;2024-12-24;545;31
+574;-1;Being late to class;2024-10-23;682;82
+575;-43;Breaking school rules;2023-08-03;60;41
+576;26;Answering correctly in class;2024-06-05;980;12
+577;20;Bravery in difficult situation;2023-08-26;481;80
+578;30;Excellent classwork;2024-02-12;566;33
+579;-48;Disrespecting a teacher;2023-10-15;409;48
+580;28;Answering correctly in class;2024-12-25;157;4
+581;31;Excellent classwork;2023-07-08;239;59
+582;-43;Being late to class;2024-01-14;98;58
+583;20;Helping another student;2024-07-17;213;90
+584;-26;Breaking school rules;2023-06-16;892;33
+585;14;Helping another student;2023-05-28;236;100
+586;23;Helping another student;2024-04-21;594;37
+587;-12;Breaking school rules;2024-05-27;758;71
+588;39;Outstanding spell performance;2023-05-08;338;79
+589;12;Outstanding spell performance;2023-02-21;482;75
+590;-21;Being late to class;2023-04-21;151;35
+591;-13;Being late to class;2023-04-27;80;17
+592;-6;Being out after curfew;2023-08-25;172;36
+593;-42;Being late to class;2023-10-02;831;80
+594;-22;Disrespecting a teacher;2024-08-15;936;84
+595;-2;Being late to class;2023-05-03;964;53
+596;36;Answering correctly in class;2023-01-27;704;68
+597;14;Outstanding spell performance;2023-04-14;501;6
+598;35;Helping another student;2023-11-17;333;19
+599;7;Excellent classwork;2023-09-10;91;12
+600;26;Outstanding spell performance;2023-06-02;700;48
+601;44;Outstanding spell performance;2024-08-28;77;40
+602;11;Answering correctly in class;2024-05-24;657;28
+603;3;Excellent classwork;2024-11-20;464;68
+604;-20;Being out after curfew;2023-06-17;610;80
+605;20;Helping another student;2023-09-21;761;46
+606;-41;Being late to class;2023-07-07;740;83
+607;20;Helping another student;2023-08-01;702;64
+608;-30;Being out after curfew;2024-02-17;956;25
+609;36;Outstanding spell performance;2023-08-07;932;6
+610;-33;Disrespecting a teacher;2024-01-24;358;3
+611;48;Bravery in difficult situation;2023-10-27;898;100
+612;22;Excellent classwork;2023-02-07;662;81
+613;44;Answering correctly in class;2023-10-09;974;75
+614;48;Answering correctly in class;2024-08-16;40;71
+615;11;Answering correctly in class;2024-07-31;623;37
+616;-45;Being out after curfew;2024-07-09;721;77
+617;-8;Being out after curfew;2023-04-04;336;8
+618;9;Bravery in difficult situation;2024-12-31;395;69
+619;-9;Being out after curfew;2024-07-15;30;69
+620;27;Outstanding spell performance;2023-06-29;820;24
+621;-46;Being late to class;2023-04-16;484;62
+622;18;Excellent classwork;2024-08-09;150;49
+623;-36;Using magic in corridors;2024-08-21;43;74
+624;10;Outstanding spell performance;2024-04-07;425;49
+625;-34;Using magic in corridors;2023-03-06;189;90
+626;15;Helping another student;2023-02-01;27;52
+627;-11;Using magic in corridors;2024-02-17;1;85
+628;-25;Being late to class;2024-03-24;185;89
+629;2;Outstanding spell performance;2023-02-08;142;85
+630;-35;Disrespecting a teacher;2024-05-20;534;8
+631;-37;Being late to class;2024-09-16;148;61
+632;-8;Being late to class;2024-09-21;90;69
+633;15;Answering correctly in class;2023-01-31;788;50
+634;-44;Disrespecting a teacher;2024-07-12;190;9
+635;38;Outstanding spell performance;2023-12-17;150;85
+636;-46;Being out after curfew;2023-07-15;809;41
+637;-28;Being out after curfew;2024-12-31;665;74
+638;-37;Breaking school rules;2024-09-13;801;52
+639;0;Breaking school rules;2023-08-03;7;20
+640;27;Helping another student;2024-02-23;828;19
+641;-15;Disrespecting a teacher;2023-07-31;929;28
+642;-24;Using magic in corridors;2023-01-19;585;18
+643;20;Bravery in difficult situation;2023-09-27;213;80
+644;-6;Using magic in corridors;2023-05-06;879;2
+645;21;Helping another student;2023-07-06;459;10
+646;10;Answering correctly in class;2024-01-15;541;86
+647;13;Answering correctly in class;2023-10-13;118;67
+648;-26;Being late to class;2023-03-28;547;86
+649;-24;Disrespecting a teacher;2024-11-02;626;83
+650;-28;Being out after curfew;2024-12-07;238;8
+651;-6;Breaking school rules;2024-02-27;465;21
+652;-45;Being out after curfew;2024-01-05;561;84
+653;-8;Using magic in corridors;2023-11-30;226;87
+654;12;Outstanding spell performance;2023-07-08;394;77
+655;-19;Breaking school rules;2023-09-09;218;58
+656;8;Excellent classwork;2023-11-03;309;51
+657;14;Outstanding spell performance;2023-07-13;582;8
+658;-21;Being out after curfew;2023-06-28;824;5
+659;-31;Being late to class;2023-08-24;53;5
+660;19;Excellent classwork;2024-08-05;34;62
+661;7;Answering correctly in class;2023-10-28;787;93
+662;30;Bravery in difficult situation;2023-05-14;922;98
+663;-1;Being late to class;2023-12-18;654;43
+664;-2;Using magic in corridors;2024-03-04;90;4
+665;-22;Being late to class;2023-08-17;752;22
+666;18;Helping another student;2024-05-23;852;42
+667;-31;Breaking school rules;2024-12-18;830;93
+668;-23;Using magic in corridors;2024-10-22;122;7
+669;-4;Being late to class;2023-01-08;131;65
+670;-23;Using magic in corridors;2023-08-23;90;30
+671;-40;Being out after curfew;2024-02-08;152;29
+672;28;Helping another student;2023-10-11;372;56
+673;6;Answering correctly in class;2023-11-16;106;57
+674;13;Bravery in difficult situation;2024-02-08;665;40
+675;-7;Using magic in corridors;2024-01-16;725;37
+676;15;Bravery in difficult situation;2024-11-14;170;88
+677;44;Excellent classwork;2023-04-14;83;49
+678;28;Bravery in difficult situation;2023-04-16;350;46
+679;14;Outstanding spell performance;2023-12-02;141;5
+680;-36;Using magic in corridors;2024-05-22;496;40
+681;-35;Being out after curfew;2024-06-15;962;51
+682;33;Excellent classwork;2023-03-02;873;8
+683;23;Bravery in difficult situation;2024-12-03;969;45
+684;-36;Disrespecting a teacher;2023-11-27;343;5
+685;-24;Being late to class;2024-08-02;864;30
+686;-34;Breaking school rules;2024-06-21;599;54
+687;48;Answering correctly in class;2024-11-02;683;56
+688;47;Bravery in difficult situation;2023-06-24;26;74
+689;15;Bravery in difficult situation;2024-01-17;418;72
+690;-3;Being out after curfew;2023-06-27;330;59
+691;25;Helping another student;2024-11-20;484;49
+692;-24;Breaking school rules;2023-05-31;218;8
+693;8;Helping another student;2024-11-28;274;0
+694;5;Excellent classwork;2024-07-07;889;97
+695;-32;Using magic in corridors;2023-12-16;283;84
+696;-1;Disrespecting a teacher;2023-02-01;397;54
+697;-35;Disrespecting a teacher;2024-11-04;860;90
+698;47;Bravery in difficult situation;2024-03-09;86;97
+699;-44;Breaking school rules;2024-11-21;204;77
+700;-33;Disrespecting a teacher;2023-08-14;955;53
+701;-43;Disrespecting a teacher;2023-10-20;334;6
+702;-11;Disrespecting a teacher;2024-05-17;599;5
+703;18;Answering correctly in class;2023-06-02;345;11
+704;46;Bravery in difficult situation;2023-05-13;835;95
+705;40;Answering correctly in class;2023-06-14;693;95
+706;-9;Using magic in corridors;2024-03-11;173;82
+707;25;Answering correctly in class;2024-11-22;775;26
+708;-3;Being late to class;2023-07-30;620;82
+709;43;Answering correctly in class;2023-12-20;612;81
+710;-17;Being late to class;2024-07-04;960;24
+711;-29;Breaking school rules;2024-02-13;919;76
+712;-2;Breaking school rules;2023-09-18;915;2
+713;-18;Breaking school rules;2024-01-20;885;79
+714;33;Helping another student;2024-08-22;711;56
+715;-48;Disrespecting a teacher;2023-04-28;575;22
+716;-30;Being out after curfew;2023-12-09;541;49
+717;-44;Disrespecting a teacher;2023-07-05;190;96
+718;22;Answering correctly in class;2024-01-25;458;32
+719;40;Outstanding spell performance;2023-08-06;85;54
+720;-13;Being late to class;2024-01-12;138;38
+721;8;Outstanding spell performance;2024-03-16;921;58
+722;-9;Breaking school rules;2024-11-17;70;68
+723;50;Answering correctly in class;2024-08-20;504;47
+724;29;Outstanding spell performance;2023-06-10;738;8
+725;23;Outstanding spell performance;2023-07-09;884;31
+726;0;Being late to class;2024-02-28;306;100
+727;-12;Being out after curfew;2024-09-11;231;54
+728;-27;Being out after curfew;2024-01-15;557;47
+729;-7;Using magic in corridors;2024-04-03;548;71
+730;-35;Using magic in corridors;2024-12-30;886;5
+731;-44;Being late to class;2023-03-30;120;21
+732;32;Bravery in difficult situation;2023-04-17;564;4
+733;-30;Breaking school rules;2024-04-21;628;1
+734;-22;Using magic in corridors;2023-02-07;140;15
+735;39;Helping another student;2024-04-18;139;89
+736;-50;Breaking school rules;2023-01-18;387;26
+737;-4;Disrespecting a teacher;2024-04-05;747;29
+738;34;Outstanding spell performance;2024-09-14;721;45
+739;-12;Being late to class;2023-03-04;318;58
+740;-7;Being late to class;2023-09-16;342;14
+741;10;Excellent classwork;2023-11-22;414;56
+742;-49;Using magic in corridors;2024-07-29;103;82
+743;-9;Using magic in corridors;2023-01-16;0;53
+744;1;Outstanding spell performance;2024-08-20;561;3
+745;-43;Being late to class;2023-06-29;578;69
+746;46;Excellent classwork;2023-12-09;42;58
+747;-30;Disrespecting a teacher;2024-03-22;921;10
+748;35;Helping another student;2024-05-18;61;53
+749;14;Bravery in difficult situation;2024-06-06;328;10
+750;-26;Using magic in corridors;2024-09-03;430;47
+751;35;Excellent classwork;2024-05-19;939;24
+752;-23;Being out after curfew;2023-02-27;184;92
+753;3;Excellent classwork;2024-12-01;653;30
+754;37;Helping another student;2023-06-17;759;9
+755;-20;Breaking school rules;2024-06-28;71;18
+756;-15;Being out after curfew;2024-02-24;615;81
+757;-47;Disrespecting a teacher;2024-02-22;595;3
+758;-1;Breaking school rules;2023-03-23;575;85
+759;3;Answering correctly in class;2023-08-10;408;7
+760;39;Outstanding spell performance;2023-08-08;589;18
+761;14;Bravery in difficult situation;2024-03-24;319;43
+762;-26;Being out after curfew;2024-08-12;506;65
+763;-8;Being out after curfew;2024-11-18;728;91
+764;-32;Disrespecting a teacher;2023-12-14;880;54
+765;38;Outstanding spell performance;2023-12-20;178;46
+766;-12;Breaking school rules;2024-04-03;393;49
+767;1;Bravery in difficult situation;2024-04-10;884;39
+768;-40;Using magic in corridors;2024-07-14;735;49
+769;50;Outstanding spell performance;2024-08-31;580;90
+770;2;Bravery in difficult situation;2023-04-12;817;97
+771;32;Bravery in difficult situation;2024-07-16;773;21
+772;-1;Being out after curfew;2024-06-23;272;6
+773;39;Answering correctly in class;2023-12-09;122;91
+774;-27;Using magic in corridors;2024-02-07;749;9
+775;-49;Using magic in corridors;2023-07-21;935;85
+776;48;Helping another student;2023-09-15;575;7
+777;-43;Using magic in corridors;2024-03-23;974;28
+778;-37;Being out after curfew;2023-07-21;831;61
+779;2;Answering correctly in class;2024-06-23;474;70
+780;17;Excellent classwork;2024-10-15;967;45
+781;-13;Breaking school rules;2024-08-17;113;62
+782;-43;Being out after curfew;2023-10-31;504;64
+783;13;Outstanding spell performance;2023-09-21;259;95
+784;5;Bravery in difficult situation;2023-07-23;515;74
+785;-36;Disrespecting a teacher;2023-06-13;4;22
+786;45;Helping another student;2024-04-10;164;44
+787;-50;Using magic in corridors;2023-08-05;180;96
+788;50;Helping another student;2024-12-28;30;44
+789;-36;Being late to class;2024-12-02;723;22
+790;-49;Breaking school rules;2024-05-06;665;27
+791;44;Answering correctly in class;2024-12-04;46;30
+792;6;Outstanding spell performance;2023-10-04;832;88
+793;26;Outstanding spell performance;2023-12-01;57;32
+794;-4;Disrespecting a teacher;2023-03-12;74;87
+795;-45;Disrespecting a teacher;2024-05-02;51;43
+796;-47;Being late to class;2023-06-16;577;28
+797;3;Outstanding spell performance;2024-12-07;780;75
+798;-15;Being late to class;2023-04-06;58;38
+799;-7;Being out after curfew;2023-01-29;95;21
+800;21;Answering correctly in class;2024-05-28;839;3
+801;8;Excellent classwork;2024-02-09;948;55
+802;27;Helping another student;2024-08-04;67;76
+803;7;Bravery in difficult situation;2024-04-30;537;66
+804;2;Outstanding spell performance;2023-03-28;183;97
+805;-15;Breaking school rules;2024-06-06;590;32
+806;18;Excellent classwork;2024-07-14;880;71
+807;-22;Being out after curfew;2023-01-04;430;15
+808;26;Bravery in difficult situation;2024-08-26;60;37
+809;36;Answering correctly in class;2024-06-12;411;54
+810;20;Bravery in difficult situation;2024-05-12;287;65
+811;-19;Being out after curfew;2023-07-05;556;32
+812;-4;Being out after curfew;2024-08-02;173;63
+813;10;Answering correctly in class;2024-08-03;255;84
+814;48;Answering correctly in class;2024-01-21;107;37
+815;49;Bravery in difficult situation;2023-08-22;953;29
+816;43;Helping another student;2024-08-03;839;69
+817;-33;Breaking school rules;2024-12-01;3;60
+818;42;Helping another student;2024-07-13;855;58
+819;32;Bravery in difficult situation;2023-11-10;640;8
+820;36;Outstanding spell performance;2023-02-23;691;31
+821;33;Outstanding spell performance;2023-02-23;731;51
+822;49;Outstanding spell performance;2023-09-02;339;57
+823;-6;Being late to class;2023-11-09;431;30
+824;-41;Breaking school rules;2024-01-04;101;6
+825;-38;Disrespecting a teacher;2024-06-17;534;65
+826;32;Answering correctly in class;2024-05-10;190;13
+827;38;Outstanding spell performance;2024-01-16;637;77
+828;12;Bravery in difficult situation;2024-02-27;280;17
+829;-34;Breaking school rules;2023-07-30;887;90
+830;-44;Being late to class;2024-06-26;931;50
+831;26;Helping another student;2023-11-06;539;2
+832;27;Helping another student;2023-03-28;482;55
+833;-36;Using magic in corridors;2023-11-24;681;47
+834;-29;Being late to class;2024-04-19;754;2
+835;-17;Breaking school rules;2024-12-15;896;25
+836;15;Answering correctly in class;2024-08-24;16;100
+837;-25;Being late to class;2023-12-16;814;24
+838;-1;Being out after curfew;2023-11-28;173;62
+839;45;Answering correctly in class;2024-04-21;981;54
+840;41;Bravery in difficult situation;2023-12-09;614;25
+841;-45;Being late to class;2023-03-25;642;2
+842;50;Outstanding spell performance;2024-05-19;419;91
+843;-32;Breaking school rules;2024-02-14;346;66
+844;9;Outstanding spell performance;2024-03-29;644;54
+845;31;Bravery in difficult situation;2024-03-11;689;44
+846;-21;Breaking school rules;2024-10-12;825;70
+847;-42;Being out after curfew;2023-08-11;123;56
+848;-50;Breaking school rules;2024-09-19;454;23
+849;9;Bravery in difficult situation;2023-08-05;391;32
+850;49;Outstanding spell performance;2024-03-13;63;90
+851;-32;Disrespecting a teacher;2023-02-15;870;28
+852;-24;Disrespecting a teacher;2023-05-14;140;17
+853;34;Outstanding spell performance;2024-04-14;805;60
+854;-41;Using magic in corridors;2023-01-26;72;78
+855;5;Outstanding spell performance;2023-11-30;449;76
+856;-12;Using magic in corridors;2023-02-21;782;59
+857;-11;Using magic in corridors;2023-02-26;519;85
+858;-49;Being out after curfew;2024-04-09;340;54
+859;33;Excellent classwork;2024-10-18;253;10
+860;31;Helping another student;2024-12-31;269;54
+861;-46;Disrespecting a teacher;2023-08-25;633;61
+862;12;Answering correctly in class;2023-02-19;230;82
+863;31;Outstanding spell performance;2023-06-05;89;43
+864;-33;Breaking school rules;2024-07-03;202;77
+865;-42;Being late to class;2024-08-13;762;94
+866;-24;Being out after curfew;2024-08-03;425;41
+867;-8;Breaking school rules;2023-08-09;379;4
+868;38;Excellent classwork;2024-07-08;788;98
+869;-41;Disrespecting a teacher;2024-05-18;112;76
+870;0;Being out after curfew;2023-07-04;755;22
+871;-28;Being out after curfew;2023-08-19;123;14
+872;10;Helping another student;2023-09-25;417;91
+873;10;Bravery in difficult situation;2023-08-28;69;44
+874;26;Helping another student;2023-07-11;12;22
+875;25;Bravery in difficult situation;2023-11-08;188;74
+876;16;Excellent classwork;2024-07-20;812;20
+877;-17;Breaking school rules;2023-10-27;223;34
+878;30;Answering correctly in class;2024-02-05;585;10
+879;37;Bravery in difficult situation;2024-08-15;707;53
+880;40;Excellent classwork;2024-10-03;791;88
+881;-43;Being late to class;2023-05-17;719;27
+882;34;Answering correctly in class;2024-06-02;915;100
+883;5;Answering correctly in class;2023-04-23;685;89
+884;9;Excellent classwork;2024-07-31;136;37
+885;-37;Using magic in corridors;2023-08-23;152;89
+886;-26;Breaking school rules;2023-03-28;288;24
+887;44;Bravery in difficult situation;2024-05-03;29;62
+888;29;Bravery in difficult situation;2024-09-07;839;72
+889;-3;Being late to class;2023-08-20;196;19
+890;-2;Disrespecting a teacher;2024-03-05;656;87
+891;17;Helping another student;2023-09-21;932;72
+892;40;Outstanding spell performance;2023-12-08;539;34
+893;29;Outstanding spell performance;2023-10-14;860;88
+894;31;Answering correctly in class;2023-05-28;926;54
+895;20;Answering correctly in class;2024-01-05;849;33
+896;-28;Disrespecting a teacher;2024-01-10;262;93
+897;5;Bravery in difficult situation;2024-02-16;560;87
+898;6;Outstanding spell performance;2023-12-06;475;63
+899;-6;Being late to class;2023-11-06;812;54
+900;-3;Using magic in corridors;2024-10-12;729;39
+901;37;Outstanding spell performance;2024-10-24;631;34
+902;-6;Being out after curfew;2023-12-22;84;69
+903;-37;Using magic in corridors;2023-07-13;463;53
+904;-26;Breaking school rules;2023-03-01;353;21
+905;-6;Disrespecting a teacher;2024-11-30;312;100
+906;-1;Being late to class;2023-01-23;595;65
+907;31;Bravery in difficult situation;2023-03-09;823;46
+908;10;Excellent classwork;2024-12-30;461;97
+909;34;Helping another student;2024-10-25;130;60
+910;-17;Using magic in corridors;2023-11-10;396;90
+911;8;Bravery in difficult situation;2023-02-09;88;63
+912;-32;Being out after curfew;2024-02-19;125;34
+913;-16;Breaking school rules;2023-12-22;223;42
+914;-17;Using magic in corridors;2024-07-29;427;95
+915;14;Excellent classwork;2024-07-20;499;100
+916;-15;Being late to class;2023-12-29;319;66
+917;25;Bravery in difficult situation;2024-02-08;916;81
+918;-34;Disrespecting a teacher;2024-06-24;134;7
+919;46;Outstanding spell performance;2023-12-17;635;5
+920;45;Answering correctly in class;2023-07-24;178;70
+921;-38;Being late to class;2023-05-03;496;19
+922;13;Outstanding spell performance;2024-08-09;385;49
+923;-23;Being out after curfew;2024-11-07;854;99
+924;23;Excellent classwork;2024-09-03;256;13
+925;3;Outstanding spell performance;2023-12-22;771;39
+926;40;Excellent classwork;2023-07-18;880;47
+927;33;Outstanding spell performance;2024-12-25;525;62
+928;-6;Breaking school rules;2024-02-15;63;11
+929;14;Helping another student;2023-06-20;87;91
+930;34;Answering correctly in class;2023-12-11;156;73
+931;11;Outstanding spell performance;2023-09-07;435;60
+932;4;Helping another student;2024-11-12;557;101
+933;-3;Disrespecting a teacher;2024-01-12;859;52
+934;8;Helping another student;2024-11-18;97;93
+935;-27;Disrespecting a teacher;2023-12-05;47;80
+936;20;Outstanding spell performance;2024-02-02;511;95
+937;-34;Being late to class;2023-07-08;340;85
+938;19;Bravery in difficult situation;2024-05-24;702;74
+939;49;Excellent classwork;2023-02-14;113;84
+940;-46;Being late to class;2023-11-07;788;53
+941;-34;Being late to class;2023-06-01;166;39
+942;12;Bravery in difficult situation;2024-01-25;93;17
+943;-48;Being late to class;2024-12-26;626;54
+944;5;Outstanding spell performance;2024-11-06;742;98
+945;-35;Using magic in corridors;2024-05-29;236;99
+946;-45;Breaking school rules;2024-11-06;616;79
+947;7;Bravery in difficult situation;2024-12-25;530;32
+948;2;Bravery in difficult situation;2023-10-06;395;16
+949;29;Outstanding spell performance;2024-03-01;258;53
+950;-9;Using magic in corridors;2023-11-21;643;42
+951;-25;Being out after curfew;2023-09-28;207;70
+952;19;Excellent classwork;2024-09-26;156;8
+953;12;Excellent classwork;2023-01-06;396;1
+954;-45;Being out after curfew;2023-05-21;974;82
+955;46;Excellent classwork;2024-11-18;32;76
+956;14;Bravery in difficult situation;2023-05-03;786;92
+957;14;Bravery in difficult situation;2024-05-20;434;15
+958;17;Bravery in difficult situation;2023-03-07;68;42
+959;40;Excellent classwork;2024-06-11;872;100
+960;-44;Using magic in corridors;2024-04-02;941;37
+961;-47;Using magic in corridors;2024-02-07;679;46
+962;-19;Being late to class;2023-11-30;112;1
+963;39;Helping another student;2023-06-02;307;101
+964;-6;Being out after curfew;2023-02-11;624;36
+965;-40;Disrespecting a teacher;2024-07-12;377;28
+966;22;Answering correctly in class;2023-06-27;136;16
+967;45;Bravery in difficult situation;2024-08-30;229;55
+968;-28;Being late to class;2023-04-13;156;45
+969;37;Answering correctly in class;2024-03-23;606;42
+970;49;Bravery in difficult situation;2023-08-03;326;93
+971;-34;Being out after curfew;2024-01-30;686;47
+972;-15;Breaking school rules;2024-02-17;240;75
+973;16;Bravery in difficult situation;2023-08-08;468;72
+974;-6;Breaking school rules;2023-02-26;812;26
+975;-32;Being late to class;2024-07-07;130;32
+976;-20;Being out after curfew;2023-09-27;442;94
+977;30;Excellent classwork;2024-12-11;584;52
+978;-49;Disrespecting a teacher;2023-12-28;742;60
+979;-46;Being out after curfew;2024-10-25;440;0
+980;36;Helping another student;2023-04-21;144;15
+981;-22;Being late to class;2024-06-12;480;6
+982;-46;Breaking school rules;2023-05-02;515;53
+983;44;Outstanding spell performance;2024-10-21;551;43
+984;-34;Disrespecting a teacher;2024-08-05;494;82
+985;46;Helping another student;2024-11-16;933;79
+986;-18;Being out after curfew;2023-12-16;766;57
+987;-21;Disrespecting a teacher;2024-08-11;953;36
+988;-7;Using magic in corridors;2024-07-25;601;25
+989;0;Using magic in corridors;2024-03-01;112;69
+990;-21;Being late to class;2024-01-10;691;38
+991;17;Answering correctly in class;2024-05-08;52;15
+992;17;Excellent classwork;2024-08-13;924;57
+993;-41;Breaking school rules;2023-05-02;87;90
+994;33;Excellent classwork;2023-10-24;648;47
+995;-16;Being out after curfew;2024-04-12;297;7
+996;-1;Breaking school rules;2024-02-28;279;10
+997;5;Helping another student;2023-07-18;393;67
+998;14;Bravery in difficult situation;2024-06-03;189;51
+999;-33;Being out after curfew;2023-02-22;219;73
+1000;-9;Being out after curfew;2024-03-12;6;100
+1001;-27;Being out after curfew;2023-11-20;429;67
+1002;12;Outstanding spell performance;2023-05-19;628;80
+1003;-38;Being out after curfew;2024-01-28;721;66
+1004;1;Outstanding spell performance;2023-06-29;67;79
+1005;-5;Disrespecting a teacher;2023-04-23;861;57
+1006;22;Outstanding spell performance;2023-09-15;385;88
+1007;11;Excellent classwork;2023-03-25;729;3
+1008;-9;Using magic in corridors;2024-02-25;838;55
+1009;12;Helping another student;2024-07-24;726;93
+1010;11;Helping another student;2023-03-30;927;60
+1011;18;Outstanding spell performance;2024-11-02;876;62
+1012;-36;Disrespecting a teacher;2024-10-17;802;0
+1013;-11;Using magic in corridors;2023-03-21;246;37
+1014;14;Bravery in difficult situation;2023-05-21;700;77
+1015;-38;Disrespecting a teacher;2023-08-23;32;48
+1016;-26;Being late to class;2023-11-03;609;59
+1017;27;Answering correctly in class;2023-11-07;110;47
+1018;43;Answering correctly in class;2023-05-24;749;51
+1019;-3;Being out after curfew;2024-03-01;698;75
+1020;-4;Being out after curfew;2024-05-31;830;12
+1021;44;Helping another student;2024-08-08;591;77
+1022;25;Bravery in difficult situation;2024-05-21;237;37
+1023;-32;Breaking school rules;2024-09-11;519;8
+1024;47;Answering correctly in class;2024-12-02;464;62
+1025;-2;Being out after curfew;2024-04-07;260;71
+1026;30;Outstanding spell performance;2024-11-27;934;81
+1027;-5;Using magic in corridors;2023-01-02;185;36
+1028;7;Bravery in difficult situation;2024-11-20;504;43
+1029;-37;Being out after curfew;2024-07-18;211;61
+1030;-14;Disrespecting a teacher;2024-06-21;513;24
+1031;-48;Being late to class;2024-09-28;645;27
+1032;-2;Using magic in corridors;2024-11-09;634;17
+1033;-3;Disrespecting a teacher;2024-01-24;418;85
+1034;22;Bravery in difficult situation;2023-04-22;878;85
+1035;24;Helping another student;2023-07-08;383;50
+1036;48;Answering correctly in class;2023-07-17;769;92
+1037;-17;Breaking school rules;2023-03-22;210;96
+1038;35;Bravery in difficult situation;2023-09-05;3;91
+1039;6;Bravery in difficult situation;2023-07-20;10;0
+1040;41;Answering correctly in class;2024-10-23;657;21
+1041;-2;Breaking school rules;2024-07-18;383;79
+1042;-12;Using magic in corridors;2023-01-23;387;8
+1043;-3;Using magic in corridors;2023-05-08;115;11
+1044;-20;Breaking school rules;2023-03-03;270;98
+1045;12;Bravery in difficult situation;2023-12-11;148;32
+1046;-36;Disrespecting a teacher;2023-01-31;478;46
+1047;36;Helping another student;2024-03-02;143;20
+1048;43;Helping another student;2024-05-27;239;83
+1049;-9;Breaking school rules;2023-07-20;157;80
+1050;-23;Being late to class;2023-11-06;753;13
+1051;36;Helping another student;2023-03-20;885;29
+1052;-2;Being out after curfew;2024-11-27;659;98
+1053;15;Answering correctly in class;2023-08-12;851;52
+1054;2;Excellent classwork;2024-10-27;360;47
+1055;45;Answering correctly in class;2024-06-14;879;89
+1056;16;Helping another student;2024-10-26;269;100
+1057;21;Excellent classwork;2024-07-05;565;29
+1058;-2;Being late to class;2023-06-29;467;8
+1059;-46;Being out after curfew;2024-11-21;626;30
+1060;6;Helping another student;2023-06-09;551;20
+1061;-19;Disrespecting a teacher;2024-09-11;586;43
+1062;-13;Using magic in corridors;2024-05-17;28;89
+1063;7;Excellent classwork;2023-01-02;482;79
+1064;22;Answering correctly in class;2024-04-09;142;54
+1065;42;Outstanding spell performance;2023-06-17;259;42
+1066;-17;Using magic in corridors;2024-10-04;361;22
+1067;38;Answering correctly in class;2023-01-12;571;35
+1068;16;Helping another student;2023-01-11;65;25
+1069;15;Outstanding spell performance;2024-02-10;636;0
+1070;-37;Being out after curfew;2023-12-15;413;56
+1071;0;Being out after curfew;2023-09-22;201;14
+1072;-21;Being late to class;2023-06-28;312;26
+1073;23;Answering correctly in class;2023-06-08;31;82
+1074;-37;Disrespecting a teacher;2023-06-25;739;86
+1075;25;Excellent classwork;2024-10-26;130;94
+1076;-18;Being late to class;2023-05-24;951;73
+1077;40;Outstanding spell performance;2023-05-22;181;87
+1078;-2;Breaking school rules;2024-02-22;194;89
+1079;-23;Being late to class;2024-07-09;464;80
+1080;19;Bravery in difficult situation;2023-04-18;759;36
+1081;-46;Breaking school rules;2023-12-13;238;41
+1082;16;Bravery in difficult situation;2024-04-25;875;56
+1083;-48;Disrespecting a teacher;2023-05-29;520;79
+1084;20;Excellent classwork;2024-12-19;628;86
+1085;25;Helping another student;2024-03-07;861;61
+1086;46;Bravery in difficult situation;2023-07-26;330;73
+1087;33;Answering correctly in class;2024-05-28;168;27
+1088;24;Helping another student;2024-05-24;569;11
+1089;-43;Being late to class;2024-07-20;901;7
+1090;-4;Being out after curfew;2024-06-24;31;40
+1091;16;Helping another student;2024-04-08;892;5
+1092;25;Answering correctly in class;2024-11-19;94;40
+1093;-39;Breaking school rules;2023-08-31;900;90
+1094;14;Bravery in difficult situation;2024-05-05;907;73
+1095;32;Excellent classwork;2024-10-07;293;11
+1096;-42;Being late to class;2024-10-01;649;26
+1097;42;Answering correctly in class;2024-09-28;732;45
+1098;-26;Using magic in corridors;2024-02-02;275;100
+1099;30;Outstanding spell performance;2023-03-06;609;31
+1100;22;Helping another student;2023-05-06;409;69
+1101;34;Outstanding spell performance;2023-12-27;397;2
+1102;1;Excellent classwork;2023-10-30;227;42
+1103;12;Excellent classwork;2024-11-03;943;35
+1104;38;Answering correctly in class;2023-11-04;593;69
+1105;27;Bravery in difficult situation;2024-08-14;912;17
+1106;-26;Being out after curfew;2023-06-15;586;1
+1107;-27;Being out after curfew;2024-02-21;728;16
+1108;36;Answering correctly in class;2023-10-12;233;89
+1109;48;Excellent classwork;2024-07-20;687;80
+1110;20;Helping another student;2024-09-27;770;97
+1111;-25;Being late to class;2023-10-28;779;42
+1112;-29;Using magic in corridors;2023-07-02;609;7
+1113;-42;Being out after curfew;2023-12-19;319;78
+1114;22;Outstanding spell performance;2024-01-18;256;48
+1115;-8;Disrespecting a teacher;2024-04-20;597;10
+1116;-45;Disrespecting a teacher;2023-03-10;176;44
+1117;26;Excellent classwork;2024-04-19;923;93
+1118;40;Outstanding spell performance;2024-02-26;157;45
+1119;12;Helping another student;2024-07-11;970;76
+1120;-10;Disrespecting a teacher;2024-05-04;393;63
+1121;39;Answering correctly in class;2024-11-17;255;38
+1122;-22;Breaking school rules;2024-04-11;839;12
+1123;-13;Breaking school rules;2023-03-03;429;2
+1124;42;Outstanding spell performance;2024-03-11;790;13
+1125;19;Excellent classwork;2024-07-10;975;58
+1126;29;Answering correctly in class;2023-09-14;619;81
+1127;-14;Being out after curfew;2023-08-26;359;43
+1128;-18;Being out after curfew;2023-06-17;427;49
+1129;46;Helping another student;2024-04-13;395;31
+1130;17;Answering correctly in class;2024-03-25;641;34
+1131;-5;Using magic in corridors;2024-06-28;517;98
+1132;6;Helping another student;2023-10-25;648;91
+1133;24;Excellent classwork;2024-11-08;451;86
+1134;-8;Being late to class;2023-04-24;381;95
+1135;-4;Using magic in corridors;2024-09-19;842;45
+1136;36;Helping another student;2024-01-05;968;36
+1137;29;Excellent classwork;2024-12-12;19;0
+1138;-17;Using magic in corridors;2024-02-01;910;69
+1139;18;Answering correctly in class;2023-10-22;167;32
+1140;12;Answering correctly in class;2023-08-28;25;61
+1141;20;Bravery in difficult situation;2024-10-12;777;63
+1142;50;Helping another student;2024-05-09;488;76
+1143;2;Bravery in difficult situation;2023-02-04;599;18
+1144;-17;Being out after curfew;2024-12-21;313;24
+1145;-28;Disrespecting a teacher;2023-10-31;25;73
+1146;-49;Being late to class;2024-07-26;578;48
+1147;4;Answering correctly in class;2024-04-25;457;75
+1148;-15;Being out after curfew;2023-03-16;62;5
+1149;5;Bravery in difficult situation;2024-10-28;615;26
+1150;13;Answering correctly in class;2023-04-09;255;97
+1151;49;Helping another student;2023-05-02;926;84
+1152;-34;Using magic in corridors;2023-03-20;853;48
+1153;43;Bravery in difficult situation;2023-08-18;88;21
+1154;-34;Breaking school rules;2023-09-29;965;13
+1155;-23;Using magic in corridors;2023-06-21;345;96
+1156;4;Bravery in difficult situation;2024-11-30;905;70
+1157;9;Bravery in difficult situation;2023-08-10;745;100
+1158;42;Answering correctly in class;2023-09-06;363;76
+1159;-34;Using magic in corridors;2023-06-09;205;29
+1160;2;Helping another student;2023-01-24;244;87
+1161;23;Excellent classwork;2024-11-18;161;11
+1162;-31;Breaking school rules;2023-01-02;624;64
+1163;-31;Using magic in corridors;2023-09-22;227;54
+1164;-47;Breaking school rules;2023-01-10;918;26
+1165;26;Outstanding spell performance;2023-08-16;932;100
+1166;49;Answering correctly in class;2024-11-12;676;94
+1167;27;Helping another student;2023-09-28;2;99
+1168;-12;Breaking school rules;2023-02-28;182;97
+1169;37;Helping another student;2024-11-27;575;4
+1170;8;Bravery in difficult situation;2024-11-02;409;65
+1171;38;Outstanding spell performance;2024-10-13;902;19
+1172;28;Bravery in difficult situation;2023-02-12;591;22
+1173;3;Outstanding spell performance;2023-01-27;980;66
+1174;-33;Being late to class;2024-03-18;256;72
+1175;34;Bravery in difficult situation;2023-02-20;370;7
+1176;40;Bravery in difficult situation;2024-03-10;681;44
+1177;-29;Breaking school rules;2024-08-07;547;6
+1178;6;Helping another student;2024-10-03;545;32
+1179;-25;Being late to class;2024-11-21;576;73
+1180;-10;Using magic in corridors;2023-07-15;403;1
+1181;-33;Breaking school rules;2023-02-12;270;96
+1182;4;Excellent classwork;2023-07-19;48;87
+1183;36;Excellent classwork;2023-09-17;171;26
+1184;35;Answering correctly in class;2024-07-06;957;69
+1185;3;Bravery in difficult situation;2023-02-06;446;68
+1186;28;Bravery in difficult situation;2023-04-21;376;42
+1187;-40;Being out after curfew;2023-04-28;943;75
+1188;33;Answering correctly in class;2023-01-31;782;52
+1189;-45;Being out after curfew;2023-09-09;355;44
+1190;8;Bravery in difficult situation;2024-04-04;420;69
+1191;-29;Being late to class;2024-07-27;959;99
+1192;-24;Being late to class;2024-11-25;387;69
+1193;13;Outstanding spell performance;2024-06-11;492;54
+1194;17;Outstanding spell performance;2023-04-10;849;67
+1195;8;Excellent classwork;2023-12-13;980;98
+1196;37;Helping another student;2024-04-11;362;31
+1197;4;Helping another student;2024-09-04;804;53
+1198;5;Bravery in difficult situation;2024-06-13;528;63
+1199;-42;Being late to class;2024-01-31;886;5
+1200;11;Bravery in difficult situation;2023-04-27;40;33
+1201;48;Excellent classwork;2023-03-26;798;73
+1202;22;Answering correctly in class;2023-07-20;561;97
+1203;24;Outstanding spell performance;2024-08-05;599;47
+1204;-38;Breaking school rules;2023-07-22;157;41
+1205;-15;Being late to class;2023-06-01;457;45
+1206;50;Outstanding spell performance;2024-08-23;714;72
+1207;19;Outstanding spell performance;2023-10-12;909;86
+1208;-28;Disrespecting a teacher;2024-12-25;60;25
+1209;-36;Being out after curfew;2024-05-02;275;61
+1210;-39;Being out after curfew;2023-06-01;384;48
+1211;12;Answering correctly in class;2023-07-18;267;101
+1212;-6;Disrespecting a teacher;2024-07-23;336;69
+1213;18;Outstanding spell performance;2023-11-24;235;75
+1214;28;Answering correctly in class;2023-02-03;239;30
+1215;9;Bravery in difficult situation;2023-06-10;586;5
+1216;46;Bravery in difficult situation;2023-06-22;410;40
+1217;46;Answering correctly in class;2024-07-26;975;12
+1218;-13;Disrespecting a teacher;2024-09-05;984;83
+1219;11;Outstanding spell performance;2024-06-21;394;95
+1220;-40;Being late to class;2023-11-09;424;83
+1221;-13;Disrespecting a teacher;2024-05-27;947;44
+1222;-16;Breaking school rules;2024-10-28;983;62
+1223;-6;Disrespecting a teacher;2023-10-27;308;75
+1224;16;Outstanding spell performance;2023-11-30;264;13
+1225;-21;Using magic in corridors;2024-08-28;56;78
+1226;-1;Using magic in corridors;2024-04-18;857;44
+1227;43;Helping another student;2024-01-12;26;60
+1228;-25;Breaking school rules;2023-04-23;892;99
+1229;14;Answering correctly in class;2023-12-04;90;23
+1230;11;Answering correctly in class;2024-10-02;963;51
+1231;24;Bravery in difficult situation;2024-03-10;344;101
+1232;38;Outstanding spell performance;2023-09-13;133;85
+1233;-24;Breaking school rules;2024-04-27;718;25
+1234;24;Answering correctly in class;2023-07-04;184;98
+1235;-11;Being out after curfew;2024-01-05;315;73
+1236;6;Helping another student;2023-04-03;460;27
+1237;2;Bravery in difficult situation;2023-04-17;273;46
+1238;-42;Breaking school rules;2024-02-24;401;72
+1239;-50;Disrespecting a teacher;2023-03-20;979;21
+1240;-47;Breaking school rules;2024-05-24;556;44
+1241;45;Answering correctly in class;2023-10-01;462;24
+1242;-32;Breaking school rules;2023-11-23;355;73
+1243;23;Bravery in difficult situation;2024-06-14;338;66
+1244;43;Answering correctly in class;2023-05-08;423;58
+1245;39;Bravery in difficult situation;2024-08-31;643;16
+1246;-2;Being out after curfew;2023-02-01;510;73
+1247;2;Helping another student;2023-12-04;444;89
+1248;46;Bravery in difficult situation;2024-01-05;926;36
+1249;4;Bravery in difficult situation;2024-09-18;281;2
+1250;46;Excellent classwork;2023-07-07;550;2
+1251;49;Helping another student;2023-08-16;475;92
+1252;-12;Being late to class;2023-04-23;597;82
+1253;5;Helping another student;2023-12-16;857;38
+1254;26;Helping another student;2024-04-06;824;24
+1255;17;Bravery in difficult situation;2023-08-04;638;26
+1256;-15;Breaking school rules;2023-02-20;4;82
+1257;22;Bravery in difficult situation;2023-06-12;97;37
+1258;-16;Being late to class;2023-05-08;75;62
+1259;-15;Being out after curfew;2024-12-25;106;74
+1260;-3;Being late to class;2024-07-02;703;15
+1261;39;Answering correctly in class;2023-02-08;833;70
+1262;49;Helping another student;2023-09-08;612;84
+1263;23;Outstanding spell performance;2024-09-06;227;99
+1264;47;Answering correctly in class;2024-08-01;501;88
+1265;6;Excellent classwork;2024-01-02;447;7
+1266;-31;Being out after curfew;2024-01-01;788;15
+1267;-38;Being out after curfew;2023-04-05;928;62
+1268;34;Excellent classwork;2023-03-22;209;95
+1269;17;Outstanding spell performance;2024-02-08;433;63
+1270;-33;Disrespecting a teacher;2023-10-30;436;63
+1271;47;Answering correctly in class;2024-02-29;535;66
+1272;-29;Breaking school rules;2024-10-20;785;43
+1273;-30;Breaking school rules;2023-04-01;540;35
+1274;-39;Breaking school rules;2023-12-01;55;57
+1275;25;Answering correctly in class;2023-03-20;448;71
+1276;21;Answering correctly in class;2023-08-16;185;36
+1277;20;Bravery in difficult situation;2023-07-26;888;52
+1278;38;Excellent classwork;2023-01-22;369;55
+1279;-30;Disrespecting a teacher;2024-05-20;650;36
+1280;33;Outstanding spell performance;2024-11-20;12;0
+1281;-13;Disrespecting a teacher;2023-10-06;362;95
+1282;-35;Being out after curfew;2024-03-15;574;75
+1283;-44;Breaking school rules;2023-02-07;587;74
+1284;9;Outstanding spell performance;2024-10-27;562;30
+1285;7;Answering correctly in class;2023-11-29;576;65
+1286;-48;Using magic in corridors;2023-11-06;367;83
+1287;11;Bravery in difficult situation;2024-02-09;482;80
+1288;9;Helping another student;2024-05-08;355;66
+1289;19;Outstanding spell performance;2023-04-08;105;86
+1290;23;Outstanding spell performance;2024-07-07;516;83
+1291;-13;Breaking school rules;2023-09-24;938;81
+1292;-13;Being late to class;2024-11-12;202;72
+1293;-36;Using magic in corridors;2024-05-20;223;32
+1294;-22;Being out after curfew;2023-06-03;917;42
+1295;40;Excellent classwork;2024-05-11;801;63
+1296;26;Helping another student;2024-09-01;264;99
+1297;3;Excellent classwork;2023-12-07;245;37
+1298;-38;Breaking school rules;2024-04-02;380;10
+1299;46;Excellent classwork;2024-05-09;116;9
+1300;-1;Using magic in corridors;2023-07-26;204;33
+1301;32;Bravery in difficult situation;2024-05-28;284;75
+1302;-40;Being out after curfew;2023-08-31;606;26
+1303;-32;Breaking school rules;2024-01-03;144;44
+1304;50;Excellent classwork;2024-12-28;43;59
+1305;-14;Disrespecting a teacher;2024-10-10;945;28
+1306;-8;Disrespecting a teacher;2024-06-22;634;25
+1307;-28;Being out after curfew;2024-09-16;128;68
+1308;47;Helping another student;2024-02-08;799;7
+1309;-33;Using magic in corridors;2024-09-15;626;83
+1310;0;Being out after curfew;2023-02-02;672;98
+1311;9;Outstanding spell performance;2023-11-06;876;6
+1312;15;Bravery in difficult situation;2024-09-19;502;12
+1313;40;Outstanding spell performance;2023-02-20;468;14
+1314;4;Answering correctly in class;2023-06-23;685;0
+1315;-22;Disrespecting a teacher;2023-06-25;350;9
+1316;-30;Being late to class;2024-07-27;810;9
+1317;-42;Using magic in corridors;2024-06-14;355;88
+1318;-47;Being out after curfew;2024-06-11;714;60
+1319;-14;Breaking school rules;2023-06-11;205;73
+1320;37;Answering correctly in class;2023-04-25;883;32
+1321;1;Outstanding spell performance;2023-07-18;247;43
+1322;-19;Being out after curfew;2024-05-29;479;1
+1323;20;Outstanding spell performance;2023-10-27;202;17
+1324;-17;Disrespecting a teacher;2023-02-07;455;99
+1325;48;Outstanding spell performance;2023-12-26;433;7
+1326;-29;Being out after curfew;2023-10-15;72;42
+1327;-11;Breaking school rules;2023-02-13;734;39
+1328;-27;Being out after curfew;2024-08-24;500;78
+1329;-3;Using magic in corridors;2024-08-22;241;28
+1330;-24;Breaking school rules;2023-10-28;881;28
+1331;14;Answering correctly in class;2023-10-27;733;32
+1332;24;Excellent classwork;2024-05-17;4;70
+1333;-50;Disrespecting a teacher;2024-06-19;909;57
+1334;9;Outstanding spell performance;2024-06-28;260;50
+1335;-21;Using magic in corridors;2023-08-15;94;98
+1336;29;Answering correctly in class;2023-09-13;440;101
+1337;2;Helping another student;2023-11-09;478;60
+1338;4;Outstanding spell performance;2024-10-24;218;97
+1339;-23;Breaking school rules;2023-09-13;572;83
+1340;34;Answering correctly in class;2024-03-22;571;47
+1341;-12;Being late to class;2024-02-23;886;55
+1342;-48;Disrespecting a teacher;2024-04-13;858;46
+1343;37;Helping another student;2024-02-27;592;51
+1344;-30;Breaking school rules;2023-01-25;37;56
+1345;22;Outstanding spell performance;2023-06-21;853;37
+1346;-42;Disrespecting a teacher;2024-06-21;377;17
+1347;8;Bravery in difficult situation;2024-12-31;81;75
+1348;20;Excellent classwork;2023-08-05;27;60
+1349;40;Bravery in difficult situation;2024-06-25;356;52
+1350;-46;Being late to class;2023-07-21;744;30
+1351;-11;Disrespecting a teacher;2023-05-31;848;74
+1352;-8;Being late to class;2023-07-18;147;19
+1353;6;Answering correctly in class;2024-10-04;961;101
+1354;-26;Being out after curfew;2023-03-13;540;71
+1355;3;Excellent classwork;2023-08-02;226;71
+1356;32;Answering correctly in class;2024-11-21;750;45
+1357;-14;Using magic in corridors;2023-12-16;263;85
+1358;1;Excellent classwork;2023-10-27;580;85
+1359;29;Outstanding spell performance;2023-08-16;575;20
+1360;1;Helping another student;2023-03-11;1;92
+1361;22;Helping another student;2024-03-11;542;71
+1362;7;Excellent classwork;2024-03-02;454;10
+1363;-29;Disrespecting a teacher;2023-02-17;805;66
+1364;-40;Disrespecting a teacher;2024-09-19;544;34
+1365;39;Outstanding spell performance;2024-05-30;705;44
+1366;12;Answering correctly in class;2023-06-21;273;19
+1367;28;Bravery in difficult situation;2024-08-31;737;96
+1368;28;Answering correctly in class;2023-10-16;891;25
+1369;-9;Being late to class;2024-12-16;195;41
+1370;-24;Being late to class;2023-05-27;49;95
+1371;-12;Disrespecting a teacher;2023-04-29;837;24
+1372;44;Outstanding spell performance;2023-03-13;458;26
+1373;-20;Being late to class;2024-05-15;771;51
+1374;-25;Being out after curfew;2023-04-13;875;46
+1375;-34;Disrespecting a teacher;2024-09-18;884;60
+1376;-14;Being late to class;2024-02-14;894;37
+1377;-18;Being late to class;2024-10-26;384;64
+1378;-44;Breaking school rules;2024-08-24;808;26
+1379;-42;Being late to class;2023-04-25;126;49
+1380;10;Bravery in difficult situation;2024-11-09;417;43
+1381;31;Answering correctly in class;2023-05-21;754;34
+1382;6;Bravery in difficult situation;2024-08-10;688;81
+1383;-25;Being out after curfew;2024-01-02;144;43
+1384;-46;Using magic in corridors;2023-09-10;479;9
+1385;-7;Using magic in corridors;2023-10-09;854;51
+1386;-15;Being late to class;2023-09-29;69;12
+1387;-30;Being late to class;2024-09-07;678;10
+1388;39;Bravery in difficult situation;2023-05-25;2;41
+1389;-42;Being late to class;2023-08-20;938;6
+1390;25;Outstanding spell performance;2024-12-26;646;29
+1391;11;Bravery in difficult situation;2024-03-15;1;59
+1392;-43;Being late to class;2023-06-23;913;47
+1393;10;Bravery in difficult situation;2023-12-24;738;16
+1394;-11;Using magic in corridors;2023-04-14;179;57
+1395;39;Helping another student;2024-05-01;156;38
+1396;-13;Breaking school rules;2023-07-17;913;77
+1397;5;Helping another student;2024-03-04;420;7
+1398;-48;Being late to class;2023-02-20;892;46
+1399;-18;Disrespecting a teacher;2023-11-11;383;23
+1400;9;Outstanding spell performance;2024-03-31;667;98
+1401;-7;Using magic in corridors;2023-09-12;19;13
+1402;29;Bravery in difficult situation;2024-12-28;249;70
+1403;-22;Being late to class;2024-06-12;190;12
+1404;-8;Being late to class;2024-12-24;123;83
+1405;-8;Disrespecting a teacher;2023-02-11;705;78
+1406;33;Helping another student;2024-11-12;193;28
+1407;31;Helping another student;2024-03-24;390;30
+1408;-47;Being out after curfew;2023-06-21;459;80
+1409;-13;Disrespecting a teacher;2023-05-12;932;45
+1410;17;Helping another student;2023-06-11;270;31
+1411;46;Excellent classwork;2023-12-05;649;56
+1412;29;Excellent classwork;2024-12-06;716;91
+1413;18;Excellent classwork;2023-10-21;820;0
+1414;41;Bravery in difficult situation;2024-09-04;849;71
+1415;-28;Breaking school rules;2024-06-17;409;48
+1416;49;Answering correctly in class;2024-04-17;504;98
+1417;-7;Breaking school rules;2024-05-31;6;40
+1418;-6;Being out after curfew;2023-12-25;416;57
+1419;6;Outstanding spell performance;2024-02-29;920;91
+1420;-8;Being out after curfew;2024-09-28;924;92
+1421;23;Answering correctly in class;2023-05-03;454;36
+1422;-32;Being out after curfew;2023-06-17;779;54
+1423;23;Helping another student;2024-05-10;418;19
+1424;41;Helping another student;2023-09-21;123;97
+1425;-12;Breaking school rules;2023-04-03;596;52
+1426;8;Answering correctly in class;2024-04-06;834;86
+1427;-22;Using magic in corridors;2023-04-02;920;99
+1428;38;Bravery in difficult situation;2024-04-03;438;4
+1429;-49;Breaking school rules;2023-03-30;928;61
+1430;8;Excellent classwork;2023-03-09;279;69
+1431;38;Outstanding spell performance;2023-12-12;585;40
+1432;2;Answering correctly in class;2024-11-02;280;44
+1433;-24;Using magic in corridors;2024-03-06;710;39
+1434;-44;Being late to class;2023-02-10;666;93
+1435;-45;Breaking school rules;2024-11-23;508;16
+1436;-18;Breaking school rules;2024-02-29;286;40
+1437;-37;Being out after curfew;2023-09-02;671;30
+1438;-31;Being out after curfew;2023-08-03;852;15
+1439;45;Outstanding spell performance;2024-03-07;140;48
+1440;-20;Being late to class;2023-06-22;858;49
+1441;-16;Being out after curfew;2023-09-03;273;100
+1442;-20;Being late to class;2023-05-15;300;4
+1443;11;Helping another student;2024-08-06;233;39
+1444;37;Bravery in difficult situation;2024-02-27;297;83
+1445;-1;Breaking school rules;2024-11-05;464;68
+1446;-6;Breaking school rules;2024-02-09;194;21
+1447;43;Answering correctly in class;2024-06-11;202;45
+1448;11;Outstanding spell performance;2024-09-16;592;56
+1449;18;Excellent classwork;2024-08-01;626;52
+1450;-31;Using magic in corridors;2024-08-31;810;91
+1451;34;Answering correctly in class;2023-11-05;973;73
+1452;-38;Breaking school rules;2023-06-11;221;41
+1453;-34;Disrespecting a teacher;2023-05-20;127;71
+1454;-25;Using magic in corridors;2024-09-22;512;79
+1455;49;Excellent classwork;2024-02-29;372;90
+1456;-29;Being late to class;2023-05-26;338;24
+1457;-9;Disrespecting a teacher;2024-05-30;82;41
+1458;-8;Being late to class;2023-07-21;700;13
+1459;48;Bravery in difficult situation;2024-02-11;91;77
+1460;-31;Breaking school rules;2024-07-24;947;52
+1461;21;Excellent classwork;2024-07-20;442;87
+1462;3;Bravery in difficult situation;2023-09-28;9;23
+1463;31;Outstanding spell performance;2023-05-26;752;91
+1464;-18;Using magic in corridors;2023-06-24;822;79
+1465;-30;Breaking school rules;2024-06-21;861;31
+1466;-13;Breaking school rules;2024-04-25;134;36
+1467;31;Helping another student;2024-11-08;198;33
+1468;-25;Breaking school rules;2024-11-14;425;31
+1469;50;Answering correctly in class;2024-08-24;77;48
+1470;-15;Using magic in corridors;2023-02-16;60;97
+1471;5;Helping another student;2024-04-01;488;12
+1472;20;Answering correctly in class;2024-01-25;227;97
+1473;40;Excellent classwork;2023-11-17;947;5
+1474;-48;Breaking school rules;2023-04-15;954;1
+1475;4;Helping another student;2024-03-04;6;47
+1476;-15;Using magic in corridors;2023-03-29;778;77
+1477;-19;Being out after curfew;2024-10-24;514;5
+1478;9;Outstanding spell performance;2023-05-09;355;98
+1479;-5;Using magic in corridors;2023-03-17;114;38
+1480;41;Outstanding spell performance;2023-05-11;251;71
+1481;19;Helping another student;2023-01-07;523;53
+1482;43;Outstanding spell performance;2024-07-07;478;61
+1483;-18;Disrespecting a teacher;2024-06-28;362;84
+1484;16;Bravery in difficult situation;2024-02-23;145;17
+1485;-46;Being late to class;2024-11-20;908;58
+1486;30;Helping another student;2024-07-27;717;15
+1487;-39;Being late to class;2024-04-25;764;36
+1488;-9;Using magic in corridors;2024-05-26;119;91
+1489;18;Outstanding spell performance;2024-06-08;128;95
+1490;-43;Using magic in corridors;2023-04-14;560;84
+1491;47;Outstanding spell performance;2024-06-23;586;38
+1492;16;Answering correctly in class;2023-03-19;703;41
+1493;22;Helping another student;2024-01-20;961;77
+1494;-8;Being late to class;2023-08-29;656;82
+1495;-44;Breaking school rules;2023-06-23;313;69
+1496;-3;Breaking school rules;2024-06-09;225;70
+1497;-8;Breaking school rules;2023-12-23;370;90
+1498;1;Answering correctly in class;2023-12-18;589;94
+1499;-39;Being late to class;2023-03-11;469;20
+1500;-12;Being out after curfew;2024-01-18;441;26
+1501;14;Excellent classwork;2024-05-28;257;27
+1502;-17;Disrespecting a teacher;2023-02-23;95;26
+1503;-35;Disrespecting a teacher;2023-12-17;608;64
+1504;-20;Breaking school rules;2023-11-07;252;44
+1505;-2;Being out after curfew;2023-04-08;926;58
+1506;6;Outstanding spell performance;2023-11-17;378;53
+1507;-18;Breaking school rules;2024-10-19;661;27
+1508;-47;Breaking school rules;2024-07-11;296;10
+1509;-4;Disrespecting a teacher;2023-01-24;909;9
+1510;-40;Being out after curfew;2023-12-24;218;91
+1511;-42;Being late to class;2023-10-02;326;12
+1512;-41;Disrespecting a teacher;2023-10-09;186;44
+1513;-45;Being out after curfew;2023-08-14;72;73
+1514;16;Bravery in difficult situation;2024-08-17;496;67
+1515;3;Answering correctly in class;2024-03-22;264;70
+1516;-27;Breaking school rules;2023-06-25;627;75
+1517;45;Bravery in difficult situation;2024-11-10;603;87
+1518;14;Helping another student;2024-06-06;660;29
+1519;14;Helping another student;2023-09-26;330;32
+1520;-42;Disrespecting a teacher;2024-01-22;921;6
+1521;50;Excellent classwork;2023-02-13;90;61
+1522;-19;Breaking school rules;2023-01-27;179;31
+1523;40;Bravery in difficult situation;2024-10-21;451;27
+1524;49;Bravery in difficult situation;2023-02-13;718;55
+1525;21;Outstanding spell performance;2024-09-21;287;24
+1526;8;Helping another student;2023-02-16;511;18
+1527;13;Helping another student;2024-02-28;599;42
+1528;-7;Being late to class;2024-08-19;675;9
+1529;43;Answering correctly in class;2023-02-18;886;100
+1530;27;Outstanding spell performance;2024-11-10;280;46
+1531;37;Outstanding spell performance;2024-08-02;258;99
+1532;25;Outstanding spell performance;2024-06-23;381;63
+1533;29;Bravery in difficult situation;2024-12-26;791;73
+1534;35;Bravery in difficult situation;2023-05-26;261;62
+1535;-39;Breaking school rules;2023-03-02;473;58
+1536;15;Helping another student;2023-12-15;99;14
+1537;-44;Being late to class;2024-02-11;119;58
+1538;-21;Using magic in corridors;2023-07-11;401;3
+1539;-41;Being late to class;2024-04-13;532;16
+1540;37;Helping another student;2023-12-16;695;44
+1541;-11;Being out after curfew;2023-02-11;656;88
+1542;-2;Being out after curfew;2023-05-03;20;5
+1543;47;Answering correctly in class;2023-06-08;673;47
+1544;-37;Using magic in corridors;2023-07-05;306;92
+1545;-16;Being out after curfew;2023-10-18;719;49
+1546;-34;Disrespecting a teacher;2023-02-10;196;97
+1547;14;Answering correctly in class;2023-06-12;426;72
+1548;13;Bravery in difficult situation;2024-05-05;252;57
+1549;30;Bravery in difficult situation;2023-03-02;276;31
+1550;-49;Breaking school rules;2024-02-10;686;28
+1551;37;Answering correctly in class;2023-07-04;62;64
+1552;-38;Breaking school rules;2023-09-28;589;86
+1553;12;Excellent classwork;2024-10-12;657;59
+1554;13;Outstanding spell performance;2023-02-23;236;8
+1555;27;Bravery in difficult situation;2023-03-01;756;43
+1556;42;Outstanding spell performance;2023-05-09;456;8
+1557;-25;Breaking school rules;2024-06-06;458;88
+1558;6;Helping another student;2023-05-14;586;61
+1559;30;Excellent classwork;2024-11-10;207;18
+1560;-18;Using magic in corridors;2024-02-19;78;69
+1561;-7;Using magic in corridors;2023-04-21;733;92
+1562;-43;Breaking school rules;2023-05-28;283;3
+1563;33;Bravery in difficult situation;2024-02-19;420;79
+1564;16;Helping another student;2023-08-06;723;46
+1565;11;Answering correctly in class;2023-08-21;270;30
+1566;-49;Breaking school rules;2023-07-13;496;61
+1567;-21;Breaking school rules;2024-06-16;653;62
+1568;1;Bravery in difficult situation;2023-10-06;110;101
+1569;-14;Being out after curfew;2023-11-23;611;21
+1570;-42;Being late to class;2024-03-15;654;22
+1571;12;Helping another student;2024-07-31;324;42
+1572;3;Outstanding spell performance;2024-06-22;314;60
+1573;-10;Being late to class;2024-04-16;609;73
+1574;-7;Disrespecting a teacher;2023-01-12;588;39
+1575;11;Bravery in difficult situation;2024-07-08;553;4
+1576;4;Answering correctly in class;2024-04-21;677;19
+1577;-14;Disrespecting a teacher;2023-09-30;680;64
+1578;-11;Breaking school rules;2024-11-05;302;13
+1579;49;Outstanding spell performance;2024-06-10;771;66
+1580;-37;Using magic in corridors;2023-04-04;943;8
+1581;8;Outstanding spell performance;2023-09-15;190;78
+1582;21;Helping another student;2024-06-04;936;89
+1583;-8;Disrespecting a teacher;2023-09-11;919;42
+1584;1;Helping another student;2023-06-09;492;72
+1585;49;Excellent classwork;2024-07-20;106;81
+1586;-3;Breaking school rules;2023-02-27;246;68
+1587;27;Answering correctly in class;2024-07-29;142;70
+1588;-7;Disrespecting a teacher;2023-08-17;714;57
+1589;-41;Being out after curfew;2024-09-15;923;21
+1590;40;Bravery in difficult situation;2023-04-12;828;73
+1591;24;Excellent classwork;2023-05-21;52;78
+1592;-21;Using magic in corridors;2023-10-09;255;81
+1593;-34;Being late to class;2023-04-17;598;45
+1594;-10;Using magic in corridors;2023-06-29;798;69
+1595;17;Helping another student;2024-02-17;515;61
+1596;8;Helping another student;2023-04-01;264;23
+1597;49;Answering correctly in class;2024-02-15;70;73
+1598;-8;Being late to class;2024-02-20;12;54
+1599;24;Bravery in difficult situation;2024-03-10;121;9
+1600;-38;Using magic in corridors;2023-02-04;522;22
+1601;23;Helping another student;2023-03-10;653;50
+1602;0;Disrespecting a teacher;2024-01-19;56;34
+1603;-28;Breaking school rules;2024-04-25;219;69
+1604;34;Helping another student;2023-07-09;575;94
+1605;5;Answering correctly in class;2024-04-17;633;82
+1606;-35;Being out after curfew;2023-12-06;629;50
+1607;-29;Using magic in corridors;2023-07-05;408;19
+1608;-6;Disrespecting a teacher;2023-10-12;432;98
+1609;9;Outstanding spell performance;2023-01-17;691;10
+1610;26;Outstanding spell performance;2023-12-31;906;51
+1611;-25;Being late to class;2023-12-19;104;19
+1612;-4;Breaking school rules;2024-01-30;85;37
+1613;40;Helping another student;2023-01-08;733;24
+1614;20;Outstanding spell performance;2023-03-23;659;2
+1615;-22;Using magic in corridors;2024-06-26;890;4
+1616;34;Answering correctly in class;2024-11-18;762;63
+1617;-4;Using magic in corridors;2023-05-23;330;100
+1618;-24;Disrespecting a teacher;2024-09-28;864;44
+1619;12;Outstanding spell performance;2024-09-11;347;32
+1620;27;Helping another student;2024-04-16;775;72
+1621;22;Answering correctly in class;2024-08-16;198;35
+1622;-23;Disrespecting a teacher;2024-11-25;449;79
+1623;10;Bravery in difficult situation;2023-10-28;176;99
+1624;28;Helping another student;2024-12-22;152;61
+1625;6;Bravery in difficult situation;2023-05-25;937;44
+1626;46;Outstanding spell performance;2024-12-18;164;22
+1627;-33;Being out after curfew;2024-11-17;14;9
+1628;-21;Using magic in corridors;2023-07-06;617;37
+1629;-43;Breaking school rules;2024-12-20;279;56
+1630;33;Outstanding spell performance;2023-02-23;778;96
+1631;3;Answering correctly in class;2024-06-16;209;35
+1632;-27;Disrespecting a teacher;2024-06-14;419;43
+1633;17;Excellent classwork;2023-05-24;747;39
+1634;17;Answering correctly in class;2023-08-25;739;94
+1635;42;Helping another student;2023-12-07;213;5
+1636;47;Excellent classwork;2023-07-03;242;29
+1637;-12;Breaking school rules;2024-06-15;905;57
+1638;-27;Being late to class;2024-09-07;297;100
+1639;4;Answering correctly in class;2024-09-04;958;88
+1640;33;Bravery in difficult situation;2023-12-20;507;59
+1641;-26;Breaking school rules;2024-10-19;11;82
+1642;-39;Being out after curfew;2024-03-25;810;16
+1643;45;Excellent classwork;2024-07-04;139;38
+1644;22;Bravery in difficult situation;2023-03-13;399;57
+1645;-17;Breaking school rules;2023-02-13;706;75
+1646;-17;Being late to class;2024-02-26;22;87
+1647;-39;Being out after curfew;2023-03-03;425;7
+1648;-33;Being out after curfew;2023-08-10;928;10
+1649;43;Bravery in difficult situation;2024-04-29;180;50
+1650;18;Outstanding spell performance;2024-02-27;451;26
+1651;47;Bravery in difficult situation;2024-12-30;944;76
+1652;-9;Disrespecting a teacher;2024-08-12;486;20
+1653;-17;Using magic in corridors;2024-09-23;806;20
+1654;-35;Using magic in corridors;2024-12-14;617;52
+1655;-37;Being out after curfew;2023-12-08;950;87
+1656;49;Outstanding spell performance;2023-12-02;441;71
+1657;44;Answering correctly in class;2024-11-20;888;10
+1658;-49;Using magic in corridors;2023-11-02;579;32
+1659;-6;Breaking school rules;2024-04-11;812;100
+1660;32;Answering correctly in class;2023-12-14;279;60
+1661;49;Answering correctly in class;2023-11-07;145;93
+1662;31;Bravery in difficult situation;2023-05-27;579;6
+1663;25;Answering correctly in class;2023-10-26;983;57
+1664;48;Bravery in difficult situation;2024-05-24;788;21
+1665;-46;Disrespecting a teacher;2023-05-09;10;9
+1666;-32;Using magic in corridors;2023-03-28;917;83
+1667;1;Outstanding spell performance;2024-07-17;391;24
+1668;2;Answering correctly in class;2024-12-19;521;61
+1669;-5;Being out after curfew;2024-07-04;499;9
+1670;10;Helping another student;2023-11-01;125;83
+1671;50;Helping another student;2023-04-26;108;76
+1672;-32;Being late to class;2024-11-11;958;86
+1673;50;Answering correctly in class;2024-01-27;724;91
+1674;-41;Using magic in corridors;2024-06-04;613;99
+1675;-30;Breaking school rules;2023-01-16;968;40
+1676;33;Outstanding spell performance;2024-07-29;251;45
+1677;44;Excellent classwork;2024-10-14;654;19
+1678;37;Excellent classwork;2024-01-30;149;87
+1679;42;Outstanding spell performance;2024-08-20;415;48
+1680;-44;Being late to class;2024-12-12;131;74
+1681;38;Answering correctly in class;2023-12-28;594;50
+1682;-26;Disrespecting a teacher;2023-08-24;363;29
+1683;48;Helping another student;2023-10-11;770;23
+1684;-14;Using magic in corridors;2023-11-06;20;19
+1685;16;Outstanding spell performance;2023-09-25;762;81
+1686;-39;Being late to class;2023-03-29;825;77
+1687;46;Helping another student;2024-03-16;704;50
+1688;-35;Using magic in corridors;2024-12-20;809;44
+1689;23;Answering correctly in class;2024-05-29;982;36
+1690;-44;Breaking school rules;2024-12-08;508;56
+1691;24;Outstanding spell performance;2023-06-25;702;91
+1692;46;Outstanding spell performance;2023-01-07;475;25
+1693;-43;Disrespecting a teacher;2023-10-12;703;92
+1694;8;Helping another student;2024-05-08;260;84
+1695;37;Outstanding spell performance;2023-03-22;880;101
+1696;49;Excellent classwork;2024-07-14;213;24
+1697;22;Answering correctly in class;2023-06-20;863;60
+1698;40;Answering correctly in class;2023-09-30;153;5
+1699;-34;Breaking school rules;2023-10-02;623;26
+1700;-1;Disrespecting a teacher;2023-05-04;230;67
+1701;-5;Disrespecting a teacher;2023-04-30;376;14
+1702;7;Helping another student;2024-03-27;169;101
+1703;26;Answering correctly in class;2023-12-17;682;47
+1704;37;Answering correctly in class;2024-08-09;891;8
+1705;37;Answering correctly in class;2023-02-10;690;54
+1706;24;Excellent classwork;2023-11-20;370;1
+1707;-6;Being late to class;2024-08-08;440;23
+1708;32;Outstanding spell performance;2024-10-27;525;95
+1709;-37;Using magic in corridors;2023-05-18;64;55
+1710;18;Outstanding spell performance;2024-08-08;473;20
+1711;25;Helping another student;2023-11-20;50;100
+1712;35;Answering correctly in class;2024-02-07;8;55
+1713;8;Helping another student;2024-08-16;568;74
+1714;47;Excellent classwork;2024-02-21;970;41
+1715;19;Helping another student;2024-06-06;341;58
+1716;5;Helping another student;2023-07-26;648;101
+1717;-27;Using magic in corridors;2024-12-03;917;87
+1718;-18;Using magic in corridors;2024-08-02;348;88
+1719;-23;Disrespecting a teacher;2024-01-07;501;97
+1720;36;Excellent classwork;2024-01-04;628;88
+1721;-40;Disrespecting a teacher;2023-01-22;831;10
+1722;6;Bravery in difficult situation;2023-09-10;208;59
+1723;31;Excellent classwork;2024-11-30;380;13
+1724;4;Bravery in difficult situation;2023-02-26;952;39
+1725;6;Bravery in difficult situation;2023-12-11;871;23
+1726;-47;Using magic in corridors;2023-05-20;962;42
+1727;32;Outstanding spell performance;2024-10-29;590;17
+1728;20;Excellent classwork;2023-06-02;132;67
+1729;-24;Disrespecting a teacher;2024-08-05;360;10
+1730;-31;Being late to class;2024-09-04;9;0
+1731;-7;Being late to class;2024-05-12;828;48
+1732;37;Excellent classwork;2024-12-03;419;96
+1733;37;Answering correctly in class;2023-12-10;127;13
+1734;50;Excellent classwork;2023-12-20;766;12
+1735;3;Answering correctly in class;2023-09-27;846;44
+1736;37;Answering correctly in class;2023-11-17;327;4
+1737;-42;Disrespecting a teacher;2024-05-17;522;94
+1738;-3;Being late to class;2024-12-23;792;50
+1739;48;Answering correctly in class;2024-08-28;862;86
+1740;48;Helping another student;2024-04-20;537;35
+1741;40;Answering correctly in class;2024-09-02;123;17
+1742;43;Outstanding spell performance;2023-08-29;294;35
+1743;3;Helping another student;2023-02-12;695;9
+1744;-39;Being out after curfew;2024-09-07;324;98
+1745;-30;Being late to class;2023-05-02;578;35
+1746;-10;Using magic in corridors;2024-08-06;155;60
+1747;43;Excellent classwork;2023-10-16;577;34
+1748;14;Answering correctly in class;2024-03-26;747;54
+1749;34;Helping another student;2023-07-27;237;43
+1750;-4;Being late to class;2023-09-27;799;14
+1751;-13;Being late to class;2024-04-24;729;90
+1752;-6;Being out after curfew;2024-04-24;431;45
+1753;21;Answering correctly in class;2024-06-17;766;97
+1754;40;Bravery in difficult situation;2024-01-26;593;43
+1755;12;Answering correctly in class;2023-09-12;646;56
+1756;20;Answering correctly in class;2023-06-18;427;16
+1757;7;Excellent classwork;2023-08-02;151;0
+1758;23;Excellent classwork;2023-11-05;331;2
+1759;31;Bravery in difficult situation;2023-01-03;820;31
+1760;-9;Using magic in corridors;2023-03-07;494;72
+1761;-42;Being out after curfew;2023-01-13;901;78
+1762;6;Outstanding spell performance;2024-09-18;151;55
+1763;20;Helping another student;2024-12-02;445;29
+1764;-47;Using magic in corridors;2023-04-03;152;94
+1765;-42;Breaking school rules;2024-07-18;26;43
+1766;-28;Using magic in corridors;2023-06-22;597;69
+1767;-15;Breaking school rules;2024-09-10;755;52
+1768;34;Answering correctly in class;2023-07-29;457;1
+1769;24;Helping another student;2023-04-14;868;97
+1770;-35;Breaking school rules;2024-06-08;45;76
+1771;-44;Using magic in corridors;2024-09-07;188;2
+1772;42;Excellent classwork;2023-12-25;757;62
+1773;-20;Breaking school rules;2024-03-18;399;6
+1774;21;Helping another student;2023-03-20;1;70
+1775;-33;Breaking school rules;2024-11-19;82;49
+1776;42;Excellent classwork;2024-03-22;573;70
+1777;-8;Using magic in corridors;2023-02-19;758;81
+1778;-50;Being out after curfew;2023-02-16;130;12
+1779;6;Excellent classwork;2023-10-10;217;92
+1780;15;Excellent classwork;2023-12-24;359;57
+1781;10;Outstanding spell performance;2024-04-03;478;3
+1782;22;Helping another student;2024-12-18;723;10
+1783;-12;Using magic in corridors;2023-01-12;157;43
+1784;29;Answering correctly in class;2024-02-02;29;65
+1785;49;Excellent classwork;2023-12-08;565;40
+1786;-41;Disrespecting a teacher;2024-06-26;737;37
+1787;16;Outstanding spell performance;2024-06-04;199;95
+1788;16;Outstanding spell performance;2024-01-20;116;46
+1789;29;Answering correctly in class;2023-03-13;408;65
+1790;34;Outstanding spell performance;2023-04-24;506;16
+1791;-35;Disrespecting a teacher;2024-07-04;839;79
+1792;-11;Disrespecting a teacher;2024-09-22;915;13
+1793;-14;Using magic in corridors;2024-03-09;307;4
+1794;-19;Using magic in corridors;2023-08-11;377;65
+1795;-15;Being late to class;2024-07-23;971;18
+1796;37;Outstanding spell performance;2023-10-19;221;36
+1797;23;Helping another student;2024-10-03;822;34
+1798;21;Helping another student;2023-03-24;685;97
+1799;5;Outstanding spell performance;2023-12-20;317;26
+1800;12;Outstanding spell performance;2023-02-13;393;69
+1801;6;Bravery in difficult situation;2023-07-26;185;32
+1802;47;Outstanding spell performance;2024-11-14;295;30
+1803;35;Bravery in difficult situation;2024-12-05;710;92
+1804;25;Answering correctly in class;2023-01-27;602;40
+1805;-1;Being out after curfew;2024-09-03;523;76
+1806;27;Answering correctly in class;2023-10-26;284;82
+1807;-11;Being out after curfew;2024-01-19;184;90
+1808;-17;Disrespecting a teacher;2023-11-01;428;54
+1809;-33;Being late to class;2023-06-09;756;25
+1810;-20;Using magic in corridors;2024-08-27;525;32
+1811;15;Excellent classwork;2024-02-16;680;55
+1812;20;Excellent classwork;2024-02-15;69;94
+1813;-9;Breaking school rules;2024-04-23;673;32
+1814;7;Outstanding spell performance;2023-08-23;902;55
+1815;-50;Using magic in corridors;2024-01-20;44;84
+1816;-24;Using magic in corridors;2024-10-20;937;21
+1817;-14;Using magic in corridors;2023-09-23;588;18
+1818;-28;Being late to class;2024-08-08;68;18
+1819;-29;Being out after curfew;2024-09-29;565;67
+1820;12;Helping another student;2023-03-16;904;49
+1821;-26;Disrespecting a teacher;2023-06-20;669;89
+1822;-17;Being out after curfew;2023-10-25;91;72
+1823;-42;Being late to class;2023-08-01;352;96
+1824;-13;Disrespecting a teacher;2023-09-05;207;6
+1825;-22;Being out after curfew;2024-05-16;79;92
+1826;1;Bravery in difficult situation;2023-12-21;444;96
+1827;44;Bravery in difficult situation;2024-04-18;607;70
+1828;-16;Breaking school rules;2023-02-16;58;42
+1829;-47;Being out after curfew;2023-12-28;559;6
+1830;-31;Using magic in corridors;2023-02-14;160;58
+1831;17;Answering correctly in class;2023-03-30;645;34
+1832;-20;Disrespecting a teacher;2023-11-28;161;10
+1833;-14;Disrespecting a teacher;2024-12-26;842;64
+1834;18;Bravery in difficult situation;2024-03-16;69;70
+1835;-1;Being late to class;2023-06-18;890;92
+1836;-30;Being late to class;2024-08-11;14;5
+1837;20;Answering correctly in class;2023-10-11;126;72
+1838;24;Answering correctly in class;2024-11-07;580;64
+1839;-39;Being late to class;2024-05-02;194;19
+1840;25;Bravery in difficult situation;2024-03-13;116;30
+1841;30;Answering correctly in class;2023-12-20;745;24
+1842;-2;Disrespecting a teacher;2024-11-05;670;44
+1843;-28;Using magic in corridors;2024-08-11;304;87
+1844;-36;Using magic in corridors;2024-10-07;830;59
+1845;39;Answering correctly in class;2024-05-17;849;26
+1846;-28;Breaking school rules;2024-02-01;673;61
+1847;-17;Disrespecting a teacher;2024-08-25;809;8
+1848;-22;Disrespecting a teacher;2024-01-08;953;10
+1849;20;Bravery in difficult situation;2024-01-03;936;33
+1850;-31;Using magic in corridors;2024-02-24;555;56
+1851;-46;Breaking school rules;2023-06-17;771;48
+1852;-19;Disrespecting a teacher;2024-04-30;705;80
+1853;5;Bravery in difficult situation;2023-04-12;102;57
+1854;20;Excellent classwork;2023-10-31;842;77
+1855;-30;Using magic in corridors;2024-11-21;458;14
+1856;-3;Being out after curfew;2023-12-30;926;19
+1857;22;Answering correctly in class;2023-05-25;54;88
+1858;-20;Using magic in corridors;2024-01-26;70;73
+1859;24;Excellent classwork;2024-10-24;451;34
+1860;15;Excellent classwork;2023-01-19;895;43
+1861;-19;Being late to class;2023-12-25;797;16
+1862;-50;Being late to class;2024-05-10;484;15
+1863;37;Bravery in difficult situation;2024-03-30;136;8
+1864;-41;Disrespecting a teacher;2024-06-25;776;39
+1865;3;Excellent classwork;2024-07-19;328;78
+1866;44;Outstanding spell performance;2024-04-09;215;3
+1867;-7;Breaking school rules;2023-06-04;39;62
+1868;-49;Being late to class;2024-01-19;585;89
+1869;-16;Being out after curfew;2024-04-28;270;35
+1870;-41;Breaking school rules;2024-06-28;10;77
+1871;-38;Disrespecting a teacher;2023-09-14;770;4
+1872;20;Excellent classwork;2023-04-26;851;96
+1873;-20;Being late to class;2024-05-03;367;11
+1874;-16;Using magic in corridors;2023-06-28;782;71
+1875;26;Answering correctly in class;2023-01-04;306;21
+1876;-24;Disrespecting a teacher;2023-12-05;276;76
+1877;41;Bravery in difficult situation;2023-04-13;353;19
+1878;31;Excellent classwork;2024-11-03;456;8
+1879;-11;Using magic in corridors;2024-05-30;323;50
+1880;-34;Breaking school rules;2023-05-20;394;94
+1881;-2;Breaking school rules;2023-05-05;48;68
+1882;-34;Being late to class;2024-09-09;609;10
+1883;46;Excellent classwork;2023-08-27;32;29
+1884;5;Excellent classwork;2023-03-23;866;46
+1885;44;Answering correctly in class;2023-08-27;290;92
+1886;-35;Being late to class;2023-03-22;392;6
+1887;15;Helping another student;2023-06-30;152;40
+1888;22;Answering correctly in class;2023-08-22;243;56
+1889;21;Bravery in difficult situation;2024-09-14;136;5
+1890;-30;Being late to class;2024-04-27;422;19
+1891;46;Helping another student;2024-02-25;868;41
+1892;-27;Using magic in corridors;2024-01-04;595;16
+1893;-27;Being late to class;2023-11-20;25;100
+1894;-25;Being out after curfew;2024-01-03;779;4
+1895;-27;Being out after curfew;2023-02-25;840;60
+1896;-16;Being out after curfew;2024-02-03;812;11
+1897;-19;Being out after curfew;2024-11-16;526;28
+1898;49;Helping another student;2023-10-25;19;89
+1899;-18;Disrespecting a teacher;2023-06-02;890;89
+1900;-37;Using magic in corridors;2023-12-15;138;92
+1901;5;Bravery in difficult situation;2024-03-17;438;83
+1902;-18;Being late to class;2023-08-27;814;81
+1903;-23;Breaking school rules;2023-07-30;699;82
+1904;5;Bravery in difficult situation;2023-03-25;295;51
+1905;-9;Breaking school rules;2024-09-17;769;85
+1906;-27;Being out after curfew;2023-05-27;953;73
+1907;43;Excellent classwork;2024-02-19;127;51
+1908;28;Outstanding spell performance;2023-10-26;352;23
+1909;4;Bravery in difficult situation;2023-07-09;626;85
+1910;-32;Being late to class;2023-02-26;73;93
+1911;10;Answering correctly in class;2023-09-26;103;17
+1912;-21;Being late to class;2024-08-18;115;11
+1913;-49;Disrespecting a teacher;2023-09-28;507;48
+1914;40;Outstanding spell performance;2024-02-09;773;49
+1915;23;Helping another student;2023-06-20;162;21
+1916;49;Excellent classwork;2023-05-26;512;90
+1917;-42;Being late to class;2024-06-12;363;75
+1918;-1;Breaking school rules;2023-02-18;920;44
+1919;-28;Breaking school rules;2023-12-14;86;87
+1920;27;Helping another student;2024-03-08;564;46
+1921;23;Bravery in difficult situation;2024-01-15;687;72
+1922;-46;Disrespecting a teacher;2024-11-13;41;0
+1923;-14;Being out after curfew;2024-08-15;955;35
+1924;-27;Disrespecting a teacher;2024-10-01;755;13
+1925;13;Answering correctly in class;2024-03-18;492;88
+1926;45;Answering correctly in class;2024-04-09;367;78
+1927;-5;Being out after curfew;2023-12-04;925;25
+1928;-10;Disrespecting a teacher;2023-02-18;682;83
+1929;42;Helping another student;2024-12-19;539;81
+1930;32;Excellent classwork;2023-01-20;266;74
+1931;-44;Using magic in corridors;2023-10-17;462;63
+1932;-38;Being late to class;2024-06-26;943;94
+1933;18;Outstanding spell performance;2024-11-22;791;33
+1934;-17;Using magic in corridors;2023-08-06;856;41
+1935;-32;Being late to class;2024-12-26;498;42
+1936;-14;Disrespecting a teacher;2023-08-28;897;73
+1937;47;Outstanding spell performance;2023-06-11;348;49
+1938;-13;Using magic in corridors;2023-08-26;968;36
+1939;19;Answering correctly in class;2024-01-26;312;46
+1940;-49;Breaking school rules;2023-01-29;566;76
+1941;-1;Breaking school rules;2023-04-27;264;2
+1942;-22;Being out after curfew;2023-07-02;679;34
+1943;-1;Being out after curfew;2023-08-11;390;97
+1944;-26;Using magic in corridors;2023-06-03;837;1
+1945;-7;Disrespecting a teacher;2023-02-15;100;24
+1946;-10;Using magic in corridors;2023-12-22;155;63
+1947;36;Answering correctly in class;2023-04-14;644;52
+1948;5;Answering correctly in class;2024-07-12;31;82
+1949;37;Bravery in difficult situation;2024-01-27;581;95
+1950;-4;Being late to class;2024-08-16;505;45
+1951;-13;Being out after curfew;2024-06-01;300;68
+1952;-37;Breaking school rules;2023-09-21;501;49
+1953;-10;Being out after curfew;2024-09-29;702;9
+1954;6;Answering correctly in class;2023-07-19;174;50
+1955;44;Answering correctly in class;2023-02-15;77;89
+1956;-31;Using magic in corridors;2024-01-15;673;4
+1957;31;Answering correctly in class;2023-09-09;791;61
+1958;-23;Breaking school rules;2024-01-30;418;88
+1959;-33;Being out after curfew;2024-12-17;484;82
+1960;36;Bravery in difficult situation;2024-08-26;574;13
+1961;-31;Breaking school rules;2023-09-26;894;76
+1962;-12;Using magic in corridors;2023-11-24;967;48
+1963;12;Answering correctly in class;2024-07-22;408;76
+1964;-33;Using magic in corridors;2023-01-01;410;52
+1965;46;Bravery in difficult situation;2024-12-23;143;17
+1966;-29;Breaking school rules;2024-10-21;436;44
+1967;-22;Being out after curfew;2023-03-20;837;38
+1968;-33;Being late to class;2023-09-24;965;95
+1969;-3;Breaking school rules;2024-05-13;642;74
+1970;-29;Breaking school rules;2023-08-28;247;58
+1971;7;Excellent classwork;2024-09-24;292;36
+1972;1;Excellent classwork;2023-10-11;858;6
+1973;-46;Disrespecting a teacher;2024-12-09;850;39
+1974;-4;Breaking school rules;2023-07-24;981;6
+1975;-27;Using magic in corridors;2024-03-30;6;95
+1976;-6;Being out after curfew;2023-02-21;646;34
+1977;-5;Breaking school rules;2023-03-31;431;9
+1978;-15;Being late to class;2023-02-13;595;4
+1979;1;Excellent classwork;2023-03-08;247;44
+1980;24;Excellent classwork;2023-09-25;71;54
+1981;-48;Being out after curfew;2023-07-23;915;11
+1982;-29;Disrespecting a teacher;2023-01-25;516;46
+1983;-22;Being out after curfew;2024-11-13;716;27
+1984;26;Bravery in difficult situation;2024-12-14;776;93
+1985;0;Disrespecting a teacher;2024-04-01;879;63
+1986;-12;Using magic in corridors;2023-11-20;464;94
+1987;-26;Disrespecting a teacher;2024-12-06;516;97
+1988;-43;Being out after curfew;2023-03-12;622;24
+1989;-40;Being late to class;2023-06-15;846;36
+1990;-4;Being out after curfew;2023-09-11;319;68
+1991;-21;Breaking school rules;2023-03-02;256;98
+1992;39;Excellent classwork;2024-12-07;771;65
+1993;46;Answering correctly in class;2024-06-15;278;1
+1994;4;Excellent classwork;2023-10-27;675;49
+1995;-9;Being out after curfew;2023-03-28;422;3
+1996;16;Outstanding spell performance;2023-05-05;472;90
+1997;-12;Breaking school rules;2023-12-05;68;28
+1998;28;Outstanding spell performance;2023-12-21;545;70
+1999;10;Answering correctly in class;2024-03-06;486;63
+2000;13;Excellent classwork;2023-12-21;322;5
+2001;-29;Disrespecting a teacher;2024-09-15;398;30
+2002;-29;Breaking school rules;2024-01-01;410;17
+2003;37;Answering correctly in class;2023-01-23;549;8
+2004;-27;Being out after curfew;2024-07-10;544;17
+2005;28;Bravery in difficult situation;2023-02-28;95;24
+2006;15;Answering correctly in class;2023-08-24;978;72
+2007;-21;Being late to class;2023-12-29;22;62
+2008;12;Excellent classwork;2023-09-27;661;40
+2009;22;Excellent classwork;2023-09-27;179;11
+2010;28;Answering correctly in class;2023-05-15;92;79
+2011;23;Helping another student;2024-04-15;353;85
+2012;-40;Being out after curfew;2024-01-09;634;79
+2013;24;Answering correctly in class;2023-10-31;494;95
+2014;27;Helping another student;2024-04-22;46;39
+2015;32;Bravery in difficult situation;2023-11-03;532;28
+2016;31;Excellent classwork;2023-06-13;813;41
+2017;12;Helping another student;2023-08-18;179;25
+2018;16;Answering correctly in class;2024-02-22;795;28
+2019;-8;Being late to class;2024-12-29;742;15
+2020;25;Bravery in difficult situation;2024-08-11;848;51
+2021;-30;Being late to class;2024-08-13;969;24
+2022;-17;Using magic in corridors;2024-04-30;417;97
+2023;-45;Being out after curfew;2023-07-15;346;60
+2024;17;Helping another student;2024-02-19;344;91
+2025;-3;Disrespecting a teacher;2023-03-15;684;0
+2026;10;Helping another student;2023-06-07;372;83
+2027;19;Outstanding spell performance;2023-09-28;610;75
+2028;-12;Being out after curfew;2024-03-24;800;76
+2029;6;Bravery in difficult situation;2023-02-17;678;100
+2030;-5;Disrespecting a teacher;2023-08-30;702;30
+2031;3;Helping another student;2023-01-14;64;48
+2032;-15;Using magic in corridors;2023-01-28;975;73
+2033;-28;Disrespecting a teacher;2024-11-28;363;2
+2034;-6;Using magic in corridors;2023-02-16;777;57
+2035;30;Bravery in difficult situation;2024-02-11;292;67
+2036;25;Bravery in difficult situation;2023-12-21;97;1
+2037;-38;Using magic in corridors;2023-07-29;634;30
+2038;-4;Being out after curfew;2023-10-21;146;30
+2039;1;Excellent classwork;2024-11-14;675;81
+2040;3;Bravery in difficult situation;2023-11-28;487;71
+2041;-32;Disrespecting a teacher;2024-10-26;398;38
+2042;-19;Disrespecting a teacher;2024-04-29;134;59
+2043;-33;Disrespecting a teacher;2024-07-22;451;2
+2044;33;Excellent classwork;2024-10-15;93;61
+2045;-21;Being out after curfew;2024-03-10;117;36
+2046;2;Excellent classwork;2023-02-20;14;28
+2047;-43;Being out after curfew;2023-02-26;123;96
+2048;31;Answering correctly in class;2024-11-02;823;77
+2049;-46;Being out after curfew;2024-03-30;354;18
+2050;49;Answering correctly in class;2023-12-02;715;97
+2051;-30;Using magic in corridors;2023-11-27;89;45
+2052;32;Helping another student;2024-06-12;921;6
+2053;41;Answering correctly in class;2024-04-12;813;93
+2054;-47;Breaking school rules;2023-05-16;606;50
+2055;5;Outstanding spell performance;2023-12-18;872;95
+2056;-19;Disrespecting a teacher;2024-03-27;642;24
+2057;8;Excellent classwork;2023-09-29;708;34
+2058;-4;Being late to class;2024-09-14;230;28
+2059;45;Bravery in difficult situation;2023-05-05;79;85
+2060;-24;Being out after curfew;2023-10-15;421;38
+2061;6;Answering correctly in class;2023-12-31;537;26
+2062;21;Answering correctly in class;2024-09-29;249;15
+2063;-7;Being out after curfew;2023-10-06;526;100
+2064;34;Bravery in difficult situation;2024-06-03;482;58
+2065;7;Answering correctly in class;2023-11-09;425;80
+2066;-45;Being out after curfew;2024-08-19;890;95
+2067;-25;Being out after curfew;2024-06-12;261;77
+2068;-35;Being late to class;2024-04-05;599;71
+2069;25;Outstanding spell performance;2024-05-20;589;60
+2070;40;Answering correctly in class;2023-01-07;888;47
+2071;-37;Disrespecting a teacher;2023-08-08;293;32
+2072;-2;Being late to class;2023-11-18;785;78
+2073;38;Answering correctly in class;2024-03-25;408;42
+2074;-49;Disrespecting a teacher;2024-05-09;86;43
+2075;-45;Disrespecting a teacher;2024-08-03;643;6
+2076;13;Bravery in difficult situation;2024-03-27;904;57
+2077;37;Outstanding spell performance;2023-01-14;378;38
+2078;-42;Being late to class;2024-11-21;138;4
+2079;35;Answering correctly in class;2024-02-03;774;12
+2080;3;Outstanding spell performance;2023-02-14;775;35
+2081;-14;Being out after curfew;2023-01-14;391;28
+2082;-32;Being out after curfew;2023-02-25;457;100
+2083;-41;Breaking school rules;2023-02-20;455;24
+2084;-43;Breaking school rules;2024-10-13;454;79
+2085;7;Helping another student;2024-10-23;974;24
+2086;-42;Being late to class;2023-08-06;710;55
+2087;-26;Disrespecting a teacher;2024-06-06;61;70
+2088;-39;Being out after curfew;2024-01-03;197;13
+2089;-1;Disrespecting a teacher;2023-11-05;508;87
+2090;0;Using magic in corridors;2024-01-11;338;9
+2091;31;Bravery in difficult situation;2023-05-02;26;61
+2092;24;Bravery in difficult situation;2024-07-01;664;28
+2093;44;Bravery in difficult situation;2024-03-30;208;16
+2094;19;Bravery in difficult situation;2023-04-30;379;88
+2095;-1;Being out after curfew;2024-05-29;929;13
+2096;25;Helping another student;2023-01-01;311;16
+2097;1;Excellent classwork;2023-04-13;91;44
+2098;-4;Breaking school rules;2024-09-07;178;29
+2099;21;Bravery in difficult situation;2024-11-10;905;83
+2100;-1;Breaking school rules;2024-03-11;973;21
+2101;42;Bravery in difficult situation;2024-04-18;902;36
+2102;-35;Being out after curfew;2023-09-10;726;12
+2103;26;Outstanding spell performance;2023-12-19;352;11
+2104;38;Outstanding spell performance;2023-12-06;310;49
+2105;3;Outstanding spell performance;2023-09-30;170;73
+2106;24;Outstanding spell performance;2024-02-03;313;63
+2107;-27;Being out after curfew;2024-07-19;276;69
+2108;22;Outstanding spell performance;2023-05-07;839;88
+2109;44;Answering correctly in class;2023-07-08;410;51
+2110;24;Helping another student;2023-03-09;367;8
+2111;-32;Being out after curfew;2023-11-29;185;73
+2112;27;Excellent classwork;2024-05-25;429;74
+2113;36;Outstanding spell performance;2023-10-31;448;42
+2114;10;Outstanding spell performance;2024-06-17;422;30
+2115;-7;Using magic in corridors;2024-07-13;111;53
+2116;18;Helping another student;2023-12-05;259;98
+2117;15;Bravery in difficult situation;2024-04-09;549;27
+2118;2;Answering correctly in class;2024-07-01;699;4
+2119;40;Bravery in difficult situation;2024-11-05;312;67
+2120;45;Bravery in difficult situation;2023-12-02;564;87
+2121;-47;Being out after curfew;2023-10-29;488;37
+2122;13;Answering correctly in class;2024-10-04;219;94
+2123;24;Bravery in difficult situation;2023-04-18;756;39
+2124;-18;Breaking school rules;2024-10-18;258;48
+2125;46;Answering correctly in class;2023-11-16;476;32
+2126;19;Outstanding spell performance;2024-10-12;567;65
+2127;45;Excellent classwork;2024-06-13;410;100
+2128;10;Outstanding spell performance;2024-02-20;85;1
+2129;22;Excellent classwork;2023-09-04;526;42
+2130;-16;Using magic in corridors;2023-11-21;302;81
+2131;-48;Breaking school rules;2023-02-18;396;88
+2132;-26;Being late to class;2024-12-04;393;73
+2133;34;Bravery in difficult situation;2023-04-10;418;56
+2134;-41;Using magic in corridors;2024-04-14;158;87
+2135;-47;Being out after curfew;2023-01-24;505;60
+2136;-39;Being out after curfew;2023-05-08;444;50
+2137;44;Outstanding spell performance;2024-09-26;46;83
+2138;-45;Being late to class;2023-01-30;76;2
+2139;-25;Being out after curfew;2024-07-02;34;17
+2140;-43;Using magic in corridors;2023-08-22;170;12
+2141;-9;Using magic in corridors;2023-09-19;502;58
+2142;20;Outstanding spell performance;2024-08-19;189;86
+2143;-7;Being late to class;2024-06-16;918;79
+2144;-13;Being out after curfew;2024-07-11;293;64
+2145;50;Outstanding spell performance;2024-12-10;346;67
+2146;19;Bravery in difficult situation;2023-03-11;767;75
+2147;-50;Being out after curfew;2024-01-10;868;45
+2148;43;Excellent classwork;2023-05-03;50;76
+2149;-25;Being late to class;2023-12-13;751;41
+2150;38;Bravery in difficult situation;2024-03-23;510;72
+2151;27;Helping another student;2023-05-02;241;89
+2152;24;Helping another student;2024-11-12;559;2
+2153;8;Bravery in difficult situation;2023-12-24;423;58
+2154;-9;Disrespecting a teacher;2024-12-26;356;48
+2155;-28;Being out after curfew;2023-03-09;858;2
+2156;-10;Breaking school rules;2023-08-01;629;27
+2157;-19;Disrespecting a teacher;2023-08-18;443;60
+2158;-35;Being late to class;2023-09-09;139;37
+2159;40;Outstanding spell performance;2024-06-12;812;56
+2160;30;Outstanding spell performance;2024-01-31;55;0
+2161;-33;Using magic in corridors;2024-05-03;636;65
+2162;7;Excellent classwork;2024-09-30;812;79
+2163;-29;Using magic in corridors;2024-03-18;67;27
+2164;-48;Using magic in corridors;2023-07-13;666;48
+2165;-34;Using magic in corridors;2024-12-21;532;51
+2166;-7;Disrespecting a teacher;2023-04-03;323;26
+2167;-44;Using magic in corridors;2024-02-28;138;20
+2168;-27;Being out after curfew;2023-08-18;48;21
+2169;40;Excellent classwork;2023-01-09;866;84
+2170;3;Answering correctly in class;2023-10-12;20;31
+2171;33;Helping another student;2024-04-01;197;75
+2172;-1;Using magic in corridors;2023-01-26;449;73
+2173;-2;Using magic in corridors;2024-02-14;535;75
+2174;5;Outstanding spell performance;2024-03-03;752;64
+2175;-33;Using magic in corridors;2024-02-24;27;100
+2176;22;Excellent classwork;2024-02-17;293;99
+2177;25;Bravery in difficult situation;2023-06-03;483;88
+2178;15;Excellent classwork;2024-06-14;826;52
+2179;29;Answering correctly in class;2023-04-21;662;50
+2180;-42;Being late to class;2024-02-04;581;41
+2181;25;Helping another student;2023-07-15;736;4
+2182;-1;Being late to class;2024-07-16;466;94
+2183;39;Excellent classwork;2024-03-20;425;10
+2184;32;Helping another student;2023-05-11;933;63
+2185;24;Outstanding spell performance;2023-05-25;454;11
+2186;-24;Using magic in corridors;2023-07-12;604;43
+2187;-23;Disrespecting a teacher;2024-09-23;269;84
+2188;-9;Disrespecting a teacher;2023-06-27;533;88
+2189;4;Bravery in difficult situation;2023-05-10;242;58
+2190;-20;Breaking school rules;2023-11-25;266;95
+2191;10;Answering correctly in class;2023-11-24;81;14
+2192;-25;Disrespecting a teacher;2024-03-28;73;17
+2193;-6;Breaking school rules;2023-06-08;822;93
+2194;-31;Being late to class;2023-09-25;257;43
+2195;45;Excellent classwork;2023-04-15;618;40
+2196;17;Excellent classwork;2024-12-07;275;22
+2197;-32;Being late to class;2024-11-08;411;57
+2198;-36;Disrespecting a teacher;2023-09-11;25;89
+2199;35;Bravery in difficult situation;2024-09-21;485;75
+2200;-1;Disrespecting a teacher;2023-08-12;589;66
+2201;23;Excellent classwork;2024-01-31;341;19
+2202;-14;Being out after curfew;2024-08-14;377;5
+2203;-3;Being out after curfew;2024-10-01;136;59
+2204;-4;Breaking school rules;2024-10-21;420;94
+2205;-44;Using magic in corridors;2024-04-16;46;69
+2206;-7;Being late to class;2024-12-01;595;30
+2207;-16;Being late to class;2023-04-29;278;81
+2208;-25;Being out after curfew;2023-04-05;719;101
+2209;-40;Disrespecting a teacher;2023-05-08;920;53
+2210;45;Answering correctly in class;2024-09-07;386;86
+2211;-25;Being late to class;2023-10-01;649;74
+2212;41;Helping another student;2024-11-26;502;21
+2213;13;Helping another student;2024-12-15;106;53
+2214;50;Helping another student;2024-03-16;738;89
+2215;12;Outstanding spell performance;2024-11-21;71;63
+2216;-24;Being late to class;2023-01-06;284;100
+2217;-32;Being late to class;2023-10-11;102;33
+2218;10;Answering correctly in class;2023-04-05;215;15
+2219;10;Bravery in difficult situation;2024-01-14;255;88
+2220;32;Helping another student;2023-01-21;639;38
+2221;-46;Using magic in corridors;2023-12-10;41;1
+2222;-6;Disrespecting a teacher;2023-10-07;246;84
+2223;5;Outstanding spell performance;2023-11-21;483;45
+2224;-34;Being out after curfew;2024-11-28;364;21
+2225;4;Answering correctly in class;2024-03-12;497;42
+2226;41;Outstanding spell performance;2023-03-15;569;44
+2227;-42;Being late to class;2023-02-16;334;14
+2228;41;Bravery in difficult situation;2024-08-03;259;25
+2229;2;Excellent classwork;2024-05-23;326;58
+2230;32;Answering correctly in class;2023-06-12;756;28
+2231;-21;Breaking school rules;2024-05-12;631;70
+2232;-15;Breaking school rules;2024-11-13;342;21
+2233;17;Answering correctly in class;2023-07-22;952;95
+2234;28;Bravery in difficult situation;2023-03-28;774;36
+2235;21;Helping another student;2024-09-02;382;63
+2236;-28;Being late to class;2023-02-06;454;46
+2237;38;Answering correctly in class;2024-10-27;951;78
+2238;-33;Being out after curfew;2023-08-20;899;74
+2239;7;Answering correctly in class;2023-03-05;174;9
+2240;19;Bravery in difficult situation;2023-06-07;579;21
+2241;23;Outstanding spell performance;2024-03-10;932;64
+2242;-32;Breaking school rules;2023-05-06;134;4
+2243;-45;Breaking school rules;2023-01-25;67;79
+2244;-21;Being late to class;2024-09-15;548;58
+2245;-31;Being late to class;2024-06-09;968;28
+2246;-17;Disrespecting a teacher;2024-09-29;743;5
+2247;44;Outstanding spell performance;2023-09-29;788;88
+2248;11;Bravery in difficult situation;2024-03-20;505;50
+2249;0;Disrespecting a teacher;2024-12-19;513;16
+2250;18;Helping another student;2023-01-05;244;6
+2251;-38;Disrespecting a teacher;2024-03-20;968;77
+2252;31;Bravery in difficult situation;2024-02-19;247;32
+2253;7;Excellent classwork;2023-01-19;728;1
+2254;46;Answering correctly in class;2023-09-28;229;69
+2255;-30;Being late to class;2024-10-25;596;87
+2256;36;Answering correctly in class;2023-04-19;957;100
+2257;43;Bravery in difficult situation;2024-08-08;817;74
+2258;47;Answering correctly in class;2023-12-08;448;76
+2259;-14;Using magic in corridors;2024-03-08;533;48
+2260;15;Outstanding spell performance;2024-01-26;563;62
+2261;2;Helping another student;2023-06-21;530;84
+2262;27;Answering correctly in class;2024-02-24;811;100
+2263;50;Helping another student;2024-05-13;717;14
+2264;39;Outstanding spell performance;2024-11-11;383;94
+2265;-4;Being out after curfew;2024-07-03;296;100
+2266;-9;Being out after curfew;2023-06-29;796;24
+2267;28;Answering correctly in class;2024-04-30;268;4
+2268;-32;Using magic in corridors;2024-12-25;240;40
+2269;-9;Using magic in corridors;2023-06-28;611;70
+2270;-25;Being out after curfew;2023-06-26;502;55
+2271;44;Outstanding spell performance;2024-06-05;109;101
+2272;-24;Breaking school rules;2024-03-05;577;85
+2273;-41;Being out after curfew;2024-02-01;808;89
+2274;-10;Breaking school rules;2024-02-01;544;22
+2275;-23;Breaking school rules;2024-08-09;847;58
+2276;10;Outstanding spell performance;2024-03-10;534;57
+2277;-12;Being late to class;2024-05-06;359;79
+2278;50;Helping another student;2024-10-21;457;46
+2279;-1;Using magic in corridors;2023-11-20;471;4
+2280;7;Outstanding spell performance;2023-03-05;629;74
+2281;-22;Breaking school rules;2023-03-07;588;68
+2282;-8;Breaking school rules;2024-06-02;129;53
+2283;-14;Breaking school rules;2023-02-03;368;77
+2284;-13;Breaking school rules;2024-11-27;588;18
+2285;44;Bravery in difficult situation;2024-07-15;76;17
+2286;35;Excellent classwork;2024-12-31;230;69
+2287;-26;Using magic in corridors;2024-11-02;168;50
+2288;48;Outstanding spell performance;2024-09-24;544;89
+2289;-30;Being out after curfew;2024-10-25;362;18
+2290;-36;Being late to class;2024-03-14;35;32
+2291;48;Excellent classwork;2023-01-26;859;89
+2292;-16;Breaking school rules;2023-02-05;748;79
+2293;14;Outstanding spell performance;2024-03-31;367;99
+2294;15;Excellent classwork;2024-01-27;311;56
+2295;34;Outstanding spell performance;2024-01-11;648;72
+2296;-22;Breaking school rules;2024-09-20;800;72
+2297;4;Bravery in difficult situation;2023-03-20;254;91
+2298;-19;Breaking school rules;2023-05-21;391;82
+2299;-48;Using magic in corridors;2024-11-27;512;7
+2300;-35;Being out after curfew;2024-11-13;567;87
+2301;23;Answering correctly in class;2024-11-07;222;46
+2302;-41;Being out after curfew;2024-12-09;944;74
+2303;-48;Breaking school rules;2024-12-02;373;27
+2304;-49;Being out after curfew;2024-08-29;41;12
+2305;-47;Disrespecting a teacher;2024-09-25;887;55
+2306;11;Helping another student;2024-06-25;659;20
+2307;-15;Breaking school rules;2024-11-06;740;76
+2308;-38;Being late to class;2024-07-10;292;2
+2309;41;Helping another student;2024-05-15;246;96
+2310;-40;Being out after curfew;2023-02-07;895;29
+2311;47;Answering correctly in class;2023-08-03;837;93
+2312;36;Outstanding spell performance;2023-02-14;113;45
+2313;0;Using magic in corridors;2024-03-25;701;64
+2314;-35;Breaking school rules;2024-07-29;956;17
+2315;-50;Disrespecting a teacher;2024-04-03;84;20
+2316;-12;Breaking school rules;2023-06-06;610;57
+2317;-3;Using magic in corridors;2024-06-03;419;42
+2318;8;Bravery in difficult situation;2024-02-02;5;75
+2319;-29;Breaking school rules;2023-08-28;460;9
+2320;32;Answering correctly in class;2023-12-19;781;6
+2321;31;Bravery in difficult situation;2024-02-05;433;44
+2322;-38;Breaking school rules;2023-10-11;216;69
+2323;14;Bravery in difficult situation;2023-09-16;146;67
+2324;49;Answering correctly in class;2023-08-15;947;94
+2325;-4;Using magic in corridors;2023-11-20;847;26
+2326;-28;Disrespecting a teacher;2023-08-17;505;32
+2327;44;Outstanding spell performance;2023-09-07;547;4
+2328;-47;Being late to class;2024-12-14;419;64
+2329;-46;Being late to class;2024-12-04;233;28
+2330;-14;Breaking school rules;2024-05-08;726;52
+2331;11;Bravery in difficult situation;2024-11-23;420;45
+2332;46;Bravery in difficult situation;2023-12-26;873;1
+2333;-4;Being out after curfew;2023-05-13;441;16
+2334;15;Helping another student;2024-11-04;496;63
+2335;37;Excellent classwork;2023-07-13;276;14
+2336;-32;Using magic in corridors;2024-01-03;48;31
+2337;-30;Being late to class;2024-08-03;106;84
+2338;16;Outstanding spell performance;2023-05-20;361;6
+2339;47;Answering correctly in class;2023-12-26;303;4
+2340;-10;Using magic in corridors;2023-03-28;323;15
+2341;-32;Being late to class;2023-08-09;906;13
+2342;1;Helping another student;2024-04-07;134;47
+2343;-44;Being late to class;2024-02-29;659;12
+2344;26;Answering correctly in class;2024-06-03;229;3
+2345;5;Answering correctly in class;2023-10-21;175;5
+2346;-15;Being out after curfew;2024-08-21;359;84
+2347;-49;Breaking school rules;2024-08-26;862;39
+2348;-10;Using magic in corridors;2023-05-18;708;82
+2349;-23;Being late to class;2024-02-01;908;39
+2350;-12;Breaking school rules;2023-06-15;135;15
+2351;-10;Breaking school rules;2024-01-25;376;38
+2352;-34;Disrespecting a teacher;2024-04-05;61;59
+2353;29;Helping another student;2024-12-21;30;37
+2354;30;Outstanding spell performance;2023-04-08;798;25
+2355;42;Bravery in difficult situation;2024-09-19;206;63
+2356;-8;Breaking school rules;2023-03-02;977;32
+2357;26;Outstanding spell performance;2024-08-14;707;74
+2358;15;Excellent classwork;2023-09-23;621;71
+2359;-23;Disrespecting a teacher;2024-09-30;516;75
+2360;-12;Breaking school rules;2024-02-14;980;98
+2361;-15;Disrespecting a teacher;2024-04-15;482;61
+2362;-37;Being out after curfew;2023-06-05;334;92
+2363;39;Helping another student;2024-12-16;393;79
+2364;-37;Being out after curfew;2024-04-25;456;38
+2365;42;Answering correctly in class;2023-07-05;461;4
+2366;-19;Being out after curfew;2024-07-24;705;15
+2367;8;Excellent classwork;2023-09-28;289;58
+2368;-8;Being out after curfew;2024-05-24;903;92
+2369;-42;Breaking school rules;2023-02-25;99;8
+2370;-10;Being late to class;2024-03-25;835;0
+2371;-27;Disrespecting a teacher;2024-07-23;435;28
+2372;-47;Using magic in corridors;2024-04-02;532;90
+2373;-4;Using magic in corridors;2023-01-23;147;96
+2374;10;Excellent classwork;2023-06-14;615;55
+2375;-10;Disrespecting a teacher;2024-10-19;601;15
+2376;-10;Being out after curfew;2023-06-21;485;86
+2377;41;Excellent classwork;2024-06-27;67;83
+2378;0;Being out after curfew;2023-05-16;898;12
+2379;17;Excellent classwork;2023-10-01;444;21
+2380;3;Outstanding spell performance;2023-12-06;321;4
+2381;-8;Using magic in corridors;2024-01-12;478;83
+2382;-45;Using magic in corridors;2023-10-04;477;19
+2383;50;Outstanding spell performance;2024-03-28;850;52
+2384;28;Outstanding spell performance;2024-09-21;100;5
+2385;-38;Breaking school rules;2024-03-26;19;83
+2386;47;Outstanding spell performance;2023-03-11;415;93
+2387;-39;Being late to class;2023-06-02;562;32
+2388;15;Outstanding spell performance;2024-11-04;781;65
+2389;12;Answering correctly in class;2024-06-11;266;0
+2390;-26;Being out after curfew;2023-11-19;529;25
+2391;33;Outstanding spell performance;2024-01-16;232;34
+2392;-16;Disrespecting a teacher;2024-02-19;842;75
+2393;-25;Breaking school rules;2023-05-26;728;73
+2394;-15;Disrespecting a teacher;2024-02-10;862;56
+2395;19;Bravery in difficult situation;2023-06-07;472;9
+2396;10;Answering correctly in class;2023-02-19;773;80
+2397;-29;Being out after curfew;2024-01-18;701;43
+2398;-4;Being out after curfew;2024-01-17;622;66
+2399;38;Outstanding spell performance;2023-04-16;955;40
+2400;-9;Being out after curfew;2024-07-08;864;88
+2401;-13;Breaking school rules;2024-01-12;104;85
+2402;-31;Disrespecting a teacher;2024-08-10;724;12
+2403;-2;Being late to class;2023-01-10;328;49
+2404;20;Answering correctly in class;2024-09-26;207;69
+2405;21;Outstanding spell performance;2024-08-22;162;30
+2406;3;Excellent classwork;2023-10-07;132;100
+2407;-27;Breaking school rules;2024-08-05;531;83
+2408;-36;Being late to class;2023-03-24;939;6
+2409;-3;Disrespecting a teacher;2023-01-27;3;10
+2410;-21;Breaking school rules;2023-05-19;526;66
+2411;42;Bravery in difficult situation;2023-01-13;204;88
+2412;25;Excellent classwork;2023-02-02;168;2
+2413;-45;Disrespecting a teacher;2024-08-11;489;32
+2414;25;Answering correctly in class;2023-10-18;153;3
+2415;31;Helping another student;2024-04-17;97;31
+2416;-15;Being out after curfew;2024-10-05;362;84
+2417;-1;Using magic in corridors;2024-09-03;679;56
+2418;-21;Breaking school rules;2024-09-01;803;42
+2419;32;Answering correctly in class;2024-12-24;50;40
+2420;50;Helping another student;2024-03-24;958;96
+2421;34;Answering correctly in class;2024-03-21;505;70
+2422;-16;Using magic in corridors;2023-03-06;940;68
+2423;10;Excellent classwork;2024-04-16;660;82
+2424;-47;Breaking school rules;2024-09-01;429;25
+2425;-26;Being out after curfew;2024-07-12;497;2
+2426;-49;Being late to class;2023-12-18;541;86
+2427;-3;Using magic in corridors;2023-06-19;792;8
+2428;-48;Being late to class;2024-01-25;760;21
+2429;-20;Using magic in corridors;2024-10-13;234;88
+2430;24;Helping another student;2023-12-17;170;94
+2431;4;Outstanding spell performance;2024-04-11;804;17
+2432;-21;Disrespecting a teacher;2023-06-21;674;19
+2433;-46;Being late to class;2023-08-02;2;93
+2434;-6;Being late to class;2024-10-22;760;99
+2435;-42;Being late to class;2024-01-08;713;42
+2436;20;Bravery in difficult situation;2023-06-11;770;46
+2437;0;Being out after curfew;2023-08-18;479;90
+2438;16;Bravery in difficult situation;2024-04-14;232;19
+2439;10;Answering correctly in class;2024-03-03;46;5
+2440;-47;Disrespecting a teacher;2024-08-11;493;92
+2441;-43;Breaking school rules;2024-06-13;208;15
+2442;-24;Being late to class;2023-07-06;776;69
+2443;36;Answering correctly in class;2024-06-09;251;7
+2444;35;Outstanding spell performance;2024-04-28;213;67
+2445;44;Outstanding spell performance;2023-09-27;481;46
+2446;30;Answering correctly in class;2023-10-04;119;9
+2447;-50;Being late to class;2024-07-25;806;39
+2448;2;Outstanding spell performance;2024-03-11;281;26
+2449;-11;Using magic in corridors;2024-05-14;406;22
+2450;-13;Being out after curfew;2023-03-24;753;30
+2451;-17;Breaking school rules;2023-07-25;231;41
+2452;-25;Being out after curfew;2023-05-14;41;48
+2453;5;Bravery in difficult situation;2023-11-17;61;28
+2454;19;Bravery in difficult situation;2023-02-17;414;63
+2455;-9;Being late to class;2023-02-24;563;10
+2456;21;Helping another student;2023-02-25;642;18
+2457;-41;Being late to class;2024-03-29;265;46
+2458;25;Answering correctly in class;2023-02-09;167;44
+2459;10;Answering correctly in class;2024-08-03;140;49
+2460;-21;Breaking school rules;2023-09-03;921;63
+2461;-4;Using magic in corridors;2023-03-13;255;70
+2462;-24;Being late to class;2023-09-27;781;69
+2463;16;Helping another student;2024-09-17;192;4
+2464;12;Excellent classwork;2023-09-27;204;42
+2465;-23;Being late to class;2023-09-16;211;6
+2466;-13;Being late to class;2023-05-04;105;47
+2467;32;Answering correctly in class;2024-02-03;73;60
+2468;-2;Being out after curfew;2024-05-13;286;43
+2469;12;Excellent classwork;2023-02-04;833;7
+2470;45;Bravery in difficult situation;2024-06-24;671;85
+2471;-35;Disrespecting a teacher;2023-05-27;790;54
+2472;25;Excellent classwork;2024-04-24;979;72
+2473;1;Outstanding spell performance;2023-06-11;676;50
+2474;50;Answering correctly in class;2024-04-13;601;5
+2475;2;Bravery in difficult situation;2023-12-06;336;41
+2476;-18;Disrespecting a teacher;2023-09-19;27;47
+2477;-12;Using magic in corridors;2024-05-14;921;81
+2478;4;Excellent classwork;2023-09-09;569;93
+2479;35;Outstanding spell performance;2024-07-17;682;3
+2480;-7;Being out after curfew;2024-06-07;570;28
+2481;11;Excellent classwork;2024-10-07;882;90
+2482;0;Disrespecting a teacher;2023-08-11;528;62
+2483;-50;Using magic in corridors;2024-06-19;458;17
+2484;-45;Disrespecting a teacher;2023-08-21;132;88
+2485;-7;Being late to class;2024-06-04;275;41
+2486;-24;Being out after curfew;2023-09-20;738;51
+2487;8;Bravery in difficult situation;2024-07-22;927;11
+2488;1;Helping another student;2023-05-11;395;31
+2489;39;Outstanding spell performance;2024-01-28;593;28
+2490;18;Excellent classwork;2023-04-20;549;58
+2491;13;Answering correctly in class;2023-02-02;621;54
+2492;45;Answering correctly in class;2024-09-13;751;56
+2493;-25;Using magic in corridors;2024-10-29;662;10
+2494;-36;Disrespecting a teacher;2024-12-22;704;89
+2495;19;Excellent classwork;2024-07-24;773;13
+2496;44;Excellent classwork;2024-12-18;420;5
+2497;41;Helping another student;2023-04-12;273;50
+2498;-4;Breaking school rules;2023-03-31;728;69
+2499;-8;Being late to class;2024-07-07;478;53
+2500;41;Helping another student;2024-04-09;523;42
+2501;45;Helping another student;2023-01-20;960;34
+2502;-49;Disrespecting a teacher;2023-11-03;406;43
+2503;8;Answering correctly in class;2023-11-14;187;86
+2504;43;Outstanding spell performance;2023-06-26;898;77
+2505;43;Outstanding spell performance;2024-02-15;529;82
+2506;-17;Being late to class;2024-05-30;121;24
+2507;-10;Using magic in corridors;2024-04-02;772;57
+2508;-6;Disrespecting a teacher;2023-03-03;23;25
+2509;42;Outstanding spell performance;2024-07-11;564;72
+2510;-18;Breaking school rules;2024-12-14;100;82
+2511;-25;Being late to class;2023-10-20;544;83
+2512;7;Excellent classwork;2024-09-21;57;6
+2513;-10;Being out after curfew;2023-02-22;545;7
+2514;-30;Using magic in corridors;2023-11-29;777;87
+2515;49;Answering correctly in class;2024-12-23;318;63
+2516;48;Excellent classwork;2023-01-11;339;73
+2517;44;Excellent classwork;2024-03-15;633;54
+2518;-17;Being late to class;2023-06-30;17;53
+2519;-7;Disrespecting a teacher;2023-01-20;715;9
+2520;-43;Breaking school rules;2023-08-15;619;7
+2521;-23;Using magic in corridors;2024-04-15;414;48
+2522;-15;Breaking school rules;2024-05-20;679;9
+2523;7;Helping another student;2024-07-18;405;62
+2524;-23;Disrespecting a teacher;2024-11-15;73;52
+2525;-12;Breaking school rules;2023-11-01;48;45
+2526;19;Helping another student;2024-11-11;413;28
+2527;-7;Being late to class;2024-04-17;677;97
+2528;-3;Using magic in corridors;2024-08-13;522;55
+2529;18;Excellent classwork;2024-09-02;924;99
+2530;35;Bravery in difficult situation;2024-11-21;504;80
+2531;38;Helping another student;2024-01-11;888;33
+2532;-9;Using magic in corridors;2023-08-13;738;6
+2533;-45;Breaking school rules;2023-05-21;709;60
+2534;39;Outstanding spell performance;2023-04-09;693;84
+2535;29;Answering correctly in class;2024-04-09;899;3
+2536;18;Answering correctly in class;2024-11-21;36;58
+2537;-38;Being out after curfew;2023-05-15;415;19
+2538;-33;Breaking school rules;2024-05-27;887;22
+2539;-34;Being out after curfew;2023-10-12;232;30
+2540;24;Outstanding spell performance;2023-03-09;442;21
+2541;35;Bravery in difficult situation;2023-07-23;673;32
+2542;-16;Being out after curfew;2024-03-08;601;24
+2543;24;Bravery in difficult situation;2024-09-19;608;8
+2544;-7;Being out after curfew;2024-06-02;805;16
+2545;41;Excellent classwork;2024-10-10;640;31
+2546;-33;Disrespecting a teacher;2024-08-30;930;92
+2547;22;Outstanding spell performance;2024-07-14;669;8
+2548;-38;Being late to class;2023-11-05;905;12
+2549;-43;Being late to class;2024-12-24;84;27
+2550;-40;Using magic in corridors;2024-12-11;584;27
+2551;-37;Being out after curfew;2023-01-12;73;54
+2552;0;Breaking school rules;2024-02-02;956;15
+2553;23;Answering correctly in class;2023-09-07;32;13
+2554;-48;Being out after curfew;2024-09-01;966;94
+2555;19;Excellent classwork;2024-08-09;394;13
+2556;38;Bravery in difficult situation;2023-02-20;389;81
+2557;-39;Being late to class;2024-08-08;367;68
+2558;41;Bravery in difficult situation;2024-06-29;596;94
+2559;-37;Being out after curfew;2024-11-12;366;67
+2560;-50;Breaking school rules;2023-05-28;441;82
+2561;-24;Disrespecting a teacher;2023-10-29;406;53
+2562;44;Excellent classwork;2024-03-21;98;78
+2563;32;Outstanding spell performance;2023-12-19;310;98
+2564;10;Outstanding spell performance;2024-10-30;895;76
+2565;34;Helping another student;2024-07-29;633;29
+2566;-34;Breaking school rules;2023-01-02;279;53
+2567;3;Helping another student;2024-06-08;403;94
+2568;-13;Being out after curfew;2024-12-01;585;70
+2569;12;Helping another student;2023-04-05;402;50
+2570;-33;Being late to class;2023-07-19;879;51
+2571;-26;Disrespecting a teacher;2023-02-25;16;5
+2572;50;Excellent classwork;2023-10-19;295;37
+2573;-17;Using magic in corridors;2023-10-13;235;4
+2574;11;Excellent classwork;2024-05-12;634;61
+2575;39;Excellent classwork;2024-03-20;370;39
+2576;-1;Being late to class;2024-03-25;582;81
+2577;-13;Using magic in corridors;2024-07-25;44;15
+2578;20;Answering correctly in class;2024-02-02;583;16
+2579;30;Excellent classwork;2024-09-02;754;63
+2580;27;Excellent classwork;2024-07-22;491;33
+2581;-5;Breaking school rules;2023-02-08;409;16
+2582;31;Helping another student;2023-11-29;325;85
+2583;14;Answering correctly in class;2024-12-05;605;10
+2584;-4;Being out after curfew;2023-02-07;587;45
+2585;13;Helping another student;2023-07-19;266;91
+2586;-30;Being late to class;2023-08-12;813;58
+2587;28;Excellent classwork;2024-12-10;720;48
+2588;43;Excellent classwork;2024-12-29;625;56
+2589;41;Helping another student;2023-05-27;371;29
+2590;-50;Being out after curfew;2024-10-08;534;32
+2591;-2;Being late to class;2023-09-19;189;62
+2592;-39;Disrespecting a teacher;2023-02-12;242;3
+2593;-14;Disrespecting a teacher;2023-08-08;974;20
+2594;12;Outstanding spell performance;2023-06-09;64;7
+2595;7;Helping another student;2023-01-30;636;75
+2596;-7;Being out after curfew;2023-06-05;127;99
+2597;20;Outstanding spell performance;2024-04-11;940;65
+2598;-3;Being late to class;2023-10-23;680;23
+2599;16;Bravery in difficult situation;2023-01-22;683;61
+2600;-42;Breaking school rules;2023-11-11;818;46
+2601;-48;Disrespecting a teacher;2024-08-23;688;94
+2602;-31;Disrespecting a teacher;2024-01-14;394;100
+2603;31;Helping another student;2024-12-12;5;74
+2604;50;Outstanding spell performance;2023-09-10;114;65
+2605;-40;Disrespecting a teacher;2023-02-08;772;67
+2606;20;Excellent classwork;2024-02-09;927;95
+2607;12;Excellent classwork;2024-09-07;60;26
+2608;-14;Being late to class;2023-01-19;388;82
+2609;-5;Breaking school rules;2023-01-21;891;20
+2610;-27;Being out after curfew;2024-07-13;655;82
+2611;-50;Disrespecting a teacher;2024-01-28;645;37
+2612;-40;Being late to class;2023-12-01;862;80
+2613;7;Helping another student;2024-04-24;852;51
+2614;-50;Being late to class;2023-03-23;770;14
+2615;-19;Being late to class;2023-05-26;247;60
+2616;10;Helping another student;2023-07-19;818;44
+2617;13;Outstanding spell performance;2023-03-19;482;96
+2618;31;Outstanding spell performance;2023-07-07;509;59
+2619;41;Bravery in difficult situation;2023-12-09;288;26
+2620;22;Helping another student;2023-03-31;505;92
+2621;-30;Using magic in corridors;2024-11-19;695;36
+2622;-14;Being out after curfew;2023-08-30;286;56
+2623;30;Bravery in difficult situation;2023-05-19;742;58
+2624;-43;Being late to class;2023-08-07;946;56
+2625;-16;Being late to class;2023-10-24;791;38
+2626;-34;Using magic in corridors;2023-11-28;468;86
+2627;-24;Being out after curfew;2023-01-01;899;81
+2628;-40;Disrespecting a teacher;2023-12-29;950;98
+2629;-48;Being late to class;2023-11-08;47;59
+2630;26;Excellent classwork;2024-01-25;162;10
+2631;48;Bravery in difficult situation;2023-07-07;26;59
+2632;31;Answering correctly in class;2024-05-27;865;26
+2633;-33;Being late to class;2023-09-28;46;94
+2634;-29;Using magic in corridors;2023-09-16;826;92
+2635;-9;Being late to class;2024-11-30;455;46
+2636;-45;Being out after curfew;2024-08-30;919;22
+2637;1;Excellent classwork;2023-04-07;744;81
+2638;5;Excellent classwork;2024-09-15;123;75
+2639;-46;Using magic in corridors;2023-05-01;154;24
+2640;36;Outstanding spell performance;2023-10-30;19;97
+2641;-37;Being late to class;2024-07-27;872;101
+2642;13;Helping another student;2024-07-26;125;50
+2643;-25;Disrespecting a teacher;2024-12-31;831;95
+2644;31;Outstanding spell performance;2023-04-28;847;17
+2645;1;Helping another student;2023-12-22;684;33
+2646;-26;Being late to class;2024-07-25;32;0
+2647;39;Answering correctly in class;2023-01-23;263;78
+2648;28;Excellent classwork;2023-03-03;417;0
+2649;46;Helping another student;2024-09-13;94;4
+2650;24;Answering correctly in class;2023-08-07;717;65
+2651;8;Excellent classwork;2024-10-19;174;32
+2652;-50;Being out after curfew;2024-02-20;379;37
+2653;9;Answering correctly in class;2023-02-01;797;85
+2654;28;Helping another student;2024-02-12;278;98
+2655;-33;Being late to class;2023-01-17;731;0
+2656;45;Helping another student;2023-01-27;210;68
+2657;27;Answering correctly in class;2024-08-20;502;26
+2658;32;Helping another student;2023-05-11;519;20
+2659;-50;Breaking school rules;2023-12-01;445;7
+2660;48;Bravery in difficult situation;2023-09-07;885;56
+2661;37;Excellent classwork;2023-02-16;725;60
+2662;15;Bravery in difficult situation;2024-09-28;622;17
+2663;7;Answering correctly in class;2024-12-26;856;86
+2664;-8;Breaking school rules;2024-10-05;378;38
+2665;2;Helping another student;2023-09-29;713;95
+2666;49;Outstanding spell performance;2023-11-21;328;1
+2667;3;Answering correctly in class;2024-08-08;6;53
+2668;1;Excellent classwork;2023-05-17;492;1
+2669;-26;Breaking school rules;2023-09-24;906;75
+2670;22;Excellent classwork;2023-12-27;542;61
+2671;-24;Breaking school rules;2024-12-21;123;50
+2672;-36;Using magic in corridors;2024-08-29;618;13
+2673;6;Helping another student;2023-07-05;24;0
+2674;19;Outstanding spell performance;2023-03-25;356;78
+2675;9;Excellent classwork;2024-04-24;780;34
+2676;-11;Being late to class;2024-10-29;47;65
+2677;22;Helping another student;2024-01-09;596;79
+2678;36;Bravery in difficult situation;2024-06-08;263;21
+2679;-5;Using magic in corridors;2023-01-23;981;41
+2680;-27;Using magic in corridors;2023-01-27;865;98
+2681;-8;Using magic in corridors;2023-04-18;77;27
+2682;-21;Breaking school rules;2023-11-01;262;74
+2683;-35;Being late to class;2024-05-03;721;62
+2684;5;Answering correctly in class;2023-09-27;947;37
+2685;9;Outstanding spell performance;2024-03-14;735;88
+2686;24;Outstanding spell performance;2024-10-11;581;59
+2687;33;Bravery in difficult situation;2024-12-04;292;58
+2688;10;Helping another student;2024-10-14;317;49
+2689;42;Outstanding spell performance;2024-12-23;519;95
+2690;-13;Breaking school rules;2024-04-18;518;68
+2691;-35;Using magic in corridors;2023-08-18;268;81
+2692;19;Helping another student;2023-07-27;444;59
+2693;48;Excellent classwork;2023-08-11;2;46
+2694;-47;Being late to class;2024-04-06;682;23
+2695;-10;Being late to class;2024-06-12;850;9
+2696;-6;Using magic in corridors;2023-07-22;976;16
+2697;-10;Being out after curfew;2023-04-28;757;40
+2698;49;Excellent classwork;2024-09-10;25;97
+2699;20;Excellent classwork;2024-01-29;526;97
+2700;-48;Being out after curfew;2023-04-12;129;3
+2701;44;Outstanding spell performance;2024-08-21;511;26
+2702;8;Excellent classwork;2023-07-19;792;53
+2703;12;Bravery in difficult situation;2024-05-31;137;78
+2704;20;Excellent classwork;2024-11-03;174;12
+2705;7;Answering correctly in class;2024-02-18;808;40
+2706;-14;Using magic in corridors;2023-10-03;79;54
+2707;-42;Being late to class;2023-11-14;337;39
+2708;41;Helping another student;2024-04-16;638;37
+2709;13;Answering correctly in class;2023-09-19;334;96
+2710;49;Outstanding spell performance;2023-08-05;871;44
+2711;-5;Disrespecting a teacher;2023-05-16;484;23
+2712;-25;Breaking school rules;2024-12-25;936;18
+2713;-30;Being late to class;2024-09-22;194;5
+2714;31;Answering correctly in class;2024-11-28;111;88
+2715;26;Bravery in difficult situation;2024-10-11;403;77
+2716;-42;Using magic in corridors;2024-10-14;402;66
+2717;-46;Breaking school rules;2023-01-31;759;67
+2718;-8;Breaking school rules;2023-01-29;130;91
+2719;-19;Breaking school rules;2023-09-15;249;30
+2720;19;Excellent classwork;2024-12-15;636;12
+2721;7;Bravery in difficult situation;2024-10-29;253;58
+2722;39;Helping another student;2023-03-04;178;55
+2723;4;Outstanding spell performance;2023-06-27;62;65
+2724;-3;Being late to class;2024-12-08;384;93
+2725;-42;Using magic in corridors;2023-11-29;120;58
+2726;44;Excellent classwork;2023-04-07;709;21
+2727;40;Bravery in difficult situation;2023-02-16;720;22
+2728;9;Outstanding spell performance;2023-06-16;92;77
+2729;24;Answering correctly in class;2024-02-21;873;40
+2730;-6;Being out after curfew;2023-05-23;739;94
+2731;10;Helping another student;2023-07-11;894;12
+2732;-19;Disrespecting a teacher;2023-01-01;16;45
+2733;37;Bravery in difficult situation;2024-02-07;921;61
+2734;-47;Being out after curfew;2024-09-20;784;90
+2735;-6;Disrespecting a teacher;2024-09-20;604;49
+2736;20;Helping another student;2023-11-20;913;38
+2737;-23;Disrespecting a teacher;2023-10-11;560;47
+2738;-16;Disrespecting a teacher;2023-03-18;373;76
+2739;16;Outstanding spell performance;2023-04-21;142;83
+2740;-42;Using magic in corridors;2023-01-28;888;0
+2741;5;Answering correctly in class;2023-02-25;743;86
+2742;8;Outstanding spell performance;2023-12-05;74;44
+2743;-29;Breaking school rules;2023-04-01;121;29
+2744;-21;Disrespecting a teacher;2024-02-11;897;86
+2745;-9;Being out after curfew;2024-02-05;49;90
+2746;37;Bravery in difficult situation;2024-04-27;318;59
+2747;-5;Using magic in corridors;2024-08-24;634;36
+2748;50;Helping another student;2023-10-01;892;58
+2749;16;Outstanding spell performance;2023-05-04;854;90
+2750;8;Excellent classwork;2024-10-12;783;28
+2751;18;Helping another student;2024-04-22;805;48
+2752;27;Bravery in difficult situation;2023-10-31;247;74
+2753;43;Helping another student;2024-07-03;826;83
+2754;16;Helping another student;2024-11-23;545;50
+2755;0;Being out after curfew;2023-11-24;675;11
+2756;37;Bravery in difficult situation;2023-10-23;962;71
+2757;-5;Disrespecting a teacher;2023-10-10;49;36
+2758;-13;Breaking school rules;2023-04-11;747;3
+2759;-17;Breaking school rules;2024-09-07;34;48
+2760;-48;Being out after curfew;2023-02-28;425;79
+2761;12;Bravery in difficult situation;2023-07-04;325;0
+2762;-20;Disrespecting a teacher;2024-05-13;113;25
+2763;50;Outstanding spell performance;2023-02-03;346;39
+2764;-47;Being out after curfew;2023-12-18;541;24
+2765;-7;Using magic in corridors;2023-04-03;56;73
+2766;21;Answering correctly in class;2024-02-28;743;40
+2767;-13;Being late to class;2023-10-20;521;36
+2768;-48;Disrespecting a teacher;2024-07-16;879;9
+2769;27;Answering correctly in class;2023-01-27;417;81
+2770;6;Bravery in difficult situation;2023-08-25;148;84
+2771;27;Bravery in difficult situation;2023-03-13;466;79
+2772;-30;Using magic in corridors;2023-04-23;739;62
+2773;-10;Using magic in corridors;2023-03-31;431;86
+2774;44;Helping another student;2023-05-04;200;48
+2775;26;Outstanding spell performance;2024-12-11;125;43
+2776;30;Helping another student;2023-06-12;560;93
+2777;-10;Disrespecting a teacher;2023-10-02;150;32
+2778;14;Helping another student;2024-11-29;723;66
+2779;33;Excellent classwork;2024-07-21;637;93
+2780;28;Bravery in difficult situation;2024-06-14;743;3
+2781;18;Helping another student;2023-01-08;347;88
+2782;-23;Breaking school rules;2024-01-05;435;46
+2783;-39;Using magic in corridors;2023-12-08;68;3
+2784;-17;Breaking school rules;2023-04-01;460;36
+2785;5;Helping another student;2023-07-12;29;85
+2786;40;Outstanding spell performance;2023-05-02;506;13
+2787;15;Excellent classwork;2024-12-14;558;71
+2788;31;Excellent classwork;2024-04-02;185;1
+2789;30;Outstanding spell performance;2023-02-20;386;65
+2790;29;Helping another student;2024-09-02;959;36
+2791;10;Helping another student;2023-10-13;864;92
+2792;-28;Being out after curfew;2023-08-12;511;59
+2793;35;Helping another student;2023-03-24;732;88
+2794;-47;Disrespecting a teacher;2024-12-23;273;22
+2795;17;Outstanding spell performance;2023-03-01;557;21
+2796;-4;Being out after curfew;2024-03-31;958;13
+2797;-22;Breaking school rules;2023-09-26;96;17
+2798;37;Bravery in difficult situation;2023-09-21;335;44
+2799;15;Helping another student;2023-09-19;422;42
+2800;-23;Disrespecting a teacher;2024-05-21;279;9
+2801;38;Helping another student;2023-11-27;638;32
+2802;11;Helping another student;2023-06-03;45;80
+2803;22;Answering correctly in class;2024-01-29;911;44
+2804;30;Bravery in difficult situation;2024-02-18;443;34
+2805;23;Bravery in difficult situation;2023-11-28;334;46
+2806;16;Answering correctly in class;2024-08-26;619;56
+2807;-14;Breaking school rules;2023-07-11;260;27
+2808;-32;Being out after curfew;2023-09-18;899;86
+2809;40;Answering correctly in class;2024-06-14;424;89
+2810;-2;Using magic in corridors;2024-07-16;700;56
+2811;-39;Breaking school rules;2024-10-12;779;11
+2812;26;Outstanding spell performance;2024-10-22;445;95
+2813;-34;Disrespecting a teacher;2023-11-09;835;9
+2814;-32;Using magic in corridors;2023-12-02;816;75
+2815;-23;Disrespecting a teacher;2023-03-27;176;23
+2816;9;Bravery in difficult situation;2024-11-20;232;80
+2817;-47;Being late to class;2023-07-15;412;52
+2818;-41;Disrespecting a teacher;2024-09-09;263;1
+2819;-42;Disrespecting a teacher;2023-10-02;215;57
+2820;11;Bravery in difficult situation;2024-07-21;807;71
+2821;-39;Using magic in corridors;2024-10-27;576;74
+2822;-27;Being late to class;2023-05-26;313;28
+2823;43;Helping another student;2024-08-20;421;98
+2824;45;Bravery in difficult situation;2024-12-21;880;95
+2825;26;Excellent classwork;2024-01-29;649;35
+2826;29;Excellent classwork;2023-08-22;141;81
+2827;-17;Being out after curfew;2024-07-29;810;88
+2828;16;Helping another student;2023-07-12;621;33
+2829;-29;Using magic in corridors;2023-08-24;184;86
+2830;-20;Disrespecting a teacher;2023-10-27;341;36
+2831;37;Bravery in difficult situation;2024-07-12;246;28
+2832;-6;Breaking school rules;2024-04-04;785;8
+2833;-34;Being late to class;2023-06-25;104;55
+2834;47;Outstanding spell performance;2024-09-21;887;95
+2835;-34;Using magic in corridors;2024-06-19;917;58
+2836;16;Excellent classwork;2023-08-31;45;31
+2837;27;Helping another student;2023-05-15;285;8
+2838;-44;Being out after curfew;2023-06-27;274;50
+2839;-7;Breaking school rules;2024-11-08;414;72
+2840;37;Answering correctly in class;2024-12-23;407;65
+2841;50;Outstanding spell performance;2023-01-02;591;45
+2842;-26;Breaking school rules;2024-11-19;756;18
+2843;48;Answering correctly in class;2023-11-04;589;84
+2844;-1;Breaking school rules;2023-10-12;689;100
+2845;-40;Breaking school rules;2023-11-03;394;63
+2846;31;Bravery in difficult situation;2024-02-16;252;39
+2847;-19;Disrespecting a teacher;2024-08-23;128;43
+2848;44;Helping another student;2023-02-14;569;47
+2849;35;Helping another student;2024-05-17;676;6
+2850;34;Answering correctly in class;2023-06-18;598;63
+2851;-14;Disrespecting a teacher;2024-05-12;880;69
+2852;21;Answering correctly in class;2024-09-14;330;11
+2853;22;Excellent classwork;2024-02-08;727;5
+2854;-33;Breaking school rules;2024-04-24;531;81
+2855;10;Answering correctly in class;2023-12-04;566;34
+2856;34;Bravery in difficult situation;2023-03-29;138;82
+2857;39;Answering correctly in class;2024-06-24;385;71
+2858;28;Answering correctly in class;2024-06-05;244;21
+2859;30;Bravery in difficult situation;2024-12-31;343;94
+2860;4;Outstanding spell performance;2024-10-09;90;6
+2861;11;Answering correctly in class;2023-01-12;88;43
+2862;-39;Breaking school rules;2023-02-15;712;66
+2863;-14;Disrespecting a teacher;2024-11-22;604;34
+2864;16;Helping another student;2023-11-27;207;77
+2865;-34;Using magic in corridors;2024-05-18;377;54
+2866;13;Bravery in difficult situation;2023-07-28;124;91
+2867;20;Excellent classwork;2024-08-06;689;47
+2868;47;Bravery in difficult situation;2023-01-16;104;94
+2869;-15;Breaking school rules;2024-12-18;456;63
+2870;-31;Disrespecting a teacher;2024-11-26;369;9
+2871;-14;Breaking school rules;2023-10-31;781;24
+2872;37;Answering correctly in class;2024-11-14;317;11
+2873;-43;Disrespecting a teacher;2024-09-04;733;15
+2874;8;Outstanding spell performance;2023-03-03;3;0
+2875;-4;Being out after curfew;2024-12-19;419;45
+2876;-11;Using magic in corridors;2024-02-24;259;3
+2877;35;Helping another student;2024-08-03;982;90
+2878;19;Helping another student;2024-10-14;826;40
+2879;15;Excellent classwork;2024-12-23;656;48
+2880;26;Excellent classwork;2023-07-06;510;67
+2881;-20;Disrespecting a teacher;2023-10-09;22;59
+2882;26;Answering correctly in class;2024-09-04;682;66
+2883;-4;Using magic in corridors;2024-10-16;85;77
+2884;38;Bravery in difficult situation;2024-04-29;565;71
+2885;-5;Disrespecting a teacher;2024-02-09;251;0
+2886;40;Helping another student;2023-08-15;150;8
+2887;-12;Using magic in corridors;2024-07-30;786;46
+2888;4;Excellent classwork;2023-04-25;171;3
+2889;11;Outstanding spell performance;2023-09-06;423;93
+2890;-7;Being late to class;2024-09-08;535;55
+2891;15;Excellent classwork;2023-11-16;342;52
+2892;43;Excellent classwork;2024-07-03;63;23
+2893;3;Excellent classwork;2023-05-23;438;72
+2894;48;Excellent classwork;2024-12-22;500;45
+2895;-14;Being out after curfew;2023-10-15;380;24
+2896;-31;Being out after curfew;2024-07-12;487;56
+2897;-38;Breaking school rules;2024-06-27;291;58
+2898;-39;Being late to class;2023-01-17;596;94
+2899;-28;Being out after curfew;2024-02-19;945;46
+2900;-50;Being late to class;2023-08-28;405;73
+2901;45;Helping another student;2024-09-29;602;92
+2902;5;Bravery in difficult situation;2024-11-30;871;5
+2903;-17;Disrespecting a teacher;2024-06-29;834;19
+2904;31;Outstanding spell performance;2023-10-11;277;88
+2905;22;Answering correctly in class;2023-01-08;600;59
+2906;-49;Using magic in corridors;2024-03-25;355;22
+2907;-40;Disrespecting a teacher;2024-04-08;86;23
+2908;-43;Disrespecting a teacher;2023-06-23;272;12
+2909;11;Helping another student;2024-06-19;468;94
+2910;50;Excellent classwork;2023-04-18;748;48
+2911;-34;Disrespecting a teacher;2023-09-26;98;26
+2912;-50;Disrespecting a teacher;2023-04-03;93;78
+2913;3;Excellent classwork;2023-03-10;758;66
+2914;14;Excellent classwork;2023-10-12;13;6
+2915;31;Excellent classwork;2024-06-04;908;92
+2916;-29;Being out after curfew;2024-09-26;819;41
+2917;19;Bravery in difficult situation;2023-10-09;966;85
+2918;-46;Breaking school rules;2024-08-04;367;37
+2919;35;Helping another student;2023-11-07;514;81
+2920;-17;Disrespecting a teacher;2023-11-09;736;78
+2921;-44;Being late to class;2024-06-02;279;59
+2922;-9;Breaking school rules;2023-12-07;35;13
+2923;13;Answering correctly in class;2023-10-13;281;7
+2924;-16;Breaking school rules;2023-08-30;717;84
+2925;-40;Breaking school rules;2024-08-20;851;8
+2926;-17;Breaking school rules;2023-11-23;543;0
+2927;-47;Being late to class;2024-01-07;26;49
+2928;1;Helping another student;2023-07-06;240;26
+2929;-33;Disrespecting a teacher;2024-10-19;510;7
+2930;-18;Being late to class;2023-01-26;196;11
+2931;-19;Being out after curfew;2024-04-19;133;100
+2932;41;Outstanding spell performance;2023-11-16;30;42
+2933;-28;Disrespecting a teacher;2023-03-19;202;92
+2934;-15;Using magic in corridors;2023-10-30;496;58
+2935;-42;Using magic in corridors;2024-06-14;160;83
+2936;15;Bravery in difficult situation;2024-10-28;733;93
+2937;11;Bravery in difficult situation;2023-11-17;17;33
+2938;16;Excellent classwork;2023-03-27;581;35
+2939;5;Bravery in difficult situation;2024-08-13;587;27
+2940;3;Excellent classwork;2024-04-08;372;71
+2941;39;Excellent classwork;2023-01-06;817;41
+2942;36;Answering correctly in class;2024-11-10;129;9
+2943;17;Outstanding spell performance;2024-06-03;797;1
+2944;48;Outstanding spell performance;2024-03-31;374;37
+2945;-38;Being out after curfew;2024-11-17;532;84
+2946;50;Bravery in difficult situation;2024-11-15;225;3
+2947;-34;Breaking school rules;2023-04-05;10;47
+2948;20;Outstanding spell performance;2023-03-22;537;54
+2949;-15;Being out after curfew;2024-03-09;708;53
+2950;17;Answering correctly in class;2024-12-27;490;25
+2951;10;Excellent classwork;2023-04-13;367;39
+2952;-40;Using magic in corridors;2024-03-02;97;38
+2953;21;Helping another student;2023-06-15;903;92
+2954;17;Helping another student;2023-01-01;539;57

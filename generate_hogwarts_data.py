@@ -2,24 +2,70 @@ import random
 import time
 import os
 import csv
+from datetime import datetime
+
+# Funkcje debugowania
+def debug_print(message, data=None):
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    print(f"[{timestamp}] {message}")
+    if data is not None:
+        print(f"Data: {data}")
+
+def verify_file_exists(filename):
+    if not os.path.exists(f"hogwarts_data/{filename}"):
+        debug_print(f"BŁĄD: Plik {filename} nie został utworzony!")
+        return False
+    return True
+
+def count_rows_in_file(filename):
+    if not verify_file_exists(filename):
+        return 0
+    with open(f"hogwarts_data/{filename}", "r", newline='', encoding='utf-8') as f:
+        return sum(1 for row in f) - 1  # -1 dla nagłówka
+
+def verify_foreign_keys(filename, foreign_key_col, reference_file, reference_col):
+    if not verify_file_exists(filename) or not verify_file_exists(reference_file):
+        return False
+    
+    # Wczytaj referencje
+    references = set()
+    with open(f"hogwarts_data/{reference_file}", "r", newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f, delimiter=';')
+        for row in reader:
+            references.add(int(row[reference_col]))
+    
+    # Sprawdź klucze obce
+    invalid_keys = set()
+    with open(f"hogwarts_data/{filename}", "r", newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f, delimiter=';')
+        for row in reader:
+            key = int(row[foreign_key_col])
+            if key not in references:
+                invalid_keys.add(key)
+    
+    if invalid_keys:
+        debug_print(f"BŁĄD: Znaleziono nieprawidłowe klucze obce w {filename}: {invalid_keys}")
+        return False
+    return True
 
 # Parametry generowania danych - możesz je dostosować
-nTeachers = random.randrange(90, 110)    # Około 100 nauczycieli
-nStudents = random.randrange(9000, 11000)  # Około 1000 uczniów
+nTeachers = 100    # Stała liczba nauczycieli
+nStudents = 10000  # Stała liczba uczniów
 house_names = ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"]
 house_symbols = ["Lion", "Snake", "Badger", "Eagle"]
-grade_values = ["O", "E", "A", "P", "D", "T"]  # Oceny w Hogwarts: Outstanding, Exceeds Expectations, Acceptable, Poor, Dreadful, Troll
+grade_values = ["O", "E", "A", "P", "D", "T"]
+
+debug_print("Rozpoczynam generowanie danych...")
+debug_print(f"Parametry: {nTeachers} nauczycieli, {nStudents} uczniów")
 
 # Format daty: YYYY-MM-DD
 def random_date(start_date, end_date):
     start_year = int(start_date.split('-')[0])
     end_year = int(end_date.split('-')[0])
     
-    # Generuj losowy rok
     year = random.randint(start_year, end_year)
-    # Generuj losowy miesiąc
     month = random.randint(1, 12)
-    # Generuj losowy dzień
+    
     if month in [4, 6, 9, 11]:
         day = random.randint(1, 30)
     elif month == 2:
@@ -46,35 +92,53 @@ try:
         surnames = f.read().split(";")
         surnames = [surname.strip() for surname in surnames if surname.strip()]
     
-    # W przypadku braku danych, użyj przykładowych
-    if not feminine_names:
-        feminine_names = ["Emma", "Olivia", "Ava", "Isabella", "Sophia", "Charlotte", "Mia", "Amelia", "Harper", "Evelyn"]
-    if not masculine_names:
-        masculine_names = ["Liam", "Noah", "William", "James", "Oliver", "Benjamin", "Elijah", "Lucas", "Mason", "Logan"]
-    if not surnames:
-        surnames = ["Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor"]
-        
-    names = feminine_names + masculine_names
+    debug_print("Wczytano pliki z nazwami", {
+        "imiona żeńskie": len(feminine_names),
+        "imiona męskie": len(masculine_names),
+        "nazwiska": len(surnames)
+    })
 except Exception as e:
-    print(f"Błąd podczas wczytywania plików z nazwami: {e}")
-    # Domyślne imiona i nazwiska w przypadku błędu
+    debug_print(f"BŁĄD podczas wczytywania plików z nazwami: {e}")
     feminine_names = ["Emma", "Olivia", "Ava", "Isabella", "Sophia", "Charlotte", "Mia", "Amelia", "Harper", "Evelyn"]
     masculine_names = ["Liam", "Noah", "William", "James", "Oliver", "Benjamin", "Elijah", "Lucas", "Mason", "Logan"]
     surnames = ["Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor"]
-    names = feminine_names + masculine_names
 
-# Generowanie tabel
+# 1. Nauczyciele (Teachers) - generuj najpierw, bo są referencjonowani przez inne tabele
+debug_print("Generuję nauczycieli...")
+teacher_ids = list(range(nTeachers))
+with open("hogwarts_data/teachers.csv", "w", newline='') as teachers_file:
+    writer = csv.writer(teachers_file, delimiter=';')
+    writer.writerow(["id", "name", "surname", "date_of_birth", "date_of_employment"])
+    
+    for i in range(nTeachers):
+        birth_date = random_date("1950-01-01", "1990-01-01")
+        min_employment_year = int(birth_date.split('-')[0]) + 23
+        min_employment_date = f"{min_employment_year}-01-01"
+        employment_date = random_date(min_employment_date, "2024-09-01")
+        
+        gender = random.choice(['M', 'F'])
+        name = random.choice(feminine_names if gender == 'F' else masculine_names)
+        writer.writerow([i, name, random.choice(surnames), birth_date, employment_date])
 
-# 1. Domy (Houses)
+debug_print(f"Wygenerowano {count_rows_in_file('teachers.csv')} nauczycieli")
+
+# 2. Domy (Houses) - używają teacher_ids
+debug_print("Generuję domy...")
+house_ids = list(range(4))
 with open("hogwarts_data/houses.csv", "w", newline='') as houses_file:
     writer = csv.writer(houses_file, delimiter=';')
     writer.writerow(["id", "name", "symbol", "location", "teacher_id"])
     for i in range(4):
         location = f"{house_names[i]} Common Room"
-        teacher_id = random.randint(0, nTeachers-1)
+        teacher_id = random.choice(teacher_ids)
         writer.writerow([i, house_names[i], house_symbols[i], location, teacher_id])
 
-# 2. Dormitoria (Dormitories)
+debug_print(f"Wygenerowano {count_rows_in_file('houses.csv')} domów")
+verify_foreign_keys('houses.csv', 'teacher_id', 'teachers.csv', 'id')
+
+# 3. Dormitoria (Dormitories) - używają house_ids
+debug_print("Generuję dormitoria...")
+dormitory_ids = []
 with open("hogwarts_data/dormitories.csv", "w", newline='') as dormitories_file:
     writer = csv.writer(dormitories_file, delimiter=';')
     writer.writerow(["id", "gender", "room_number", "house_id"])
@@ -82,37 +146,21 @@ with open("hogwarts_data/dormitories.csv", "w", newline='') as dormitories_file:
     dormitory_id = 0
     for house_id in range(4):
         for gender in ['M', 'F']:
-            for year in range(1, 8):  # 7 lat nauki
-                num_rooms = random.randint(1, 3)  # 1-3 pokoje na rok na płeć na dom
+            for year in range(1, 8):
+                num_rooms = random.randint(1, 3)
                 for room in range(num_rooms):
                     room_number = (year * 100) + room
                     writer.writerow([dormitory_id, gender, room_number, house_id])
+                    dormitory_ids.append(dormitory_id)
                     dormitory_id += 1
 
-# 3. Nauczyciele (Teachers)
-with open("hogwarts_data/teachers.csv", "w", newline='') as teachers_file:
-    writer = csv.writer(teachers_file, delimiter=';')
-    writer.writerow(["id", "name", "surname", "date_of_birth", "date_of_employment"])
-    
-    for i in range(nTeachers):
-        birth_date = random_date("1950-01-01", "1990-01-01")
-        # Data zatrudnienia najwcześniej 23 lata po urodzeniu
-        min_employment_year = int(birth_date.split('-')[0]) + 23
-        min_employment_date = f"{min_employment_year}-01-01"
-        employment_date = random_date(min_employment_date, "2024-09-01")
-        
-        gender = random.choice(['M', 'F'])
-        if gender == 'F':
-            name = random.choice(feminine_names)
-        else:
-            name = random.choice(masculine_names)
-            
-        writer.writerow([i, name, random.choice(surnames), birth_date, employment_date])
+debug_print(f"Wygenerowano {count_rows_in_file('dormitories.csv')} dormitoriów")
+verify_foreign_keys('dormitories.csv', 'house_id', 'houses.csv', 'id')
 
-# 4. Przedmioty (Subjects)
-# Lista typowych przedmiotów w Hogwarts
+# 4. Przedmioty (Subjects) - używają teacher_ids
+debug_print("Generuję przedmioty...")
+subject_ids = []
 hogwarts_subjects = [
-    # przedmiot, rok rozpoczęcia, czas trwania (lat)
     ["Transfiguration", 1, 7],
     ["Charms", 1, 7],
     ["Potions", 1, 7],
@@ -140,162 +188,152 @@ with open("hogwarts_data/subjects.csv", "w", newline='') as subjects_file:
         
         if duration == 1:
             classroom = random.randint(1, 50)
-            teacher_id = random.randint(0, nTeachers-1)
+            teacher_id = random.choice(teacher_ids)
             writer.writerow([subject_id, name, classroom, first_year, teacher_id])
+            subject_ids.append(subject_id)
             subject_id += 1
         else:
             for year_offset in range(duration):
                 classroom = random.randint(1, 50)
-                teacher_id = random.randint(0, nTeachers-1)
+                teacher_id = random.choice(teacher_ids)
                 current_year = first_year + year_offset
                 subject_name = f"{name} Year {current_year}"
                 writer.writerow([subject_id, subject_name, classroom, current_year, teacher_id])
+                subject_ids.append(subject_id)
                 subject_id += 1
 
-    nSubjects = subject_id
+debug_print(f"Wygenerowano {count_rows_in_file('subjects.csv')} przedmiotów")
+verify_foreign_keys('subjects.csv', 'teacher_id', 'teachers.csv', 'id')
 
-# 5. Uczniowie (Students)
-dormitories_by_house_and_gender = {}
-
-# Załaduj identyfikatory dormitoriów dla każdego domu i płci
-with open("hogwarts_data/dormitories.csv", "r", newline='') as dormitories_file:
-    reader = csv.reader(dormitories_file, delimiter=';')
-    next(reader)  # Pomiń nagłówek
-    for row in reader:
-        dorm_id, gender, room_number, house_id = row
-        year = int(room_number) // 100
-        key = (int(house_id), gender, year)
-        if key not in dormitories_by_house_and_gender:
-            dormitories_by_house_and_gender[key] = []
-        dormitories_by_house_and_gender[key].append(int(dorm_id))
-
+# 5. Uczniowie (Students) - używają house_ids i dormitory_ids
+debug_print("Generuję uczniów...")
+student_ids = list(range(nStudents))
 with open("hogwarts_data/students.csv", "w", newline='') as students_file:
     writer = csv.writer(students_file, delimiter=';')
     writer.writerow(["id", "name", "surname", "gender", "date_of_birth", "year", "hogsmeade_consent", "house_id", "dormitory_id"])
     
     for i in range(nStudents):
-        # Rok urodzenia determinuje rok nauki
         birth_date = random_date("2007-01-01", "2013-12-31")
         birth_year = int(birth_date.split('-')[0])
-        year = 2024 - birth_year - 10  # Uczniowie zaczynają w wieku 11 lat
+        year = 2024 - birth_year - 10
         
         gender = random.choice(['M', 'F'])
-        if gender == 'F':
-            name = random.choice(feminine_names)
-        else:
-            name = random.choice(masculine_names)
+        name = random.choice(feminine_names if gender == 'F' else masculine_names)
         
-        # Zgoda na wyjścia do Hogsmeade (od 3 roku)
         consent = 0
         if year >= 3:
             consent = 1 if random.random() > 0.05 else 0
         
-        house_id = random.randint(0, 3)
+        house_id = random.choice(house_ids)
         
-        # Przypisanie do dormitorium
-        dormitory_id = None
-        key = (house_id, gender, year)
-        if key in dormitories_by_house_and_gender and dormitories_by_house_and_gender[key]:
-            dormitory_id = random.choice(dormitories_by_house_and_gender[key])
-        else:
-            # Jeśli nie znaleziono odpowiedniego dormitorium, przypisz NULL
-            dormitory_id = "NULL"
+        # Znajdź odpowiednie dormitorium
+        available_dorms = [d for d in dormitory_ids if d % 2 == (0 if gender == 'M' else 1)]
+        dormitory_id = random.choice(available_dorms) if available_dorms else None
         
         writer.writerow([i, name, random.choice(surnames), gender, birth_date, year, consent, house_id, dormitory_id])
 
+debug_print(f"Wygenerowano {count_rows_in_file('students.csv')} uczniów")
+verify_foreign_keys('students.csv', 'house_id', 'houses.csv', 'id')
+verify_foreign_keys('students.csv', 'dormitory_id', 'dormitories.csv', 'id')
+
 # 6. Przedmioty uczniów (Students_Subjects)
+debug_print("Generuję przypisania przedmiotów do uczniów...")
+
+# Najpierw wczytajmy wszystkie potrzebne dane do pamięci
+debug_print("Wczytuję dane o uczniach i przedmiotach...")
+students_data = {}
+subjects_data = {}
+
+with open("hogwarts_data/students.csv", "r", newline='') as students_file:
+    reader = csv.DictReader(students_file, delimiter=';')
+    for row in reader:
+        students_data[int(row['id'])] = int(row['year'])
+
+with open("hogwarts_data/subjects.csv", "r", newline='') as subjects_file:
+    reader = csv.DictReader(subjects_file, delimiter=';')
+    for row in reader:
+        subjects_data[int(row['id'])] = {
+            'year': int(row['year']),
+            'name': row['name']
+        }
+
+debug_print(f"Wczytano dane o {len(students_data)} uczniach i {len(subjects_data)} przedmiotach")
+
+student_subject_pairs = set()
 with open("hogwarts_data/students_subjects.csv", "w", newline='') as students_subjects_file:
     writer = csv.writer(students_subjects_file, delimiter=';')
     writer.writerow(["student_id", "subject_id"])
     
-    # Wczytaj przedmioty i ich lata
-    subjects_by_year = {}
-    subject_ids = set()  # Dodane: zbiór istniejących ID przedmiotów
-    with open("hogwarts_data/subjects.csv", "r", newline='') as subjects_file:
-        reader = csv.reader(subjects_file, delimiter=';')
-        next(reader)  # Pomiń nagłówek
-        for row in reader:
-            subject_id, name, classroom, year, teacher_id = row
-            subject_ids.add(int(subject_id))  # Dodane: zapisz ID przedmiotu
-            year = int(year)
-            if year not in subjects_by_year:
-                subjects_by_year[year] = []
-            subjects_by_year[year].append(int(subject_id))
-    
-    # Wczytaj uczniów i ich lata
-    students_by_year = {}
-    student_ids = set()  # Dodane: zbiór istniejących ID studentów
-    with open("hogwarts_data/students.csv", "r", newline='') as students_file:
-        reader = csv.reader(students_file, delimiter=';')
-        next(reader)  # Pomiń nagłówek
-        for row in reader:
-            student_id, name, surname, gender, birth_date, year, consent, house_id, dormitory_id = row
-            student_ids.add(int(student_id))  # Dodane: zapisz ID studenta
-            year = int(year)
-            if year not in students_by_year:
-                students_by_year[year] = []
-            students_by_year[year].append(int(student_id))
-
-    # Zapisz wszystkie pary student-przedmiot do weryfikacji
-    student_subject_pairs = set()
-    
-    # Przypisz uczniów do przedmiotów
-    for year in range(1, 8):
-        if year not in subjects_by_year or year not in students_by_year:
-            continue
-            
-        for student_id in students_by_year[year]:
-            # Obowiązkowe przedmioty (wszyscy uczniowie)
-            for subject_id in subjects_by_year[year]:
-                # Dla przedmiotów opcjonalnych (od 3 roku), tylko część uczniów je wybiera
-                if year >= 3 and "Year" not in next((s for s in hogwarts_subjects if s[0] in subjects_by_year[year]), [""])[0]:
-                    if random.random() > 0.7:  # 70% szans na wybór przedmiotu opcjonalnego
-                        continue
-                if student_id in student_ids and subject_id in subject_ids:  # Dodane: weryfikacja
-                    student_subject_pairs.add((student_id, subject_id))
-                    writer.writerow([student_id, subject_id])
-
-# 7. Drużyny Quidditcha (Quidditch_Team_Members)
-positions = ["Seeker", "Keeper", "Chaser", "Beater"]
-with open("hogwarts_data/quidditch_team_members.csv", "w", newline='') as quidditch_file:
-    writer = csv.writer(quidditch_file, delimiter=';')
-    writer.writerow(["id", "position", "is_captain", "student_id"])
-    
-    quidditch_id = 0
-    for house_id in range(4):
-        # Wybierz kapitana
-        captain_student = None
-        potential_captains = [s for s in range(nStudents) if random.randint(0, 3) == house_id and random.randint(1, 7) >= 3]
-        if potential_captains:
-            captain_student = random.choice(potential_captains)
-            writer.writerow([quidditch_id, random.choice(positions), 1, captain_student])
-            quidditch_id += 1
+    total_students = len(student_ids)
+    for i, student_id in enumerate(student_ids, 1):
+        if i % 1000 == 0:  # Pokazuj postęp co 1000 uczniów
+            debug_print(f"Przetworzono {i}/{total_students} uczniów")
         
-        # Pozostali członkowie drużyny
-        team_size = random.randint(6, 10)  # Różne rozmiary drużyn
-        team_members = set()
-        if captain_student:
-            team_members.add(captain_student)
-            
-        while len(team_members) < team_size:
-            student_id = random.randint(0, nStudents-1)
-            if student_id not in team_members:
-                team_members.add(student_id)
-                is_captain = 0  # Już wybraliśmy kapitana
-                writer.writerow([quidditch_id, random.choice(positions), is_captain, student_id])
-                quidditch_id += 1
+        year = students_data[student_id]
+        
+        # Przypisz przedmioty dla danego roku
+        for subject_id, subject_info in subjects_data.items():
+            if subject_info['year'] == year:
+                if year >= 3 and "Year" not in subject_info['name']:
+                    if random.random() > 0.7:
+                        continue
+                student_subject_pairs.add((student_id, subject_id))
+                writer.writerow([student_id, subject_id])
+
+debug_print(f"Wygenerowano {count_rows_in_file('students_subjects.csv')} przypisań przedmiotów do uczniów")
+verify_foreign_keys('students_subjects.csv', 'student_id', 'students.csv', 'id')
+verify_foreign_keys('students_subjects.csv', 'subject_id', 'subjects.csv', 'id')
+
+# 7. Oceny (Grades)
+debug_print("Generuję oceny...")
+
+# Najpierw wczytajmy dane o nauczycielach przedmiotów do pamięci
+debug_print("Wczytuję dane o nauczycielach przedmiotów...")
+subject_teachers = {}
+with open("hogwarts_data/subjects.csv", "r", newline='') as subjects_file:
+    reader = csv.DictReader(subjects_file, delimiter=';')
+    for row in reader:
+        subject_teachers[int(row['id'])] = int(row['teacher_id'])
+
+debug_print(f"Wczytano dane o nauczycielach dla {len(subject_teachers)} przedmiotów")
+
+# Generuj oceny
+with open("hogwarts_data/grades.csv", "w", newline='') as grades_file:
+    writer = csv.writer(grades_file, delimiter=';')
+    writer.writerow(["id", "value", "award_date", "student_id", "subject_id", "teacher_id"])
+    
+    grade_id = 0
+    total_pairs = len(student_subject_pairs)
+    
+    for i, (student_id, subject_id) in enumerate(student_subject_pairs, 1):
+        if i % 10000 == 0:  # Pokazuj postęp co 10000 par
+            debug_print(f"Przetworzono {i}/{total_pairs} par uczeń-przedmiot")
+        
+        num_grades = random.randint(2, 5)
+        teacher_id = subject_teachers[subject_id]
+        
+        for _ in range(num_grades):
+            value = random.choice(grade_values)
+            award_date = random_date("2023-09-01", "2024-06-30")
+            writer.writerow([grade_id, value, award_date, student_id, subject_id, teacher_id])
+            grade_id += 1
+
+debug_print(f"Wygenerowano {count_rows_in_file('grades.csv')} ocen")
+verify_foreign_keys('grades.csv', 'student_id', 'students.csv', 'id')
+verify_foreign_keys('grades.csv', 'subject_id', 'subjects.csv', 'id')
+verify_foreign_keys('grades.csv', 'teacher_id', 'teachers.csv', 'id')
 
 # 8. Punkty (Points)
+debug_print("Generuję punkty...")
 with open("hogwarts_data/points.csv", "w", newline='') as points_file:
     writer = csv.writer(points_file, delimiter=';')
     writer.writerow(["id", "value", "description", "award_date", "student_id", "teacher_id"])
     
     points_id = 0
-    # Generuj losowe przyznane punkty
-    for _ in range(nStudents * 3):  # Średnio 3 przyznania punktów na ucznia
-        student_id = random.randint(0, nStudents-1)
-        teacher_id = random.randint(0, nTeachers-1)
-        value = random.randint(-50, 50)  # Można też odejmować punkty
+    for _ in range(nStudents * 3):
+        student_id = random.choice(student_ids)
+        teacher_id = random.choice(teacher_ids)
+        value = random.randint(-50, 50)
         
         if value > 0:
             descriptions = [
@@ -320,36 +358,53 @@ with open("hogwarts_data/points.csv", "w", newline='') as points_file:
         writer.writerow([points_id, value, description, award_date, student_id, teacher_id])
         points_id += 1
 
-# 9. Oceny (Grades)
-with open("hogwarts_data/grades.csv", "w", newline='') as grades_file:
-    writer = csv.writer(grades_file, delimiter=';')
-    writer.writerow(["id", "value", "award_date", "student_id", "subject_id", "teacher_id"])
-    
-    grade_id = 0
-    # Używamy wcześniej utworzonego zbioru par student-przedmiot
-    for student_id, subject_id in student_subject_pairs:
-        # Każdy uczeń otrzymuje 2-5 ocen z każdego przedmiotu
-        num_grades = random.randint(2, 5)
-        
-        for _ in range(num_grades):
-            value = random.choice(grade_values)
-            award_date = random_date("2023-09-01", "2024-06-30")
-            
-            # Znajdź nauczyciela przypisanego do przedmiotu
-            teacher_id = None
-            with open("hogwarts_data/subjects.csv", "r", newline='') as subjects_file:
-                reader = csv.reader(subjects_file, delimiter=';')
-                next(reader)  # Pomiń nagłówek
-                for row in reader:
-                    if int(row[0]) == subject_id:
-                        teacher_id = int(row[4])
-                        break
-            
-            if teacher_id is None:
-                continue  # Pomiń ocenę jeśli nie znaleziono nauczyciela
-                
-            writer.writerow([grade_id, value, award_date, student_id, subject_id, teacher_id])
-            grade_id += 1
+debug_print(f"Wygenerowano {count_rows_in_file('points.csv')} punktów")
+verify_foreign_keys('points.csv', 'student_id', 'students.csv', 'id')
+verify_foreign_keys('points.csv', 'teacher_id', 'teachers.csv', 'id')
 
-print(f"Wygenerowano dane dla {nStudents} uczniów, {nTeachers} nauczycieli i {nSubjects} przedmiotów.")
-print("Pliki CSV zostały utworzone.")
+# 9. Drużyny Quidditcha (Quidditch_Team_Members)
+debug_print("Generuję członków drużyn Quidditcha...")
+with open("hogwarts_data/quidditch_team_members.csv", "w", newline='') as quidditch_file:
+    writer = csv.writer(quidditch_file, delimiter=';')
+    writer.writerow(["id", "position", "is_captain", "student_id"])
+    
+    quidditch_id = 0
+    positions = ["Seeker", "Keeper", "Chaser", "Beater"]
+    
+    for house_id in range(4):
+        # Wybierz kapitana
+        potential_captains = [s for s in student_ids if random.randint(0, 3) == house_id and random.randint(1, 7) >= 3]
+        if potential_captains:
+            captain_student = random.choice(potential_captains)
+            writer.writerow([quidditch_id, random.choice(positions), 1, captain_student])
+            quidditch_id += 1
+        
+        # Pozostali członkowie drużyny
+        team_size = random.randint(6, 10)
+        team_members = set()
+        if 'captain_student' in locals():
+            team_members.add(captain_student)
+            
+        while len(team_members) < team_size:
+            student_id = random.choice(student_ids)
+            if student_id not in team_members:
+                team_members.add(student_id)
+                writer.writerow([quidditch_id, random.choice(positions), 0, student_id])
+                quidditch_id += 1
+
+debug_print(f"Wygenerowano {count_rows_in_file('quidditch_team_members.csv')} członków drużyn Quidditcha")
+verify_foreign_keys('quidditch_team_members.csv', 'student_id', 'students.csv', 'id')
+
+# Podsumowanie
+debug_print("\nPODSUMOWANIE GENEROWANIA DANYCH:")
+debug_print(f"Nauczyciele: {count_rows_in_file('teachers.csv')}")
+debug_print(f"Domy: {count_rows_in_file('houses.csv')}")
+debug_print(f"Dormitoria: {count_rows_in_file('dormitories.csv')}")
+debug_print(f"Przedmioty: {count_rows_in_file('subjects.csv')}")
+debug_print(f"Uczniowie: {count_rows_in_file('students.csv')}")
+debug_print(f"Przypisania przedmiotów: {count_rows_in_file('students_subjects.csv')}")
+debug_print(f"Oceny: {count_rows_in_file('grades.csv')}")
+debug_print(f"Punkty: {count_rows_in_file('points.csv')}")
+debug_print(f"Członkowie drużyn Quidditcha: {count_rows_in_file('quidditch_team_members.csv')}")
+
+debug_print("\nWszystkie dane zostały wygenerowane i zweryfikowane.")

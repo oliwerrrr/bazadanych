@@ -1,79 +1,79 @@
 id;name;classroom;year;teacher_id
-0;Transfiguration Year 1;22;1;80
-1;Transfiguration Year 2;18;2;10
-2;Transfiguration Year 3;19;3;10
-3;Transfiguration Year 4;29;4;85
-4;Transfiguration Year 5;12;5;29
-5;Transfiguration Year 6;5;6;66
-6;Transfiguration Year 7;44;7;72
-7;Charms Year 1;34;1;39
-8;Charms Year 2;4;2;89
-9;Charms Year 3;15;3;65
-10;Charms Year 4;6;4;32
-11;Charms Year 5;15;5;63
-12;Charms Year 6;30;6;86
-13;Charms Year 7;25;7;4
-14;Potions Year 1;34;1;4
-15;Potions Year 2;20;2;30
-16;Potions Year 3;31;3;23
-17;Potions Year 4;39;4;16
-18;Potions Year 5;44;5;44
-19;Potions Year 6;18;6;14
-20;Potions Year 7;46;7;83
-21;History of Magic Year 1;19;1;54
-22;History of Magic Year 2;15;2;65
-23;History of Magic Year 3;42;3;74
-24;History of Magic Year 4;38;4;50
-25;History of Magic Year 5;36;5;31
-26;History of Magic Year 6;8;6;57
-27;History of Magic Year 7;27;7;63
-28;Defence Against the Dark Arts Year 1;5;1;13
-29;Defence Against the Dark Arts Year 2;41;2;85
-30;Defence Against the Dark Arts Year 3;18;3;39
-31;Defence Against the Dark Arts Year 4;36;4;89
-32;Defence Against the Dark Arts Year 5;3;5;44
-33;Defence Against the Dark Arts Year 6;19;6;20
-34;Defence Against the Dark Arts Year 7;10;7;26
-35;Astronomy Year 1;29;1;83
-36;Astronomy Year 2;34;2;85
-37;Astronomy Year 3;11;3;65
-38;Astronomy Year 4;1;4;73
-39;Astronomy Year 5;37;5;43
-40;Astronomy Year 6;15;6;74
-41;Astronomy Year 7;28;7;41
-42;Herbology Year 1;9;1;46
-43;Herbology Year 2;12;2;25
-44;Herbology Year 3;10;3;78
-45;Herbology Year 4;3;4;59
-46;Herbology Year 5;35;5;59
-47;Herbology Year 6;25;6;32
-48;Herbology Year 7;45;7;21
-49;Flying;6;1;74
-50;Muggle Studies Year 3;24;3;88
-51;Muggle Studies Year 4;33;4;75
-52;Muggle Studies Year 5;19;5;38
-53;Muggle Studies Year 6;12;6;56
-54;Muggle Studies Year 7;35;7;59
-55;Divination Year 3;50;3;84
-56;Divination Year 4;19;4;73
-57;Divination Year 5;31;5;0
-58;Divination Year 6;16;6;0
-59;Divination Year 7;1;7;79
-60;Ancient Runes Year 3;5;3;6
-61;Ancient Runes Year 4;8;4;52
-62;Ancient Runes Year 5;37;5;14
-63;Ancient Runes Year 6;25;6;58
-64;Ancient Runes Year 7;38;7;37
-65;Care of Magical Creatures Year 3;4;3;6
-66;Care of Magical Creatures Year 4;47;4;74
-67;Care of Magical Creatures Year 5;7;5;27
-68;Care of Magical Creatures Year 6;19;6;83
-69;Care of Magical Creatures Year 7;36;7;65
-70;Arithmancy Year 3;8;3;73
-71;Arithmancy Year 4;37;4;31
-72;Arithmancy Year 5;42;5;41
-73;Arithmancy Year 6;48;6;57
-74;Arithmancy Year 7;17;7;22
-75;Alchemy Year 6;13;6;28
-76;Alchemy Year 7;49;7;6
-77;Apparition;2;6;31
+0;Transfiguration Year 1;18;1;60
+1;Transfiguration Year 2;2;2;88
+2;Transfiguration Year 3;31;3;1
+3;Transfiguration Year 4;22;4;20
+4;Transfiguration Year 5;42;5;70
+5;Transfiguration Year 6;12;6;23
+6;Transfiguration Year 7;6;7;32
+7;Charms Year 1;20;1;53
+8;Charms Year 2;8;2;86
+9;Charms Year 3;42;3;12
+10;Charms Year 4;19;4;36
+11;Charms Year 5;18;5;93
+12;Charms Year 6;27;6;26
+13;Charms Year 7;5;7;50
+14;Potions Year 1;46;1;28
+15;Potions Year 2;21;2;65
+16;Potions Year 3;18;3;67
+17;Potions Year 4;42;4;59
+18;Potions Year 5;16;5;64
+19;Potions Year 6;24;6;97
+20;Potions Year 7;31;7;95
+21;History of Magic Year 1;9;1;60
+22;History of Magic Year 2;32;2;0
+23;History of Magic Year 3;25;3;74
+24;History of Magic Year 4;4;4;67
+25;History of Magic Year 5;8;5;23
+26;History of Magic Year 6;22;6;20
+27;History of Magic Year 7;15;7;21
+28;Defence Against the Dark Arts Year 1;27;1;48
+29;Defence Against the Dark Arts Year 2;27;2;95
+30;Defence Against the Dark Arts Year 3;39;3;13
+31;Defence Against the Dark Arts Year 4;37;4;70
+32;Defence Against the Dark Arts Year 5;9;5;53
+33;Defence Against the Dark Arts Year 6;2;6;16
+34;Defence Against the Dark Arts Year 7;44;7;55
+35;Astronomy Year 1;29;1;60
+36;Astronomy Year 2;14;2;39
+37;Astronomy Year 3;25;3;52
+38;Astronomy Year 4;32;4;16
+39;Astronomy Year 5;30;5;82
+40;Astronomy Year 6;27;6;24
+41;Astronomy Year 7;49;7;36
+42;Herbology Year 1;33;1;81
+43;Herbology Year 2;2;2;20
+44;Herbology Year 3;20;3;88
+45;Herbology Year 4;50;4;30
+46;Herbology Year 5;47;5;93
+47;Herbology Year 6;19;6;26
+48;Herbology Year 7;1;7;90
+49;Flying;11;1;21
+50;Muggle Studies Year 3;7;3;57
+51;Muggle Studies Year 4;41;4;72
+52;Muggle Studies Year 5;10;5;87
+53;Muggle Studies Year 6;16;6;25
+54;Muggle Studies Year 7;11;7;94
+55;Divination Year 3;5;3;73
+56;Divination Year 4;17;4;77
+57;Divination Year 5;28;5;52
+58;Divination Year 6;1;6;37
+59;Divination Year 7;48;7;27
+60;Ancient Runes Year 3;29;3;81
+61;Ancient Runes Year 4;43;4;81
+62;Ancient Runes Year 5;34;5;36
+63;Ancient Runes Year 6;44;6;54
+64;Ancient Runes Year 7;41;7;95
+65;Care of Magical Creatures Year 3;5;3;20
+66;Care of Magical Creatures Year 4;31;4;29
+67;Care of Magical Creatures Year 5;17;5;31
+68;Care of Magical Creatures Year 6;21;6;74
+69;Care of Magical Creatures Year 7;40;7;47
+70;Arithmancy Year 3;25;3;5
+71;Arithmancy Year 4;18;4;24
+72;Arithmancy Year 5;29;5;45
+73;Arithmancy Year 6;6;6;82
+74;Arithmancy Year 7;7;7;18
+75;Alchemy Year 6;7;6;11
+76;Alchemy Year 7;46;7;22
+77;Apparition;9;6;15

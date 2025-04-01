@@ -16,6 +16,12 @@ def get_table_stats(cursor, table_name):
     count = cursor.fetchone()[0]
     return count
 
+def execute_query_to_df(cursor, query):
+    cursor.execute(query)
+    columns = [desc[0].lower() for desc in cursor.description]
+    data = cursor.fetchall()
+    return pd.DataFrame(data, columns=columns)
+
 def plot_students_by_house(cursor):
     query = """
     SELECT h.name as house_name, COUNT(s.id) as student_count
@@ -23,7 +29,7 @@ def plot_students_by_house(cursor):
     LEFT JOIN students s ON h.id = s.house_id
     GROUP BY h.name
     """
-    df = pd.read_sql(query, cursor.connection)
+    df = execute_query_to_df(cursor, query)
     
     plt.figure(figsize=(10, 6))
     sns.barplot(data=df, x='house_name', y='student_count')
@@ -48,7 +54,7 @@ def plot_grades_distribution(cursor):
             WHEN 'T' THEN 6
         END
     """
-    df = pd.read_sql(query, cursor.connection)
+    df = execute_query_to_df(cursor, query)
     
     plt.figure(figsize=(10, 6))
     sns.barplot(data=df, x='grade_value', y='count')
@@ -65,7 +71,7 @@ def plot_points_by_house(cursor):
     JOIN points p ON s.id = p.student_id
     GROUP BY h.name
     """
-    df = pd.read_sql(query, cursor.connection)
+    df = execute_query_to_df(cursor, query)
     
     plt.figure(figsize=(10, 6))
     sns.barplot(data=df, x='house_name', y='total_points')
@@ -84,7 +90,7 @@ def plot_subjects_popularity(cursor):
     ORDER BY COUNT(ss.student_id) DESC
     FETCH FIRST 10 ROWS ONLY
     """
-    df = pd.read_sql(query, cursor.connection)
+    df = execute_query_to_df(cursor, query)
     
     plt.figure(figsize=(12, 6))
     sns.barplot(data=df, x='student_count', y='subject_name')
@@ -99,7 +105,7 @@ def plot_gender_distribution(cursor):
     FROM students
     GROUP BY gender
     """
-    df = pd.read_sql(query, cursor.connection)
+    df = execute_query_to_df(cursor, query)
     
     plt.figure(figsize=(8, 8))
     plt.pie(df['count'], labels=df['gender'], autopct='%1.1f%%')
@@ -116,7 +122,7 @@ def plot_quidditch_teams(cursor):
     LEFT JOIN quidditch_team_members qtm ON s.id = qtm.student_id
     GROUP BY h.name
     """
-    df = pd.read_sql(query, cursor.connection)
+    df = execute_query_to_df(cursor, query)
     
     plt.figure(figsize=(10, 6))
     sns.barplot(data=df, x='house_name', y='team_size')

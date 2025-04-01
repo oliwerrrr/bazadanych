@@ -178,7 +178,10 @@ hogwarts_subjects = [
     ["Apparition", 6, 1]
 ]
 
-with open("hogwarts_data/subjects.csv", "w", newline='') as subjects_file:
+# Upewnij się, że katalog istnieje
+os.makedirs("hogwarts_data", exist_ok=True)
+
+with open("hogwarts_data/subjects.csv", "w", newline='', encoding='utf-8') as subjects_file:
     writer = csv.writer(subjects_file, delimiter=';')
     writer.writerow(["id", "name", "classroom", "year", "teacher_id"])
     
@@ -202,7 +205,21 @@ with open("hogwarts_data/subjects.csv", "w", newline='') as subjects_file:
                 subject_ids.append(subject_id)
                 subject_id += 1
 
-debug_print(f"Wygenerowano {count_rows_in_file('subjects.csv')} przedmiotów")
+# Sprawdź czy plik został utworzony i czy zawiera dane
+if not os.path.exists("hogwarts_data/subjects.csv"):
+    debug_print("BŁĄD: Plik subjects.csv nie został utworzony!")
+    exit(1)
+
+with open("hogwarts_data/subjects.csv", "r", newline='', encoding='utf-8') as f:
+    reader = csv.reader(f, delimiter=';')
+    next(reader)  # Pomiń nagłówek
+    subjects_count = sum(1 for row in reader)
+
+debug_print(f"Wygenerowano {subjects_count} przedmiotów")
+if subjects_count == 0:
+    debug_print("BŁĄD: Nie wygenerowano żadnych przedmiotów!")
+    exit(1)
+
 verify_foreign_keys('subjects.csv', 'teacher_id', 'teachers.csv', 'id')
 
 # 5. Uczniowie (Students) - używają house_ids i dormitory_ids

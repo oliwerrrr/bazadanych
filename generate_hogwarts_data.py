@@ -210,11 +210,13 @@ with open("hogwarts_data/students_subjects.csv", "w", newline='') as students_su
     
     # Wczytaj przedmioty i ich lata
     subjects_by_year = {}
+    subject_ids = set()  # Dodane: zbiór istniejących ID przedmiotów
     with open("hogwarts_data/subjects.csv", "r", newline='') as subjects_file:
         reader = csv.reader(subjects_file, delimiter=';')
         next(reader)  # Pomiń nagłówek
         for row in reader:
             subject_id, name, classroom, year, teacher_id = row
+            subject_ids.add(int(subject_id))  # Dodane: zapisz ID przedmiotu
             year = int(year)
             if year not in subjects_by_year:
                 subjects_by_year[year] = []
@@ -222,15 +224,20 @@ with open("hogwarts_data/students_subjects.csv", "w", newline='') as students_su
     
     # Wczytaj uczniów i ich lata
     students_by_year = {}
+    student_ids = set()  # Dodane: zbiór istniejących ID studentów
     with open("hogwarts_data/students.csv", "r", newline='') as students_file:
         reader = csv.reader(students_file, delimiter=';')
         next(reader)  # Pomiń nagłówek
         for row in reader:
             student_id, name, surname, gender, birth_date, year, consent, house_id, dormitory_id = row
+            student_ids.add(int(student_id))  # Dodane: zapisz ID studenta
             year = int(year)
             if year not in students_by_year:
                 students_by_year[year] = []
             students_by_year[year].append(int(student_id))
+
+    # Zapisz wszystkie pary student-przedmiot do weryfikacji
+    student_subject_pairs = set()
     
     # Przypisz uczniów do przedmiotów
     for year in range(1, 8):
@@ -244,7 +251,9 @@ with open("hogwarts_data/students_subjects.csv", "w", newline='') as students_su
                 if year >= 3 and "Year" not in next((s for s in hogwarts_subjects if s[0] in subjects_by_year[year]), [""])[0]:
                     if random.random() > 0.7:  # 70% szans na wybór przedmiotu opcjonalnego
                         continue
-                writer.writerow([student_id, subject_id])
+                if student_id in student_ids and subject_id in subject_ids:  # Dodane: weryfikacja
+                    student_subject_pairs.add((student_id, subject_id))
+                    writer.writerow([student_id, subject_id])
 
 # 7. Drużyny Quidditcha (Quidditch_Team_Members)
 positions = ["Seeker", "Keeper", "Chaser", "Beater"]
@@ -317,16 +326,7 @@ with open("hogwarts_data/grades.csv", "w", newline='') as grades_file:
     writer.writerow(["id", "value", "award_date", "student_id", "subject_id", "teacher_id"])
     
     grade_id = 0
-    # Wczytaj pary uczeń-przedmiot
-    student_subject_pairs = []
-    with open("hogwarts_data/students_subjects.csv", "r", newline='') as ss_file:
-        reader = csv.reader(ss_file, delimiter=';')
-        next(reader)  # Pomiń nagłówek
-        for row in reader:
-            student_id, subject_id = row
-            student_subject_pairs.append((int(student_id), int(subject_id)))
-    
-    # Przydziel oceny
+    # Używamy wcześniej utworzonego zbioru par student-przedmiot
     for student_id, subject_id in student_subject_pairs:
         # Każdy uczeń otrzymuje 2-5 ocen z każdego przedmiotu
         num_grades = random.randint(2, 5)
@@ -346,7 +346,7 @@ with open("hogwarts_data/grades.csv", "w", newline='') as grades_file:
                         break
             
             if teacher_id is None:
-                teacher_id = random.randint(0, nTeachers-1)
+                continue  # Pomiń ocenę jeśli nie znaleziono nauczyciela
                 
             writer.writerow([grade_id, value, award_date, student_id, subject_id, teacher_id])
             grade_id += 1

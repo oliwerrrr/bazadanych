@@ -1,52 +1,354 @@
 
-    <html>
+    <!DOCTYPE html>
+    <html lang="pl">
     <head>
-        <title>Hogwarts Report</title>
+        <meta charset="UTF-8">
+        <title>Hogwarts Database Report</title>
         <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            .container { max-width: 1200px; margin: 0 auto; }
-            .stats { background-color: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
-            .visualization { margin-bottom: 30px; }
-            img { max-width: 100%; height: auto; }
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                background-color: #f5f5f5;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+            h1, h2 {
+                color: #1a237e;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            th {
+                background-color: #1a237e;
+                color: white;
+            }
+            tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
+            .section {
+                margin: 30px 0;
+                padding: 20px;
+                background-color: white;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .collapsible {
+                background-color: #1a237e;
+                color: white;
+                cursor: pointer;
+                padding: 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 15px;
+                border-radius: 5px;
+                margin: 10px 0;
+            }
+            .active, .collapsible:hover {
+                background-color: #0d47a1;
+            }
+            .content {
+                padding: 0 18px;
+                display: none;
+                overflow: hidden;
+                background-color: #f1f1f1;
+                border-radius: 0 0 5px 5px;
+            }
+            .schema-img {
+                max-width: 100%;
+                height: auto;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+            .schema-img:hover {
+                transform: scale(1.05);
+            }
+            .visualization-img {
+                max-width: 100%;
+                height: auto;
+                margin: 10px 0;
+            }
+            .wizard-section {
+                background-color: #e3f2fd;
+                padding: 20px;
+                border-radius: 5px;
+                margin: 20px 0;
+            }
+            .wizard-button {
+                background-color: #1a237e;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin: 5px;
+                font-size: 14px;
+            }
+            .wizard-button:hover {
+                background-color: #0d47a1;
+            }
+            .error {
+                color: #d32f2f;
+                background-color: #ffebee;
+                padding: 10px;
+                border-radius: 5px;
+                margin: 5px 0;
+            }
+            .success {
+                color: #1b5e20;
+                background-color: #e8f5e9;
+                padding: 10px;
+                border-radius: 5px;
+                margin: 5px 0;
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>Hogwarts School Statistics Report</h1>
-            <div class="stats">
-                <h2>Database Statistics</h2>
-                <p>Generated on: 2025-04-02 02:10:17</p>
-                <ul>
-                    <li>Teachers: 111</li>
-                    <li>Houses: 4</li>
-                    <li>Dormitories: 110</li>
-                    <li>Students: 10000</li>
-                    <li>Subjects: 78</li>
-                    <li>Grades: 444278</li>
-                    <li>Points: 30000</li>
-                    <li>Quidditch Team Members: 31</li>
-                </ul>
+            <h1>Hogwarts Database Report</h1>
+            
+            <!-- Database Statistics -->
+            <button type="button" class="collapsible">Database Statistics</button>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th>Table</th>
+                        <th>Row Count</th>
+                    </tr>
+    
+                    <tr>
+                        <td>teachers</td>
+                        <td>111</td>
+                    </tr>
+        
+                    <tr>
+                        <td>houses</td>
+                        <td>4</td>
+                    </tr>
+        
+                    <tr>
+                        <td>dormitories</td>
+                        <td>127</td>
+                    </tr>
+        
+                    <tr>
+                        <td>students</td>
+                        <td>10000</td>
+                    </tr>
+        
+                    <tr>
+                        <td>subjects</td>
+                        <td>78</td>
+                    </tr>
+        
+                    <tr>
+                        <td>grades</td>
+                        <td>442077</td>
+                    </tr>
+        
+                    <tr>
+                        <td>points</td>
+                        <td>30000</td>
+                    </tr>
+        
+                    <tr>
+                        <td>quidditch</td>
+                        <td>33</td>
+                    </tr>
+        
+                </table>
             </div>
-            <div class="visualization">
-                <h2>Visualizations</h2>
-                <h3>Number of Students per House</h3>
-                <img src="visualizations/students_by_house.png" alt="Students per House">
-                
-                <h3>Grade Distribution</h3>
-                <img src="visualizations/grades_distribution.png" alt="Grade Distribution">
-                
-                <h3>Total Points per House</h3>
-                <img src="visualizations/points_by_house.png" alt="Points per House">
-                
-                <h3>Top 10 Most Popular Subjects</h3>
-                <img src="visualizations/subjects_popularity.png" alt="Subject Popularity">
-                
-                <h3>Gender Distribution Among Students</h3>
-                <img src="visualizations/gender_distribution.png" alt="Gender Distribution">
-                
-                <h3>Quidditch Team Size by House</h3>
-                <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams">
+
+            <!-- Database Schema -->
+            <button type="button" class="collapsible">Database Schema</button>
+            <div class="content">
+                <h3>Entity Relationship Diagram</h3>
+                <img src="HogwartRelations.png" alt="Database Relations" class="schema-img" onclick="window.open(this.src)">
+                <h3>Database Schema</h3>
+                <img src="schema.png" alt="Database Schema" class="schema-img" onclick="window.open(this.src)">
             </div>
+
+            <!-- Visualizations -->
+            <button type="button" class="collapsible">Visualizations</button>
+            <div class="content">
+                <h3>Students by House</h3>
+                <img src="visualizations/students_by_house.png" alt="Students by House" class="visualization-img">
+                <h3>Grades Distribution</h3>
+                <img src="visualizations/grades_distribution.png" alt="Grades Distribution" class="visualization-img">
+                <h3>Subjects Popularity</h3>
+                <img src="visualizations/subjects_popularity.png" alt="Subjects Popularity" class="visualization-img">
+                <h3>Points by House</h3>
+                <img src="visualizations/points_by_house.png" alt="Points by House" class="visualization-img">
+                <h3>Gender Distribution</h3>
+                <img src="visualizations/gender_distribution.png" alt="Gender Distribution" class="visualization-img">
+                <h3>Quidditch Teams</h3>
+                <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams" class="visualization-img">
+            </div>
+
+            <!-- Performance Analysis -->
+            <button type="button" class="collapsible">Performance Analysis</button>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th>Query Type</th>
+                        <th>Description</th>
+                        <th>Execution Time</th>
+                        <th>Rows Processed</th>
+                    </tr>
+    
+                    <tr class="success">
+                        <td>Simple SELECT</td>
+                        <td>Basic select query on students table</td>
+                        <td>0.0056 seconds</td>
+                        <td>2137</td>
+                    </tr>
+        
+                    <tr class="success">
+                        <td>Complex JOIN</td>
+                        <td>Complex join between students, grades, and subjects</td>
+                        <td>0.0127 seconds</td>
+                        <td>1000</td>
+                    </tr>
+        
+                    <tr class="success">
+                        <td>Aggregation</td>
+                        <td>Complex aggregation with grouping and having</td>
+                        <td>0.0065 seconds</td>
+                        <td>4</td>
+                    </tr>
+        
+                    <tr class="success">
+                        <td>Nested Subquery</td>
+                        <td>Complex nested subquery with multiple conditions</td>
+                        <td>0.0128 seconds</td>
+                        <td>0</td>
+                    </tr>
+        
+                    <tr class="error">
+                        <td>Transaction - Batch Insert</td>
+                        <td>Insert multiple grades with transaction control</td>
+                        <td>Error</td>
+                        <td>0</td>
+                    </tr>
+        
+                    <tr class="success">
+                        <td>Transaction - Batch Update</td>
+                        <td>Update multiple grades with transaction control</td>
+                        <td>0.0287 seconds</td>
+                        <td>1000</td>
+                    </tr>
+        
+                    <tr class="success">
+                        <td>Transaction - Complex Delete</td>
+                        <td>Delete with complex conditions and restore data</td>
+                        <td>0.3199 seconds</td>
+                        <td>1000</td>
+                    </tr>
+        
+                    <tr class="success">
+                        <td>Full Table Scan Analysis</td>
+                        <td>Analyze grade distribution with full table scan</td>
+                        <td>0.0218 seconds</td>
+                        <td>6</td>
+                    </tr>
+        
+                </table>
+            </div>
+
+            <!-- Data Wizard -->
+            <button type="button" class="collapsible">Data Wizard 🧙‍♂️</button>
+            <div class="content wizard-section">
+                <h3>Generate and Manage Data</h3>
+                <p>Use these magical buttons to manage your Hogwarts database:</p>
+                <button onclick="generateConfig()" class="wizard-button">Generate Configuration 📝</button>
+                <button onclick="generateData()" class="wizard-button">Generate Test Data 🎲</button>
+                <button onclick="importData()" class="wizard-button">Import Data to Database 📥</button>
+                <button onclick="clearDatabase()" class="wizard-button">Clear Database 🧹</button>
+                <button onclick="runTests()" class="wizard-button">Run Performance Tests ⚡</button>
+                <div id="wizardStatus"></div>
+            </div>
+
+            <script>
+                // Collapsible sections
+                var coll = document.getElementsByClassName("collapsible");
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.display === "block") {
+                            content.style.display = "none";
+                        } else {
+                            content.style.display = "block";
+                        }
+                    });
+                }
+
+                // Wizard functions
+                async function showStatus(message, isError = false) {
+                    const statusDiv = document.getElementById('wizardStatus');
+                    statusDiv.innerHTML = `<div class="${isError ? 'error' : 'success'}">${message}</div>`;
+                }
+
+                async function makeRequest(endpoint, message) {
+                    try {
+                        const response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                        });
+                        const data = await response.json();
+                        
+                        if (data.status === 'success') {
+                            showStatus(data.loading_message || message);
+                            if (endpoint === '/run_tests') {
+                                setTimeout(() => window.location.reload(), 2000);
+                            }
+                        } else {
+                            showStatus(data.message || 'An error occurred', true);
+                        }
+                    } catch (error) {
+                        showStatus(`Error: ${error.message}`, true);
+                    }
+                }
+
+                async function generateConfig() {
+                    await makeRequest('/generate_config', '🧙‍♂️ Configuration generated successfully!');
+                }
+
+                async function generateData() {
+                    await makeRequest('/generate_data', '🎲 Test data generated successfully!');
+                }
+
+                async function importData() {
+                    await makeRequest('/import_data', '📥 Data imported successfully!');
+                }
+
+                async function clearDatabase() {
+                    if (confirm('Are you sure you want to clear the database? This action cannot be undone!')) {
+                        await makeRequest('/clear_database', '🧹 Database cleared successfully!');
+                    }
+                }
+
+                async function runTests() {
+                    await makeRequest('/run_tests', '⚡ Running performance tests...');
+                }
+
+                // Open first section by default
+                document.getElementsByClassName("collapsible")[0].click();
+            </script>
         </div>
     </body>
     </html>

@@ -1,6 +1,10 @@
 import json
 import os
 
+# Get absolute paths
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+CONFIG_FILE = os.path.join(BASE_DIR, 'hogwarts_config.json')
+
 def get_int_input(prompt, default_value):
     while True:
         try:
@@ -73,11 +77,14 @@ def main():
         # Quidditch team parameters
         'min_team_size': get_int_input("Minimum Quidditch team size", 6),
         'max_team_size': get_int_input("Maximum Quidditch team size", 10),
-        'min_captain_year': get_int_input("Minimum year to be a team captain", 3)
+        'min_captain_year': get_int_input("Minimum year to be a team captain", 3),
+        
+        # Gender distribution
+        'female_percentage': 50  # Default value
     }
     
     # Save configuration to file
-    with open('hogwarts_config.json', 'w', encoding='utf-8') as f:
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
         json.dump(config, f, indent=4, ensure_ascii=False)
     
     print("\nConfiguration has been saved to hogwarts_config.json")

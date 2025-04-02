@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, render_template_string
+from flask import Flask, request, jsonify, send_from_directory, render_template
 import oracledb
 from visualization.visualize_data import run_performance_analysis, generate_html_report, get_table_stats
 import json
@@ -9,22 +9,25 @@ import shutil
 from datetime import datetime
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+import time
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'docs'))
 CORS(app)  # Enable CORS for all routes
 socketio = SocketIO(app, cors_allowed_origins="*")  # Enable WebSocket with CORS
 
 # Get absolute paths
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 DOCS_DIR = os.path.join(BASE_DIR, 'docs')
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+DATABASE_DIR = os.path.join(BASE_DIR, 'src', 'database')
+DATA_DIR = os.path.join(BASE_DIR, 'data', 'hogwarts_data')
 VISUALIZATIONS_DIR = os.path.join(DOCS_DIR, 'visualizations')
 
 def ensure_directories():
     """Create necessary directories if they don't exist"""
     os.makedirs(DOCS_DIR, exist_ok=True)
-    os.makedirs(VISUALIZATIONS_DIR, exist_ok=True)
+    os.makedirs(DATABASE_DIR, exist_ok=True)
     os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(os.path.join(DOCS_DIR, 'visualizations'), exist_ok=True)
 
 def copy_schema_files():
     """Copy schema files to docs directory"""
@@ -61,6 +64,7 @@ def get_db_connection():
     """Get database connection with proper error handling"""
     try:
         connection = oracledb.connect("SYSTEM/admin@localhost:1521/XE")
+        print("Database connection successful")
         return connection
     except oracledb.Error as e:
         print(f"Database connection error: {str(e)}")
@@ -76,17 +80,20 @@ def after_request(response):
 
 @app.route('/')
 def index():
-    ensure_directories()
-    if os.path.exists(os.path.join(DOCS_DIR, 'hogwarts_report.html')):
-        return send_from_directory(DOCS_DIR, 'hogwarts_report.html')
-    return jsonify({"error": "Report file not found"}), 404
+    """Serve the main page"""
+    try:
+        return render_template('hogwarts_report.html')
+    except Exception as e:
+        print(f"Error serving index: {str(e)}")
+        return str(e), 500
 
 @app.route('/<path:filename>')
-def serve_static(filename):
+def serve_file(filename):
     """Serve static files from docs directory"""
-    if os.path.exists(os.path.join(DOCS_DIR, filename)):
+    file_path = os.path.join(DOCS_DIR, filename)
+    if os.path.exists(file_path):
         return send_from_directory(DOCS_DIR, filename)
-    return jsonify({"error": f"File {filename} not found"}), 404
+    return "File not found", 404
 
 @socketio.on('connect')
 def handle_connect():
@@ -102,132 +109,199 @@ def emit_progress(message, data=None):
     socketio.emit('progress', {
         'message': message,
         'data': data,
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now().isoformat(),
+        'type': 'progress'  # Add type to distinguish progress messages
     })
 
-@app.route('/run_tests', methods=['POST'])
+@app.route('/run_tests')
 def run_tests():
     try:
-        if not request.is_json:
-            return jsonify({"error": "Content-Type must be application/json"}), 400
-            
-        config = request.get_json()
-        if not config:
-            config = {}
-            
-        connection = get_db_connection()
-        cursor = connection.cursor()
-        
-        emit_progress("Starting performance tests...")
-        
-        stats = {
-            'teachers': get_table_stats(cursor, 'teachers'),
-            'houses': get_table_stats(cursor, 'houses'),
-            'dormitories': get_table_stats(cursor, 'dormitories'),
-            'students': get_table_stats(cursor, 'students'),
-            'subjects': get_table_stats(cursor, 'subjects'),
-            'grades': get_table_stats(cursor, 'grades'),
-            'points': get_table_stats(cursor, 'points'),
-            'quidditch': get_table_stats(cursor, 'quidditch_team_members')
-        }
-        
-        emit_progress("Running performance analysis...")
-        performance_results = run_performance_analysis(cursor, config)
-        
-        emit_progress("Generating HTML report...")
-        generate_html_report(stats, performance_results)
-        
-        cursor.close()
-        connection.close()
-        
-        emit_progress("Tests completed successfully")
+        # Load database statistics
+        stats = {}
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            for table in ['teachers', 'houses', 'dormitories', 'students', 'subjects', 'grades', 'points', 'quidditch_team_members']:
+                try:
+                    cursor.execute(f"SELECT COUNT(*) FROM {table}")
+                    count = cursor.fetchone()[0]
+                    stats[table] = count
+                    print(f"Got stats for table {table}: {count}")
+                except Exception as e:
+                    print(f"Error getting stats for {table}: {str(e)}")
+                    stats[table] = 0
+
+        # Run performance analysis
+        print("Running performance analysis...")
+        performance_results = run_performance_analysis()
         
         return jsonify({
-            "status": "success", 
-            "message": "Tests completed successfully",
-            "loading_message": get_loading_message()
+            'status': 'success',
+            'stats': stats,
+            'performance': performance_results
         })
     except Exception as e:
         print(f"Error in run_tests: {str(e)}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+def run_performance_analysis():
+    results = {}
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            
+            # Simple SELECT
+            start_time = time.time()
+            cursor.execute("SELECT * FROM students WHERE rownum <= 100")
+            cursor.fetchall()
+            results['simple_select'] = time.time() - start_time
+            print(f"Completed Simple SELECT in {results['simple_select']:.4f} seconds")
+            
+            # Complex JOIN
+            start_time = time.time()
+            cursor.execute("""
+                SELECT s.name, h.name as house_name 
+                FROM students s 
+                JOIN houses h ON s.house_id = h.id 
+                WHERE rownum <= 100
+            """)
+            cursor.fetchall()
+            results['complex_join'] = time.time() - start_time
+            print(f"Completed Complex JOIN in {results['complex_join']:.4f} seconds")
+            
+            # Aggregation
+            start_time = time.time()
+            cursor.execute("""
+                SELECT h.name, COUNT(*) as student_count 
+                FROM students s 
+                JOIN houses h ON s.house_id = h.id 
+                GROUP BY h.name
+            """)
+            cursor.fetchall()
+            results['aggregation'] = time.time() - start_time
+            print(f"Completed Aggregation in {results['aggregation']:.4f} seconds")
+            
+            # Nested Subquery
+            start_time = time.time()
+            cursor.execute("""
+                SELECT name FROM students 
+                WHERE id IN (
+                    SELECT student_id FROM grades 
+                    WHERE grade = 5 
+                    AND rownum <= 100
+                )
+            """)
+            cursor.fetchall()
+            results['nested_subquery'] = time.time() - start_time
+            print(f"Completed Nested Subquery in {results['nested_subquery']:.4f} seconds")
+            
+            # Batch Update
+            start_time = time.time()
+            cursor.execute("""
+                UPDATE students 
+                SET points = points + 10 
+                WHERE house_id = 1 
+                AND rownum <= 100
+            """)
+            conn.commit()
+            results['batch_update'] = time.time() - start_time
+            print(f"Completed Transaction - Batch Update in {results['batch_update']:.4f} seconds")
+            
+            # Complex Delete
+            start_time = time.time()
+            cursor.execute("""
+                DELETE FROM grades 
+                WHERE student_id IN (
+                    SELECT id FROM students 
+                    WHERE house_id = 1 
+                    AND rownum <= 100
+                )
+            """)
+            conn.commit()
+            results['complex_delete'] = time.time() - start_time
+            print(f"Completed Transaction - Complex Delete in {results['complex_delete']:.4f} seconds")
+            
+            # Full Table Scan Analysis
+            start_time = time.time()
+            cursor.execute("""
+                SELECT h.name, COUNT(*) as student_count, AVG(g.grade) as avg_grade
+                FROM students s
+                JOIN houses h ON s.house_id = h.id
+                LEFT JOIN grades g ON s.id = g.student_id
+                GROUP BY h.name
+            """)
+            cursor.fetchall()
+            results['full_table_scan'] = time.time() - start_time
+            print(f"Completed Full Table Scan Analysis in {results['full_table_scan']:.4f} seconds")
+            
+    except Exception as e:
+        print(f"Error in performance analysis: {str(e)}")
+        results['error'] = str(e)
+    
+    return results
 
 @app.route('/generate_config', methods=['POST'])
 def generate_config():
     try:
-        if not request.is_json:
-            return jsonify({"error": "Content-Type must be application/json"}), 400
-            
-        config_data = request.get_json()
-        if not config_data:
-            config_data = {}
-        
-        # Add default values if not provided
-        default_config = {
-            "nTeachers": 111,
-            "nStudents": 10000,
-            "pointsPerStudent": 3,
-            "female_percentage": 50,
-            "min_teacher_birth_year": 1950,
-            "max_teacher_birth_year": 1990,
-            "min_student_birth_year": 2006,
-            "max_student_birth_year": 2013,
-            "min_captain_year": 5,
-            "min_team_size": 7,
-            "max_team_size": 12,
-            "min_classroom": 100,
-            "max_classroom": 999,
-            "min_grades_per_subject": 2,
-            "max_grades_per_subject": 10,
-            "min_points": -50,
-            "max_points": 50,
-            "grade_values": ["O", "E", "A", "P", "D", "T"],
-            "house_names": ["Gryffindor", "Hufflepuff", "Ravenclaw", "Slytherin"],
-            "house_symbols": ["Lion", "Badger", "Eagle", "Snake"]
-        }
-        
-        # Update with provided values
-        config_data = {**default_config, **config_data}
-        
-        config_path = os.path.join(BASE_DIR, 'hogwarts_config.json')
-        with open(config_path, 'w', encoding='utf-8') as f:
-            json.dump(config_data, f, indent=4)
-        
-        emit_progress("Configuration saved successfully")
-        
-        return jsonify({
-            "status": "success", 
-            "message": "Configuration saved",
-            "loading_message": get_loading_message()
-        })
-    except Exception as e:
-        print(f"Error in generate_config: {str(e)}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
-
-@app.route('/generate_data', methods=['POST'])
-def generate_data():
-    try:
         ensure_directories()
-        script_path = os.path.join(BASE_DIR, 'generate_hogwarts_data.py')
+        script_path = os.path.join(BASE_DIR, 'src', 'data_generation', 'config_generator.py')
         if not os.path.exists(script_path):
             raise Exception(f"Script not found: {script_path}")
             
-        emit_progress("Starting data generation...")
-        
+        emit_progress("Generating configuration...")
+            
         result = subprocess.run(
             [sys.executable, script_path],
             capture_output=True,
             text=True,
             check=True,
-            cwd=BASE_DIR
+            cwd=BASE_DIR,
+            env={**os.environ, 'PYTHONPATH': BASE_DIR}
         )
         
-        print(f"Generate data output: {result.stdout}")
+        print(f"Config generation output: {result.stdout}")
         if result.stderr:
-            print(f"Generate data errors: {result.stderr}")
+            print(f"Config generation errors: {result.stderr}")
             
-        emit_progress("Data generation completed")
+        emit_progress("Configuration generated successfully")
+            
+        return jsonify({
+            "status": "success", 
+            "message": "Configuration generated successfully",
+            "loading_message": get_loading_message()
+        })
+    except subprocess.CalledProcessError as e:
+        print(f"Error in generate_config: {str(e)}")
+        print(f"Process output: {e.output}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
+        return jsonify({"status": "error", "message": str(e)}), 500
+    except Exception as e:
+        print(f"Error in generate_config: {str(e)}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/generate_data')
+def generate_data():
+    try:
+        script_path = os.path.join(DATABASE_DIR, 'generate_data.py')
+        if not os.path.exists(script_path):
+            raise Exception(f"Script not found: {script_path}")
+            
+        emit_progress("Generating data...")
+            
+        result = subprocess.run(
+            [sys.executable, script_path],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=BASE_DIR,
+            env={**os.environ, 'PYTHONPATH': BASE_DIR}
+        )
+        
+        print(f"Data generation output: {result.stdout}")
+        if result.stderr:
+            print(f"Data generation errors: {result.stderr}")
+            
+        emit_progress("Data generated successfully")
             
         return jsonify({
             "status": "success", 
@@ -244,15 +318,14 @@ def generate_data():
         emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
 
-@app.route('/import_data', methods=['POST'])
+@app.route('/import_data')
 def import_data():
     try:
-        ensure_directories()
-        script_path = os.path.join(BASE_DIR, 'import_data.py')
+        script_path = os.path.join(DATABASE_DIR, 'import_data.py')
         if not os.path.exists(script_path):
             raise Exception(f"Script not found: {script_path}")
             
-        emit_progress("Starting data import...")
+        emit_progress("Importing data...")
             
         result = subprocess.run(
             [sys.executable, script_path],
@@ -263,11 +336,11 @@ def import_data():
             env={**os.environ, 'PYTHONPATH': BASE_DIR}
         )
         
-        print(f"Import data output: {result.stdout}")
+        print(f"Import output: {result.stdout}")
         if result.stderr:
-            print(f"Import data errors: {result.stderr}")
+            print(f"Import errors: {result.stderr}")
             
-        emit_progress("Data import completed")
+        emit_progress("Data imported successfully")
             
         return jsonify({
             "status": "success", 
@@ -287,42 +360,38 @@ def import_data():
 @app.route('/clear_database', methods=['POST'])
 def clear_database():
     try:
-        emit_progress("Starting database cleanup...")
+        ensure_directories()
+        script_path = os.path.join(BASE_DIR, 'src', 'database', 'clear_database.py')
+        if not os.path.exists(script_path):
+            raise Exception(f"Script not found: {script_path}")
+            
+        emit_progress("Clearing database...")
+            
+        result = subprocess.run(
+            [sys.executable, script_path],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=BASE_DIR,
+            env={**os.environ, 'PYTHONPATH': BASE_DIR}
+        )
         
-        connection = oracledb.connect("SYSTEM/admin@localhost:1521/XE")
-        cursor = connection.cursor()
-        
-        tables = [
-            "quidditch_team_members",
-            "points",
-            "grades",
-            "students_subjects",
-            "students",
-            "subjects",
-            "dormitories",
-            "houses",
-            "teachers"
-        ]
-        
-        for table in tables:
-            try:
-                cursor.execute(f"TRUNCATE TABLE {table} CASCADE")
-                emit_progress(f"Cleared table: {table}")
-            except oracledb.Error as e:
-                print(f"Error clearing table {table}: {str(e)}")
-                emit_progress(f"Error clearing table {table}: {str(e)}", {'error': True})
-        
-        connection.commit()
-        cursor.close()
-        connection.close()
-        
-        emit_progress("Database cleanup completed")
-        
+        print(f"Clear database output: {result.stdout}")
+        if result.stderr:
+            print(f"Clear database errors: {result.stderr}")
+            
+        emit_progress("Database cleared successfully")
+            
         return jsonify({
-            "status": "success",
+            "status": "success", 
             "message": "Database cleared successfully",
             "loading_message": get_loading_message()
         })
+    except subprocess.CalledProcessError as e:
+        print(f"Error in clear_database: {str(e)}")
+        print(f"Process output: {e.output}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
+        return jsonify({"status": "error", "message": str(e)}), 500
     except Exception as e:
         print(f"Error in clear_database: {str(e)}")
         emit_progress(f"Error: {str(e)}", {'error': True})
@@ -336,11 +405,90 @@ def serve_docs(filename):
     return jsonify({"error": f"File {filename} not found"}), 404
 
 @app.route('/visualizations/<path:filename>')
-def serve_visualizations(filename):
+def serve_visualization(filename):
     """Serve visualization files"""
-    if os.path.exists(os.path.join(VISUALIZATIONS_DIR, filename)):
-        return send_from_directory(VISUALIZATIONS_DIR, filename)
-    return jsonify({"error": f"File {filename} not found"}), 404
+    file_path = os.path.join(DOCS_DIR, 'visualizations', filename)
+    if os.path.exists(file_path):
+        return send_from_directory(os.path.join(DOCS_DIR, 'visualizations'), filename)
+    return "File not found", 404
+
+@app.route('/run_workload')
+def run_workload():
+    try:
+        script_path = os.path.join(DATABASE_DIR, 'run_workload.py')
+        if not os.path.exists(script_path):
+            raise Exception(f"Script not found: {script_path}")
+            
+        emit_progress("Running workload...")
+            
+        result = subprocess.run(
+            [sys.executable, script_path],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=BASE_DIR,
+            env={**os.environ, 'PYTHONPATH': BASE_DIR}
+        )
+        
+        print(f"Workload output: {result.stdout}")
+        if result.stderr:
+            print(f"Workload errors: {result.stderr}")
+            
+        emit_progress("Workload completed successfully")
+            
+        return jsonify({
+            "status": "success", 
+            "message": "Workload completed successfully",
+            "loading_message": get_loading_message()
+        })
+    except subprocess.CalledProcessError as e:
+        print(f"Error in run_workload: {str(e)}")
+        print(f"Process output: {e.output}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
+        return jsonify({"status": "error", "message": str(e)}), 500
+    except Exception as e:
+        print(f"Error in run_workload: {str(e)}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/visualize_data')
+def visualize_data():
+    try:
+        script_path = os.path.join(DATABASE_DIR, 'visualize_data.py')
+        if not os.path.exists(script_path):
+            raise Exception(f"Script not found: {script_path}")
+            
+        emit_progress("Generating visualizations...")
+            
+        result = subprocess.run(
+            [sys.executable, script_path],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=BASE_DIR,
+            env={**os.environ, 'PYTHONPATH': BASE_DIR}
+        )
+        
+        print(f"Visualization output: {result.stdout}")
+        if result.stderr:
+            print(f"Visualization errors: {result.stderr}")
+            
+        emit_progress("Visualizations generated successfully")
+            
+        return jsonify({
+            "status": "success", 
+            "message": "Visualizations generated successfully",
+            "loading_message": get_loading_message()
+        })
+    except subprocess.CalledProcessError as e:
+        print(f"Error in visualize_data: {str(e)}")
+        print(f"Process output: {e.output}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
+        return jsonify({"status": "error", "message": str(e)}), 500
+    except Exception as e:
+        print(f"Error in visualize_data: {str(e)}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
     ensure_directories()

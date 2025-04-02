@@ -1,0 +1,9 @@
+DROP TABLE Students_Subjects;
+DROP TABLE Grades;
+DROP TABLE Points;
+DROP TABLE Quidditch_Team_Members;
+DROP TABLE Students;
+DROP TABLE Dormitories;
+DROP TABLE Subjects;
+DROP TABLE Houses;
+DROP TABLE Teachers; 

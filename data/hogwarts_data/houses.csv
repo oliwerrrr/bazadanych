@@ -1,5 +1,5 @@
-id;name;symbol;location;teacher_id
-0;Gryffindor;Lion;Gryffindor Common Room;59
-1;Slytherin;Snake;Slytherin Common Room;110
-2;Hufflepuff;Badger;Hufflepuff Common Room;17
-3;Ravenclaw;Eagle;Ravenclaw Common Room;50
+id,name
+1,Gryffindor
+2,Hufflepuff
+3,Ravenclaw
+4,Slytherin

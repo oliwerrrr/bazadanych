@@ -8,6 +8,16 @@ import sys
 from datetime import datetime
 from tqdm import tqdm
 
+# Get absolute paths
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+DATA_DIR = os.path.join(BASE_DIR, 'data', 'hogwarts_data')
+CONFIG_FILE = os.path.join(BASE_DIR, 'config', 'hogwarts_config.json')
+NAMES_DIR = os.path.join(BASE_DIR, 'data', 'names')
+
+# Ensure directories exist
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(NAMES_DIR, exist_ok=True)
+
 # Disable output buffering completely
 os.environ['PYTHONUNBUFFERED'] = '1'
 sys.stdout = open(sys.stdout.fileno(), mode=sys.stdout.mode, buffering=1)
@@ -27,11 +37,43 @@ signal.signal(signal.SIGTERM, signal_handler)
 
 def load_config():
     try:
-        with open('hogwarts_config.json', 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        sys.stdout.write("ERROR: Configuration file hogwarts_config.json not found!\n")
-        sys.stdout.write("Please run config_generator.py first to create the configuration.\n")
+        if not os.path.exists(CONFIG_FILE):
+            sys.stdout.write(f"ERROR: Configuration file not found at {CONFIG_FILE}!\n")
+            sys.stdout.write("Please run config_generator.py first to create the configuration.\n")
+            sys.stdout.flush()
+            exit(1)
+            
+        with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+            
+        # Validate required fields
+        required_fields = [
+            'nTeachers', 'nStudents', 'female_percentage',
+            'min_teacher_birth_year', 'max_teacher_birth_year',
+            'min_student_birth_year', 'max_student_birth_year',
+            'min_classroom', 'max_classroom',
+            'grade_values', 'min_grades_per_subject', 'max_grades_per_subject',
+            'min_points', 'max_points', 'pointsPerStudent',
+            'min_team_size', 'max_team_size', 'min_captain_year',
+            'house_names', 'house_symbols'
+        ]
+        
+        missing_fields = [field for field in required_fields if field not in config]
+        if missing_fields:
+            sys.stdout.write(f"ERROR: Missing required fields in config: {', '.join(missing_fields)}\n")
+            sys.stdout.write("Please regenerate the configuration using config_generator.py\n")
+            sys.stdout.flush()
+            exit(1)
+            
+        return config
+            
+    except json.JSONDecodeError as e:
+        sys.stdout.write(f"ERROR: Invalid JSON in configuration file: {str(e)}\n")
+        sys.stdout.write("Please regenerate the configuration using config_generator.py\n")
+        sys.stdout.flush()
+        exit(1)
+    except Exception as e:
+        sys.stdout.write(f"ERROR: Failed to load configuration: {str(e)}\n")
         sys.stdout.flush()
         exit(1)
 
@@ -57,7 +99,8 @@ def check_stop():
         sys.exit(0)
 
 def verify_file_exists(filename):
-    if not os.path.exists(f"hogwarts_data/{filename}"):
+    file_path = os.path.join(DATA_DIR, filename)
+    if not os.path.exists(file_path):
         debug_print(f"ERROR: File {filename} was not created!")
         return False
     return True
@@ -65,73 +108,117 @@ def verify_file_exists(filename):
 def count_rows_in_file(filename):
     if not verify_file_exists(filename):
         return 0
-    with open(f"hogwarts_data/{filename}", "r", newline='', encoding='utf-8') as f:
-        return sum(1 for row in f) - 1  # -1 for header
+    try:
+        file_path = os.path.join(DATA_DIR, filename)
+        with open(file_path, "r", newline='', encoding='utf-8') as f:
+            return sum(1 for row in f) - 1  # -1 for header
+    except Exception as e:
+        debug_print(f"ERROR: Failed to count rows in {filename}: {str(e)}")
+        return 0
 
 def verify_foreign_keys(filename, foreign_key_col, reference_file, reference_col):
     if not verify_file_exists(filename) or not verify_file_exists(reference_file):
         return False
     
-    # Load references
-    references = set()
-    with open(f"hogwarts_data/{reference_file}", "r", newline='', encoding='utf-8') as f:
-        reader = csv.DictReader(f, delimiter=';')
-        for row in reader:
-            references.add(int(row[reference_col]))
-    
-    # Check foreign keys
-    invalid_keys = set()
-    with open(f"hogwarts_data/{filename}", "r", newline='', encoding='utf-8') as f:
-        reader = csv.DictReader(f, delimiter=';')
-        for row in reader:
-            key = int(row[foreign_key_col])
-            if key not in references:
-                invalid_keys.add(key)
-    
-    if invalid_keys:
-        debug_print(f"ERROR: Found invalid foreign keys in {filename}: {invalid_keys}")
+    try:
+        # Load references
+        references = set()
+        file_path = os.path.join(DATA_DIR, reference_file)
+        with open(file_path, "r", newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f, delimiter=';')
+            for row in reader:
+                references.add(int(row[reference_col]))
+        
+        # Check foreign keys
+        invalid_keys = set()
+        file_path = os.path.join(DATA_DIR, filename)
+        with open(file_path, "r", newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f, delimiter=';')
+            for row in reader:
+                key = int(row[foreign_key_col])
+                if key not in references:
+                    invalid_keys.add(key)
+        
+        if invalid_keys:
+            debug_print(f"ERROR: Found invalid foreign keys in {filename}: {invalid_keys}")
+            return False
+        return True
+    except Exception as e:
+        debug_print(f"ERROR: Failed to verify foreign keys in {filename}: {str(e)}")
         return False
-    return True
 
 # Date format: YYYY-MM-DD
 def random_date(start_date, end_date):
-    start_year = int(start_date.split('-')[0])
-    end_year = int(end_date.split('-')[0])
-    
-    year = random.randint(start_year, end_year)
-    month = random.randint(1, 12)
-    
-    if month in [4, 6, 9, 11]:
-        day = random.randint(1, 30)
-    elif month == 2:
-        if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
-            day = random.randint(1, 29)
+    try:
+        start_year = int(start_date.split('-')[0])
+        end_year = int(end_date.split('-')[0])
+        
+        year = random.randint(start_year, end_year)
+        month = random.randint(1, 12)
+        
+        if month in [4, 6, 9, 11]:
+            day = random.randint(1, 30)
+        elif month == 2:
+            if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
+                day = random.randint(1, 29)
+            else:
+                day = random.randint(1, 28)
         else:
-            day = random.randint(1, 28)
-    else:
-        day = random.randint(1, 31)
-    
-    return f"{year:04d}-{month:02d}-{day:02d}"
+            day = random.randint(1, 31)
+        
+        return f"{year:04d}-{month:02d}-{day:02d}"
+    except Exception as e:
+        debug_print(f"ERROR: Failed to generate random date: {str(e)}")
+        return f"{start_year:04d}-01-01"  # Return a safe default date
 
 def main():
     global stop_process
     try:
         debug_print("[>>>] Starting data generation...")
         debug_print("[INFO] Press Ctrl+C to stop the process")
+        debug_print(f"[INFO] Using data directory: {DATA_DIR}")
+        debug_print(f"[INFO] Using names directory: {NAMES_DIR}")
+        
+        # Ensure directories exist
+        os.makedirs(DATA_DIR, exist_ok=True)
+        os.makedirs(NAMES_DIR, exist_ok=True)
         
         # Load name files
         try:
-            with open("feminineNames.csv", "r", encoding="utf-8") as f:
-                feminine_names = f.read().split(";")
-                feminine_names = [name.strip() for name in feminine_names if name.strip()]
+            feminine_names = []
+            masculine_names = []
+            surnames = []
             
-            with open("masculineNames.csv", "r", encoding="utf-8") as f:
-                masculine_names = f.read().split(";")
-                masculine_names = [name.strip() for name in masculine_names if name.strip()]
+            feminine_path = os.path.join(NAMES_DIR, "feminineNames.csv")
+            masculine_path = os.path.join(NAMES_DIR, "masculineNames.csv")
+            surnames_path = os.path.join(NAMES_DIR, "surnames.csv")
             
-            with open("surnames.csv", "r", encoding="utf-8") as f:
-                surnames = f.read().split(";")
-                surnames = [surname.strip() for surname in surnames if surname.strip()]
+            if os.path.exists(feminine_path):
+                with open(feminine_path, "r", encoding="utf-8") as f:
+                    feminine_names = f.read().split(";")
+                    feminine_names = [name.strip() for name in feminine_names if name.strip()]
+            
+            if os.path.exists(masculine_path):
+                with open(masculine_path, "r", encoding="utf-8") as f:
+                    masculine_names = f.read().split(";")
+                    masculine_names = [name.strip() for name in masculine_names if name.strip()]
+            
+            if os.path.exists(surnames_path):
+                with open(surnames_path, "r", encoding="utf-8") as f:
+                    surnames = f.read().split(";")
+                    surnames = [surname.strip() for surname in surnames if surname.strip()]
+            
+            if not feminine_names:
+                feminine_names = ["Emma", "Olivia", "Ava", "Isabella", "Sophia", "Charlotte", "Mia", "Amelia", "Harper", "Evelyn"]
+                debug_print("[WARN] Using default feminine names")
+                
+            if not masculine_names:
+                masculine_names = ["Liam", "Noah", "William", "James", "Oliver", "Benjamin", "Elijah", "Lucas", "Mason", "Logan"]
+                debug_print("[WARN] Using default masculine names")
+                
+            if not surnames:
+                surnames = ["Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor"]
+                debug_print("[WARN] Using default surnames")
             
             debug_print("Name files loaded", {
                 "feminine names": len(feminine_names),
@@ -140,18 +227,16 @@ def main():
             })
         except Exception as e:
             debug_print(f"ERROR while loading name files: {e}")
+            debug_print("[WARN] Using default names")
             feminine_names = ["Emma", "Olivia", "Ava", "Isabella", "Sophia", "Charlotte", "Mia", "Amelia", "Harper", "Evelyn"]
             masculine_names = ["Liam", "Noah", "William", "James", "Oliver", "Benjamin", "Elijah", "Lucas", "Mason", "Logan"]
             surnames = ["Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor"]
-
-        # Ensure directory exists
-        os.makedirs("hogwarts_data", exist_ok=True)
 
         # 1. Teachers
         check_stop()
         debug_print("Generating teachers...")
         teacher_ids = list(range(CONFIG['nTeachers']))
-        with open("hogwarts_data/teachers.csv", "w", newline='') as teachers_file:
+        with open(os.path.join(DATA_DIR, "teachers.csv"), "w", newline='', encoding='utf-8') as teachers_file:
             writer = csv.writer(teachers_file, delimiter=';')
             writer.writerow(["id", "name", "surname", "date_of_birth", "date_of_employment"])
             
@@ -173,7 +258,7 @@ def main():
         check_stop()
         debug_print("Generating houses...")
         house_ids = list(range(4))
-        with open("hogwarts_data/houses.csv", "w", newline='') as houses_file:
+        with open(os.path.join(DATA_DIR, "houses.csv"), "w", newline='', encoding='utf-8') as houses_file:
             writer = csv.writer(houses_file, delimiter=';')
             writer.writerow(["id", "name", "symbol", "location", "teacher_id"])
             for i in range(4):
@@ -188,7 +273,7 @@ def main():
         check_stop()
         debug_print("Generating dormitories...")
         dormitory_ids = []
-        with open("hogwarts_data/dormitories.csv", "w", newline='') as dormitories_file:
+        with open(os.path.join(DATA_DIR, "dormitories.csv"), "w", newline='', encoding='utf-8') as dormitories_file:
             writer = csv.writer(dormitories_file, delimiter=';')
             writer.writerow(["id", "gender", "room_number", "house_id"])
             
@@ -228,7 +313,7 @@ def main():
             ["Apparition", 6, 1]
         ]
 
-        with open("hogwarts_data/subjects.csv", "w", newline='', encoding='utf-8') as subjects_file:
+        with open(os.path.join(DATA_DIR, "subjects.csv"), "w", newline='', encoding='utf-8') as subjects_file:
             writer = csv.writer(subjects_file, delimiter=';')
             writer.writerow(["id", "name", "classroom", "year", "teacher_id"])
             
@@ -253,11 +338,11 @@ def main():
                         subject_id += 1
 
         # Check if file was created and contains data
-        if not os.path.exists("hogwarts_data/subjects.csv"):
+        if not os.path.exists(os.path.join(DATA_DIR, "subjects.csv")):
             debug_print("ERROR: subjects.csv file was not created!")
             exit(1)
 
-        with open("hogwarts_data/subjects.csv", "r", newline='', encoding='utf-8') as f:
+        with open(os.path.join(DATA_DIR, "subjects.csv"), "r", newline='', encoding='utf-8') as f:
             reader = csv.reader(f, delimiter=';')
             next(reader)  # Skip header
             subjects_count = sum(1 for row in reader)
@@ -273,7 +358,7 @@ def main():
         check_stop()
         debug_print("Generating students...")
         student_ids = list(range(CONFIG['nStudents']))
-        with open("hogwarts_data/students.csv", "w", newline='') as students_file:
+        with open(os.path.join(DATA_DIR, "students.csv"), "w", newline='', encoding='utf-8') as students_file:
             writer = csv.writer(students_file, delimiter=';')
             writer.writerow(["id", "name", "surname", "gender", "date_of_birth", "year", "hogsmeade_consent", "house_id", "dormitory_id"])
             
@@ -313,12 +398,12 @@ def main():
         students_data = {}
         subjects_data = {}
 
-        with open("hogwarts_data/students.csv", "r", newline='') as students_file:
+        with open(os.path.join(DATA_DIR, "students.csv"), "r", newline='', encoding='utf-8') as students_file:
             reader = csv.DictReader(students_file, delimiter=';')
             for row in reader:
                 students_data[int(row['id'])] = int(row['year'])
 
-        with open("hogwarts_data/subjects.csv", "r", newline='') as subjects_file:
+        with open(os.path.join(DATA_DIR, "subjects.csv"), "r", newline='', encoding='utf-8') as subjects_file:
             reader = csv.DictReader(subjects_file, delimiter=';')
             for row in reader:
                 subjects_data[int(row['id'])] = {
@@ -329,7 +414,7 @@ def main():
         debug_print(f"Loaded data for {len(students_data)} students and {len(subjects_data)} subjects")
 
         student_subject_pairs = set()
-        with open("hogwarts_data/students_subjects.csv", "w", newline='') as students_subjects_file:
+        with open(os.path.join(DATA_DIR, "students_subjects.csv"), "w", newline='', encoding='utf-8') as students_subjects_file:
             writer = csv.writer(students_subjects_file, delimiter=';')
             writer.writerow(["student_id", "subject_id"])
             
@@ -361,7 +446,7 @@ def main():
         check_stop()
         debug_print("Loading subject teacher data...")
         subject_teachers = {}
-        with open("hogwarts_data/subjects.csv", "r", newline='') as subjects_file:
+        with open(os.path.join(DATA_DIR, "subjects.csv"), "r", newline='', encoding='utf-8') as subjects_file:
             reader = csv.DictReader(subjects_file, delimiter=';')
             for row in reader:
                 subject_teachers[int(row['id'])] = int(row['teacher_id'])
@@ -369,7 +454,7 @@ def main():
         debug_print(f"Loaded teacher data for {len(subject_teachers)} subjects")
 
         # Generate grades
-        with open("hogwarts_data/grades.csv", "w", newline='') as grades_file:
+        with open(os.path.join(DATA_DIR, "grades.csv"), "w", newline='', encoding='utf-8') as grades_file:
             writer = csv.writer(grades_file, delimiter=';')
             writer.writerow(["id", "value", "award_date", "student_id", "subject_id", "teacher_id"])
             
@@ -397,12 +482,12 @@ def main():
         # 8. Points
         check_stop()
         debug_print("Generating points...")
-        with open("hogwarts_data/points.csv", "w", newline='') as points_file:
+        with open(os.path.join(DATA_DIR, "points.csv"), "w", newline='', encoding='utf-8') as points_file:
             writer = csv.writer(points_file, delimiter=';')
             writer.writerow(["id", "value", "description", "award_date", "student_id", "teacher_id"])
             
             points_id = 0
-            for _ in range(CONFIG['nStudents'] * CONFIG['points_per_student']):
+            for _ in range(CONFIG['nStudents'] * CONFIG['pointsPerStudent']):
                 student_id = random.choice(student_ids)
                 teacher_id = random.choice(teacher_ids)
                 value = random.randint(CONFIG['min_points'], CONFIG['max_points'])
@@ -437,7 +522,7 @@ def main():
         # 9. Quidditch Team Members
         check_stop()
         debug_print("Generating Quidditch team members...")
-        with open("hogwarts_data/quidditch_team_members.csv", "w", newline='') as quidditch_file:
+        with open(os.path.join(DATA_DIR, "quidditch_team_members.csv"), "w", newline='', encoding='utf-8') as quidditch_file:
             writer = csv.writer(quidditch_file, delimiter=';')
             writer.writerow(["id", "position", "is_captain", "student_id"])
             

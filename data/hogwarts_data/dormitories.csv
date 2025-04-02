@@ -1,128 +1,121 @@
-id;gender;room_number;house_id
-0;M;100;0
-1;M;101;0
-2;M;200;0
-3;M;201;0
-4;M;202;0
-5;M;300;0
-6;M;301;0
-7;M;400;0
-8;M;401;0
-9;M;500;0
-10;M;501;0
-11;M;600;0
-12;M;601;0
-13;M;700;0
-14;M;701;0
-15;F;100;0
-16;F;101;0
-17;F;102;0
-18;F;200;0
-19;F;201;0
-20;F;202;0
-21;F;300;0
-22;F;301;0
-23;F;400;0
-24;F;401;0
-25;F;402;0
-26;F;500;0
-27;F;600;0
-28;F;700;0
-29;F;701;0
-30;F;702;0
-31;M;100;1
-32;M;101;1
-33;M;200;1
-34;M;201;1
-35;M;300;1
-36;M;301;1
-37;M;400;1
-38;M;500;1
-39;M;501;1
-40;M;600;1
-41;M;700;1
-42;M;701;1
-43;M;702;1
-44;F;100;1
-45;F;101;1
-46;F;102;1
-47;F;200;1
-48;F;201;1
-49;F;300;1
-50;F;301;1
-51;F;302;1
-52;F;400;1
-53;F;401;1
-54;F;402;1
-55;F;500;1
-56;F;501;1
-57;F;502;1
-58;F;600;1
-59;F;601;1
-60;F;602;1
-61;F;700;1
-62;F;701;1
-63;F;702;1
-64;M;100;2
-65;M;101;2
-66;M;102;2
-67;M;200;2
-68;M;201;2
-69;M;202;2
-70;M;300;2
-71;M;400;2
-72;M;401;2
-73;M;500;2
-74;M;600;2
-75;M;601;2
-76;M;700;2
-77;F;100;2
-78;F;200;2
-79;F;201;2
-80;F;300;2
-81;F;301;2
-82;F;302;2
-83;F;400;2
-84;F;401;2
-85;F;402;2
-86;F;500;2
-87;F;501;2
-88;F;502;2
-89;F;600;2
-90;F;601;2
-91;F;700;2
-92;M;100;3
-93;M;101;3
-94;M;102;3
-95;M;200;3
-96;M;201;3
-97;M;202;3
-98;M;300;3
-99;M;301;3
-100;M;400;3
-101;M;401;3
-102;M;500;3
-103;M;501;3
-104;M;502;3
-105;M;600;3
-106;M;601;3
-107;M;602;3
-108;M;700;3
-109;M;701;3
-110;M;702;3
-111;F;100;3
-112;F;101;3
-113;F;200;3
-114;F;300;3
-115;F;301;3
-116;F;302;3
-117;F;400;3
-118;F;401;3
-119;F;402;3
-120;F;500;3
-121;F;600;3
-122;F;601;3
-123;F;602;3
-124;F;700;3
-125;F;701;3
-126;F;702;3
+id,name,house_id
+1,Dormitory 1,1
+2,Dormitory 2,1
+3,Dormitory 3,1
+4,Dormitory 4,1
+5,Dormitory 5,1
+6,Dormitory 6,1
+7,Dormitory 7,1
+8,Dormitory 8,1
+9,Dormitory 9,1
+10,Dormitory 10,1
+11,Dormitory 11,1
+12,Dormitory 12,1
+13,Dormitory 13,1
+14,Dormitory 14,1
+15,Dormitory 15,1
+16,Dormitory 16,1
+17,Dormitory 17,1
+18,Dormitory 18,1
+19,Dormitory 19,1
+20,Dormitory 20,1
+21,Dormitory 21,1
+22,Dormitory 22,1
+23,Dormitory 23,1
+24,Dormitory 24,1
+25,Dormitory 25,1
+26,Dormitory 26,1
+27,Dormitory 27,1
+28,Dormitory 28,1
+29,Dormitory 29,1
+30,Dormitory 30,1
+31,Dormitory 1,2
+32,Dormitory 2,2
+33,Dormitory 3,2
+34,Dormitory 4,2
+35,Dormitory 5,2
+36,Dormitory 6,2
+37,Dormitory 7,2
+38,Dormitory 8,2
+39,Dormitory 9,2
+40,Dormitory 10,2
+41,Dormitory 11,2
+42,Dormitory 12,2
+43,Dormitory 13,2
+44,Dormitory 14,2
+45,Dormitory 15,2
+46,Dormitory 16,2
+47,Dormitory 17,2
+48,Dormitory 18,2
+49,Dormitory 19,2
+50,Dormitory 20,2
+51,Dormitory 21,2
+52,Dormitory 22,2
+53,Dormitory 23,2
+54,Dormitory 24,2
+55,Dormitory 25,2
+56,Dormitory 26,2
+57,Dormitory 27,2
+58,Dormitory 28,2
+59,Dormitory 29,2
+60,Dormitory 30,2
+61,Dormitory 1,3
+62,Dormitory 2,3
+63,Dormitory 3,3
+64,Dormitory 4,3
+65,Dormitory 5,3
+66,Dormitory 6,3
+67,Dormitory 7,3
+68,Dormitory 8,3
+69,Dormitory 9,3
+70,Dormitory 10,3
+71,Dormitory 11,3
+72,Dormitory 12,3
+73,Dormitory 13,3
+74,Dormitory 14,3
+75,Dormitory 15,3
+76,Dormitory 16,3
+77,Dormitory 17,3
+78,Dormitory 18,3
+79,Dormitory 19,3
+80,Dormitory 20,3
+81,Dormitory 21,3
+82,Dormitory 22,3
+83,Dormitory 23,3
+84,Dormitory 24,3
+85,Dormitory 25,3
+86,Dormitory 26,3
+87,Dormitory 27,3
+88,Dormitory 28,3
+89,Dormitory 29,3
+90,Dormitory 30,3
+91,Dormitory 1,4
+92,Dormitory 2,4
+93,Dormitory 3,4
+94,Dormitory 4,4
+95,Dormitory 5,4
+96,Dormitory 6,4
+97,Dormitory 7,4
+98,Dormitory 8,4
+99,Dormitory 9,4
+100,Dormitory 10,4
+101,Dormitory 11,4
+102,Dormitory 12,4
+103,Dormitory 13,4
+104,Dormitory 14,4
+105,Dormitory 15,4
+106,Dormitory 16,4
+107,Dormitory 17,4
+108,Dormitory 18,4
+109,Dormitory 19,4
+110,Dormitory 20,4
+111,Dormitory 21,4
+112,Dormitory 22,4
+113,Dormitory 23,4
+114,Dormitory 24,4
+115,Dormitory 25,4
+116,Dormitory 26,4
+117,Dormitory 27,4
+118,Dormitory 28,4
+119,Dormitory 29,4
+120,Dormitory 30,4

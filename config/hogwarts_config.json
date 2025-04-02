@@ -1,46 +1,43 @@
 {
-    "database": {
-        "host": "localhost",
-        "port": "1521",
-        "service": "XE",
-        "user": "SYSTEM",
-        "password": "admin"
-    },
     "nTeachers": 111,
     "nStudents": 10000,
     "female_percentage": 50,
+    "min_teacher_birth_year": 1950,
+    "max_teacher_birth_year": 1990,
+    "min_student_birth_year": 2006,
+    "max_student_birth_year": 2013,
+    "min_classroom": 100,
+    "max_classroom": 999,
+    "grade_values": [
+        "O",
+        "E",
+        "A",
+        "P",
+        "D",
+        "T"
+    ],
+    "min_grades_per_subject": 2,
+    "max_grades_per_subject": 10,
+    "min_points": -50,
+    "max_points": 50,
+    "pointsPerStudent": 3,
+    "min_team_size": 7,
+    "max_team_size": 12,
+    "min_captain_year": 5,
     "house_names": [
         "Gryffindor",
-        "Slytherin",
         "Hufflepuff",
-        "Ravenclaw"
+        "Ravenclaw",
+        "Slytherin"
     ],
     "house_symbols": [
         "Lion",
-        "Snake",
         "Badger",
-        "Eagle"
+        "Eagle",
+        "Snake"
     ],
-    "grade_values": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-    ],
-    "min_teacher_birth_year": 1950,
-    "max_teacher_birth_year": 1990,
-    "min_student_birth_year": 2007,
-    "max_student_birth_year": 2013,
-    "min_classroom": 101,
-    "max_classroom": 999,
-    "min_grades_per_subject": 3,
-    "max_grades_per_subject": 5,
-    "points_per_student": 3,
-    "min_points": -50,
-    "max_points": 50,
-    "min_team_size": 7,
-    "max_team_size": 10,
-    "min_captain_year": 5
+    "allow_empty_dormitories": false,
+    "enforce_min_subjects": true,
+    "allow_multiple_captains": false,
+    "timestamp": "2025-04-02 05:13:14"
 }

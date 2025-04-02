@@ -8,6 +8,7 @@ from datetime import datetime
 from tqdm import tqdm
 import pandas as pd
 import traceback
+import random
 
 # Get absolute paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -55,6 +56,21 @@ def count_rows_in_file(filename):
     with open(filename, "r", newline='', encoding='utf-8') as f:
         return sum(1 for row in f) - 1  # -1 for header
 
+def read_csv_file(filepath):
+    """Read a CSV file with either comma or semicolon delimiter"""
+    try:
+        # Try comma first
+        df = pd.read_csv(filepath)
+        return df
+    except:
+        try:
+            # Try semicolon
+            df = pd.read_csv(filepath, sep=';')
+            return df
+        except Exception as e:
+            print(f"Error reading {filepath}: {str(e)}")
+            raise
+
 def import_csv(cursor, filename, table_name, columns):
     global stop_process
     if stop_process:
@@ -100,70 +116,93 @@ def import_csv(cursor, filename, table_name, columns):
 def clear_tables(cursor):
     """Clear all tables in the correct order"""
     tables = [
-        'quidditch_team_members',
-        'points',
-        'grades',
-        'students',
-        'subjects',
-        'dormitories',
-        'houses',
-        'teachers'
+        'quidditch_team_members',  # No dependencies
+        'points',                  # Depends on students
+        'grades',                  # Depends on students and subjects
+        'students_subjects',       # Depends on students and subjects
+        'students',               # Depends on houses and dormitories
+        'subjects',               # Depends on teachers
+        'dormitories',            # Depends on houses
+        'houses',                 # No dependencies
+        'teachers'                # No dependencies
     ]
     
     for table in tables:
-        print(f"Clearing table {table}...")
         try:
+            print(f"Clearing table {table}...")
             cursor.execute(f"DELETE FROM {table}")
             print(f"Table {table} cleared successfully")
         except Exception as e:
-            print(f"Error clearing table {table}: {str(e)}")
-            raise
+            print(f"Error clearing table {table}:", str(e))
+            if hasattr(e, 'help'):
+                print("Help:", e.help)
+            raise e
 
 def get_first_teacher_id(cursor):
     """Get the ID of the first teacher in the database"""
     cursor.execute("SELECT MIN(id) FROM Teachers")
     return cursor.fetchone()[0]
 
-def import_subjects(cursor):
-    """Import subjects data"""
-    print("Importing subjects...")
-    df = pd.read_csv(os.path.join(DATA_DIR, 'subjects.csv'))
-    subject_id_map = {}
-    
-    for _, row in df.iterrows():
-        # Get a random teacher for this subject
-        cursor.execute("SELECT id FROM Teachers ORDER BY DBMS_RANDOM.VALUE FETCH FIRST 1 ROW ONLY")
-        teacher_id = cursor.fetchone()[0]
-        print(f"Using teacher ID: {teacher_id}")
-        
-        # Insert the subject
-        cursor.execute("""
-            INSERT INTO Subjects (id, name, classroom, year, teacher_id)
-            VALUES (subjects_seq.NEXTVAL, :1, FLOOR(DBMS_RANDOM.VALUE(100,999)), 1, :2)
-            RETURNING id INTO :3
-        """, (row['name'], teacher_id, cursor.var(int)))
-        
-        new_id = cursor.var.getvalue()
-        subject_id_map[int(row['id'])] = new_id
-        
-    print(f"Imported {len(df)} subjects")
-    return subject_id_map
-
 def import_teachers(cursor):
     """Import teachers data"""
     print("Importing teachers...")
-    df = pd.read_csv(os.path.join(DATA_DIR, 'teachers.csv'))
+    df = pd.read_csv(os.path.join(DATA_DIR, 'teachers.csv'), sep=';')
+    teacher_id_map = {}
+    
     for _, row in df.iterrows():
+        # Get next value from sequence
+        cursor.execute("SELECT teachers_seq.NEXTVAL FROM dual")
+        new_id = cursor.fetchone()[0]
+        teacher_id_map[row['id']] = new_id
+        
+        # Insert teacher with all required fields
         cursor.execute("""
             INSERT INTO Teachers (id, name, surname, date_of_birth, date_of_employment)
-            VALUES (teachers_seq.NEXTVAL, :1, :2, SYSDATE-365*30, SYSDATE-365*5)
-        """, (row['name'], 'Surname'))
-    print(f"Imported {len(df)} teachers")
+            VALUES (:1, :2, :3, TO_DATE(:4, 'YYYY-MM-DD'), TO_DATE(:5, 'YYYY-MM-DD'))
+        """, (new_id, row['name'], row['surname'], row['date_of_birth'], row['date_of_employment']))
+    
+    print(f"Imported {len(teacher_id_map)} teachers")
+    return teacher_id_map
+
+def import_subjects(cursor, teacher_id_map):
+    print("Importing subjects...")
+    df = pd.read_csv(os.path.join(DATA_DIR, 'subjects.csv'), sep=';')
+    subject_id_map = {}
+    
+    for _, row in df.iterrows():
+        subject_name = row['name']
+        classroom = row['classroom']
+        year = row['year']
+        old_teacher_id = row['teacher_id']
+        
+        # Map the teacher ID
+        if old_teacher_id not in teacher_id_map:
+            print(f"Warning: Teacher ID {old_teacher_id} not found in mapping")
+            continue
+        
+        teacher_id = teacher_id_map[old_teacher_id]
+        
+        # Get next value from sequence
+        cursor.execute("SELECT subjects_seq.NEXTVAL FROM dual")
+        new_id = cursor.fetchone()[0]
+        subject_id_map[row['id']] = new_id
+        
+        # Insert subject
+        cursor.execute("""
+            INSERT INTO Subjects (id, name, classroom, year, teacher_id)
+            VALUES (:1, :2, :3, :4, :5)
+        """, (new_id, subject_name, classroom, year, teacher_id))
+        
+        if len(subject_id_map) <= 5:
+            print(f"Imported subject {subject_name} with ID {new_id}")
+    
+    print(f"Imported {len(subject_id_map)} subjects")
+    return subject_id_map
 
 def import_houses(cursor):
     """Import houses data"""
     print("Importing houses...")
-    df = pd.read_csv(os.path.join(DATA_DIR, 'houses.csv'))
+    df = pd.read_csv(os.path.join(DATA_DIR, 'houses.csv'), sep=';')
     for _, row in df.iterrows():
         cursor.execute("""
             INSERT INTO Houses (id, name, symbol, location, teacher_id)
@@ -175,7 +214,7 @@ def import_houses(cursor):
 def import_dormitories(cursor):
     """Import dormitories data"""
     print("Importing dormitories...")
-    df = pd.read_csv(os.path.join(DATA_DIR, 'dormitories.csv'))
+    df = pd.read_csv(os.path.join(DATA_DIR, 'dormitories.csv'), sep=';')
     for _, row in df.iterrows():
         cursor.execute("""
             INSERT INTO Dormitories (id, gender, room_number, house_id)
@@ -194,7 +233,7 @@ def get_dormitory_id_for_house(cursor, house_id, gender):
 def import_students(cursor):
     """Import students data"""
     print("Importing students...")
-    df = pd.read_csv(os.path.join(DATA_DIR, 'students.csv'))
+    df = pd.read_csv(os.path.join(DATA_DIR, 'students.csv'), sep=';')
     student_id_map = {}
     
     for _, row in df.iterrows():
@@ -210,9 +249,9 @@ def import_students(cursor):
             
         cursor.execute("""
             INSERT INTO Students (id, name, surname, gender, date_of_birth, year, hogsmeade_consent, house_id, dormitory_id)
-            VALUES (:1, :2, :3, :4, SYSDATE-365*11-DBMS_RANDOM.VALUE(0,365), 
-                   FLOOR(DBMS_RANDOM.VALUE(1,8)), FLOOR(DBMS_RANDOM.VALUE(0,2)), :5, :6)
-        """, (new_id, row['name'][:64], 'Surname', row['gender'], row['house_id'], dormitory_id))
+            VALUES (:1, :2, :3, :4, TO_DATE(:5, 'YYYY-MM-DD'), :6, :7, :8, :9)
+        """, (new_id, row['name'][:64], row['surname'], row['gender'], row['date_of_birth'], 
+              row['year'], row['hogsmeade_consent'], row['house_id'], dormitory_id))
         
         if _ < 5:  # Print first 5 student IDs
             print(f"Created student with ID {new_id} for original ID {row['id']}")
@@ -236,28 +275,107 @@ def get_subject_id_mapping(cursor):
     print(f"Subject ID mapping: {mapping}")
     return mapping
 
-def import_grades(cursor, student_id_map, subject_id_map):
+def import_grades(cursor, student_id_map, subject_id_map, teacher_id_map):
     """Import grades data"""
     print("Importing grades...")
-    print(f"Student ID mapping (first 5): {dict(list(student_id_map.items())[:5])}")
-    print(f"Subject ID mapping: {subject_id_map}")
+    print("Student ID mapping (first 5):", dict(list(student_id_map.items())[:5]))
     
-    # Get teacher IDs for each subject
-    cursor.execute("SELECT id, teacher_id FROM Subjects")
-    subject_teacher_map = {row[0]: row[1] for row in cursor.fetchall()}
-    print(f"Subject-Teacher mapping: {subject_teacher_map}")
+    df = pd.read_csv(os.path.join(DATA_DIR, 'grades.csv'), sep=';')
     
-    # Grade value mapping (1-6 to O,E,A,P,D,T)
+    # Map numeric grades to letters
     grade_map = {
-        1: 'T',  # Troll
-        2: 'D',  # Dreadful
-        3: 'P',  # Poor
-        4: 'A',  # Acceptable
-        5: 'E',  # Exceeds Expectations
-        6: 'O'   # Outstanding
+        2: 'T',  # Troll
+        3: 'D',  # Dreadful
+        4: 'P',  # Poor
+        5: 'A',  # Acceptable
+        6: 'E',  # Exceeds Expectations
+        7: 'O'   # Outstanding
     }
     
-    df = pd.read_csv(os.path.join(DATA_DIR, 'grades.csv'))
+    for _, row in df.iterrows():
+        student_id = student_id_map.get(row['student_id'])
+        subject_id = subject_id_map.get(row['subject_id'])
+        teacher_id = teacher_id_map.get(row['teacher_id'])
+        
+        if student_id is None:
+            print(f"Warning: Student ID {row['student_id']} not found in mapping")
+            continue
+            
+        if subject_id is None:
+            print(f"Warning: Subject ID {row['subject_id']} not found in mapping")
+            continue
+            
+        if teacher_id is None:
+            print(f"Warning: Teacher ID {row['teacher_id']} not found in mapping")
+            continue
+        
+        try:
+            # Try to convert value to int and map it
+            value = int(row['value'])
+            grade_value = grade_map.get(value, 'P')  # Default to 'P' if invalid grade
+        except (ValueError, TypeError):
+            # If value is already a letter grade or invalid, use it as is
+            grade_value = str(row['value']).upper()
+            if grade_value not in ['O', 'E', 'A', 'P', 'D', 'T']:
+                grade_value = 'P'  # Default to 'P' for invalid grades
+        
+        # Insert grade
+        cursor.execute("""
+            INSERT INTO Grades (id, value, award_date, student_id, subject_id, teacher_id)
+            VALUES (grades_seq.NEXTVAL, :1, TO_DATE(:2, 'YYYY-MM-DD'), :3, :4, :5)
+        """, (grade_value, row['award_date'], student_id, subject_id, teacher_id))
+    
+    print("Imported grades successfully")
+
+def import_points(cursor, student_id_map, teacher_id_map):
+    """Import points data"""
+    print("Importing points...")
+    df = pd.read_csv(os.path.join(DATA_DIR, 'points.csv'), sep=';')
+    
+    for _, row in df.iterrows():
+        student_id = student_id_map.get(row['student_id'])
+        teacher_id = teacher_id_map.get(row['teacher_id'])
+        
+        if student_id is None:
+            print(f"Warning: Student ID {row['student_id']} not found in mapping")
+            continue
+            
+        if teacher_id is None:
+            print(f"Warning: Teacher ID {row['teacher_id']} not found in mapping")
+            continue
+        
+        cursor.execute("""
+            INSERT INTO Points (id, value, description, award_date, student_id, teacher_id)
+            VALUES (points_seq.NEXTVAL, :1, :2, TO_DATE(:3, 'YYYY-MM-DD'), :4, :5)
+        """, (row['value'], row['description'], row['award_date'], student_id, teacher_id))
+    
+    print("Imported points successfully")
+
+def import_quidditch(cursor, student_id_map):
+    """Import Quidditch team members data"""
+    print("Importing Quidditch team members...")
+    df = pd.read_csv(os.path.join(DATA_DIR, 'quidditch_team_members.csv'), sep=';')
+    
+    for _, row in df.iterrows():
+        student_id = student_id_map.get(row['student_id'])
+        
+        if student_id is None:
+            print(f"Warning: Student ID {row['student_id']} not found in mapping")
+            continue
+        
+        cursor.execute("""
+            INSERT INTO Quidditch_Team_Members (id, position, is_captain, student_id)
+            VALUES (quidditch_seq.NEXTVAL, :1, :2, :3)
+        """, (row['position'], row['is_captain'], student_id))
+    
+    print("Imported Quidditch team members successfully")
+
+def import_students_subjects(cursor, student_id_map, subject_id_map):
+    """Import students_subjects data"""
+    print("Importing students_subjects...")
+    df = pd.read_csv(os.path.join(DATA_DIR, 'students_subjects.csv'), sep=';')
+    imported_count = 0
+    
     for _, row in df.iterrows():
         new_student_id = student_id_map.get(int(row['student_id']))
         new_subject_id = subject_id_map.get(int(row['subject_id']))
@@ -266,43 +384,16 @@ def import_grades(cursor, student_id_map, subject_id_map):
             print(f"Warning: Missing mapping for student_id={row['student_id']} or subject_id={row['subject_id']}")
             continue
             
-        teacher_id = subject_teacher_map.get(new_subject_id)
-        if not teacher_id:
-            print(f"Warning: No teacher found for subject_id={new_subject_id}")
-            continue
-            
-        grade_value = grade_map.get(int(row['grade']), 'P')  # Default to 'P' if invalid grade
-            
-        if _ < 5:  # Print first 5 grade entries
-            print(f"Inserting grade for student_id={row['student_id']} -> {new_student_id}, subject_id={row['subject_id']} -> {new_subject_id}, teacher_id={teacher_id}, grade={grade_value}")
+        if imported_count < 5:  # Print first 5 entries
+            print(f"Inserting student-subject pair: student_id={row['student_id']} -> {new_student_id}, subject_id={row['subject_id']} -> {new_subject_id}")
             
         cursor.execute("""
-            INSERT INTO Grades (id, value, award_date, student_id, subject_id, teacher_id)
-            VALUES (grades_seq.NEXTVAL, :1, SYSDATE-DBMS_RANDOM.VALUE(0,365), :2, :3, :4)
-        """, (grade_value, new_student_id, new_subject_id, teacher_id))
-    print(f"Imported {len(df)} grades")
-
-def import_points(cursor):
-    """Import points data"""
-    print("Importing points...")
-    df = pd.read_csv(os.path.join(DATA_DIR, 'points.csv'))
-    for _, row in df.iterrows():
-        cursor.execute("""
-            INSERT INTO Points (id, value, description, award_date, student_id, teacher_id)
-            VALUES (points_seq.NEXTVAL, :1, :2, SYSDATE-DBMS_RANDOM.VALUE(0,365), :3, 1)
-        """, (row['points'], 'For achievements', row['student_id']))
-    print(f"Imported {len(df)} points")
-
-def import_quidditch(cursor):
-    """Import Quidditch team members data"""
-    print("Importing Quidditch team members...")
-    df = pd.read_csv(os.path.join(DATA_DIR, 'quidditch_team_members.csv'))
-    for _, row in df.iterrows():
-        cursor.execute("""
-            INSERT INTO Quidditch_Team_Members (id, position, is_captain, student_id)
-            VALUES (quidditch_seq.NEXTVAL, :1, FLOOR(DBMS_RANDOM.VALUE(0,2)), :2)
-        """, (row['position'], row['student_id']))
-    print(f"Imported {len(df)} Quidditch team members")
+            INSERT INTO Students_Subjects (student_id, subject_id)
+            VALUES (:1, :2)
+        """, (new_student_id, new_subject_id))
+        imported_count += 1
+        
+    print(f"Imported {imported_count} student-subject pairs")
 
 def get_database_connection():
     """Get database connection with proper error handling"""
@@ -327,30 +418,51 @@ def main():
         # Clear existing data
         clear_tables(cursor)
 
-        print("\nImporting base tables...")
-        # Import in order of dependencies
-        import_teachers(cursor)  # No foreign keys
+        print("\nImporting data in specified order...")
+        
+        # 1. Import teachers first (no dependencies)
+        print("\n1. Importing teachers...")
+        teacher_id_map = import_teachers(cursor)
         connection.commit()
         
-        import_houses(cursor)  # References teachers
+        # 2. Import houses (depends on teachers)
+        print("\n2. Importing houses...")
+        import_houses(cursor)
         connection.commit()
         
-        import_dormitories(cursor)  # References houses
+        # 3. Import dormitories (depends on houses)
+        print("\n3. Importing dormitories...")
+        import_dormitories(cursor)
         connection.commit()
         
-        subject_id_map = import_subjects(cursor)  # References teachers
+        # 4. Import subjects (depends on teachers)
+        print("\n4. Importing subjects...")
+        subject_id_map = import_subjects(cursor, teacher_id_map)
         connection.commit()
         
-        student_id_map = import_students(cursor)  # References houses and dormitories
+        # 5. Import students (depends on houses and dormitories)
+        print("\n5. Importing students...")
+        student_id_map = import_students(cursor)
         connection.commit()
         
-        import_grades(cursor, student_id_map, subject_id_map)  # References students, subjects, and teachers
+        # 6. Import students_subjects (depends on students and subjects)
+        print("\n6. Importing students_subjects...")
+        import_students_subjects(cursor, student_id_map, subject_id_map)
         connection.commit()
         
-        import_points(cursor)  # References students and teachers
+        # 7. Import grades (depends on students, subjects, and teachers)
+        print("\n7. Importing grades...")
+        import_grades(cursor, student_id_map, subject_id_map, teacher_id_map)
         connection.commit()
         
-        import_quidditch(cursor)  # References students
+        # 8. Import points (depends on students and teachers)
+        print("\n8. Importing points...")
+        import_points(cursor, student_id_map, teacher_id_map)
+        connection.commit()
+        
+        # 9. Import quidditch team members (depends on students)
+        print("\n9. Importing quidditch team members...")
+        import_quidditch(cursor, student_id_map)
         connection.commit()
 
         print("\nData import completed successfully!")

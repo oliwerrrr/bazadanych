@@ -739,10 +739,10 @@ def main():
         
         # Przypisz specjalne cechy do domów, które wpłyną na rozkład punktów
         house_point_bias = {
-            0: {'positive_chance': 0.65, 'positive_mean': 7, 'positive_sd': 4, 'negative_mean': -5, 'negative_sd': 3},  # Gryffindor - bardziej ekstremalne wartości
-            1: {'positive_chance': 0.80, 'positive_mean': 3, 'positive_sd': 2, 'negative_mean': -2, 'negative_sd': 1},  # Hufflepuff - więcej małych pozytywnych punktów
-            2: {'positive_chance': 0.85, 'positive_mean': 4, 'positive_sd': 2, 'negative_mean': -2, 'negative_sd': 1},  # Ravenclaw - bardzo mało negatywnych punktów
-            3: {'positive_chance': 0.50, 'positive_mean': 6, 'positive_sd': 3, 'negative_mean': -4, 'negative_sd': 2}   # Slytherin - zrównoważone, ale bardziej ekstremalne
+            0: {'positive_chance': 0.45, 'positive_mean': 10, 'positive_sd': 6, 'negative_mean': -8, 'negative_sd': 5},  # Gryffindor - ekstremalne wartości, więcej negatywnych
+            1: {'positive_chance': 0.70, 'positive_mean': 3, 'positive_sd': 2, 'negative_mean': -3, 'negative_sd': 1},  # Hufflepuff - małe wartości
+            2: {'positive_chance': 0.75, 'positive_mean': 5, 'positive_sd': 3, 'negative_mean': -3, 'negative_sd': 2},  # Ravenclaw - umiarkowane wartości
+            3: {'positive_chance': 0.35, 'positive_mean': 8, 'positive_sd': 5, 'negative_mean': -7, 'negative_sd': 4}   # Slytherin - dużo negatywnych punktów
         }
         
         with open(os.path.join(DATA_DIR, "points.csv"), "w", newline='', encoding='utf-8') as points_file:
@@ -751,10 +751,10 @@ def main():
             
             # Generuj proporcjonalnie więcej lub mniej punktów dla różnych domów
             house_points_count = {
-                0: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 1.1),    # Gryffindor - więcej punktów (zarówno + jak i -)
-                1: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 0.8),    # Hufflepuff - mniej punktów ogólnie
-                2: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 0.9),    # Ravenclaw - standardowa ilość
-                3: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 1.2)     # Slytherin - najwięcej punktów (zarówno + jak i -)
+                0: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 1.3),    # Gryffindor - dużo więcej punktów
+                1: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 0.7),    # Hufflepuff - mniej punktów
+                2: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 0.8),    # Ravenclaw - mniej punktów
+                3: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 1.5)     # Slytherin - najwięcej punktów
             }
             
             # Stwórz rozkłady normalne dla każdego domu

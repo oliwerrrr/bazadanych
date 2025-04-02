@@ -1,121 +1,121 @@
-        <!DOCTYPE html>
-        <html lang="pl">
-        <head>
-            <meta charset="UTF-8">
-            <title>Hogwarts Database Report</title>
+    <!DOCTYPE html>
+    <html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <title>Hogwarts Database Report</title>
             <!-- Add Socket.IO client library -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 20px;
-                    background-color: #f5f5f5;
-                }
-                .container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    background-color: white;
-                    padding: 20px;
-                    border-radius: 10px;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                }
-                h1, h2 {
-                    color: #1a237e;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 20px 0;
-                }
-                th, td {
-                    padding: 12px;
-                    text-align: left;
-                    border-bottom: 1px solid #ddd;
-                }
-                th {
-                    background-color: #1a237e;
-                    color: white;
-                }
-                tr:nth-child(even) {
-                    background-color: #f8f9fa;
-                }
-                .section {
-                    margin: 30px 0;
-                    padding: 20px;
-                    background-color: white;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                }
-                .collapsible {
-                    background-color: #1a237e;
-                    color: white;
-                    cursor: pointer;
-                    padding: 18px;
-                    width: 100%;
-                    border: none;
-                    text-align: left;
-                    outline: none;
-                    font-size: 15px;
-                    border-radius: 5px;
-                    margin: 10px 0;
-                }
-                .active, .collapsible:hover {
-                    background-color: #0d47a1;
-                }
-                .content {
-                    padding: 0 18px;
-                    display: none;
-                    overflow: hidden;
-                    background-color: #f1f1f1;
-                    border-radius: 0 0 5px 5px;
-                }
-                .schema-img {
-                    max-width: 100%;
-                    height: auto;
-                    cursor: pointer;
-                    transition: transform 0.3s ease;
-                }
-                .schema-img:hover {
-                    transform: scale(1.05);
-                }
-                .visualization-img {
-                    max-width: 100%;
-                    height: auto;
-                    margin: 10px 0;
-                }
-                .wizard-section {
-                    background-color: #e3f2fd;
-                    padding: 20px;
-                    border-radius: 5px;
-                    margin: 20px 0;
-                }
-                .wizard-button {
-                    background-color: #1a237e;
-                    color: white;
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    margin: 5px;
-                    font-size: 14px;
-                }
-                .wizard-button:hover {
-                    background-color: #0d47a1;
-                }
-                .error {
-                    color: #d32f2f;
-                    background-color: #ffebee;
-                    padding: 10px;
-                    border-radius: 5px;
-                    margin: 5px 0;
-                }
-                .success {
-                    color: #1b5e20;
-                    background-color: #e8f5e9;
-                    padding: 10px;
-                    border-radius: 5px;
-                    margin: 5px 0;
-                }
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                background-color: #f5f5f5;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+            h1, h2 {
+                color: #1a237e;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            th {
+                background-color: #1a237e;
+                color: white;
+            }
+            tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
+            .section {
+                margin: 30px 0;
+                padding: 20px;
+                background-color: white;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .collapsible {
+                background-color: #1a237e;
+                color: white;
+                cursor: pointer;
+                padding: 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 15px;
+                border-radius: 5px;
+                margin: 10px 0;
+            }
+            .active, .collapsible:hover {
+                background-color: #0d47a1;
+            }
+            .content {
+                padding: 0 18px;
+                display: none;
+                overflow: hidden;
+                background-color: #f1f1f1;
+                border-radius: 0 0 5px 5px;
+            }
+            .schema-img {
+                max-width: 100%;
+                height: auto;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+            .schema-img:hover {
+                transform: scale(1.05);
+            }
+            .visualization-img {
+                max-width: 100%;
+                height: auto;
+                margin: 10px 0;
+            }
+            .wizard-section {
+                background-color: #e3f2fd;
+                padding: 20px;
+                border-radius: 5px;
+                margin: 20px 0;
+            }
+            .wizard-button {
+                background-color: #1a237e;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin: 5px;
+                font-size: 14px;
+            }
+            .wizard-button:hover {
+                background-color: #0d47a1;
+            }
+            .error {
+                color: #d32f2f;
+                background-color: #ffebee;
+                padding: 10px;
+                border-radius: 5px;
+                margin: 5px 0;
+            }
+            .success {
+                color: #1b5e20;
+                background-color: #e8f5e9;
+                padding: 10px;
+                border-radius: 5px;
+                margin: 5px 0;
+            }
                 .progress-message {
                     padding: 5px;
                     margin: 2px 0;
@@ -156,172 +156,172 @@
                     background-color: #bdbdbd;
                     cursor: not-allowed;
                 }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Hogwarts Database Report</h1>
-                
-                <!-- Database Statistics -->
-                <button type="button" class="collapsible">Database Statistics</button>
-                <div class="content">
-                    <table>
-                        <tr>
-                            <th>Table</th>
-                            <th>Row Count</th>
-                        </tr>
-        
-                        <tr>
-                            <td>teachers</td>
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Hogwarts Database Report</h1>
+            
+            <!-- Database Statistics -->
+            <button type="button" class="collapsible">Database Statistics</button>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th>Table</th>
+                        <th>Row Count</th>
+                    </tr>
+    
+                    <tr>
+                        <td>teachers</td>
                             <td id="teachers-count">111</td>
-                        </tr>
+                    </tr>
         
-                        <tr>
-                            <td>houses</td>
+                    <tr>
+                        <td>houses</td>
                             <td id="houses-count">4</td>
-                        </tr>
+                    </tr>
         
-                        <tr>
-                            <td>dormitories</td>
+                    <tr>
+                        <td>dormitories</td>
                             <td id="dormitories-count">110</td>
-                        </tr>
+                    </tr>
         
-                        <tr>
-                            <td>students</td>
+                    <tr>
+                        <td>students</td>
                             <td id="students-count">10000</td>
-                        </tr>
+                    </tr>
         
-                        <tr>
-                            <td>subjects</td>
+                    <tr>
+                        <td>subjects</td>
                             <td id="subjects-count">78</td>
-                        </tr>
+                    </tr>
         
-                        <tr>
-                            <td>grades</td>
+                    <tr>
+                        <td>grades</td>
                             <td id="grades-count">579409</td>
-                        </tr>
+                    </tr>
         
-                        <tr>
-                            <td>points</td>
+                    <tr>
+                        <td>points</td>
                             <td id="points-count">30000</td>
-                        </tr>
+                    </tr>
         
-                        <tr>
-                            <td>quidditch</td>
+                    <tr>
+                        <td>quidditch</td>
                             <td id="quidditch-count">38</td>
-                        </tr>
+                    </tr>
         
-                    </table>
-                </div>
+                </table>
+            </div>
 
-                <!-- Database Schema -->
-                <button type="button" class="collapsible">Database Schema</button>
-                <div class="content">
-                    <h3>Entity Relationship Diagram</h3>
-                    <img src="HogwartRelations.png" alt="Database Relations" class="schema-img" onclick="window.open(this.src)">
-                    <h3>Database Schema</h3>
-                    <img src="schema.png" alt="Database Schema" class="schema-img" onclick="window.open(this.src)">
-                </div>
+            <!-- Database Schema -->
+            <button type="button" class="collapsible">Database Schema</button>
+            <div class="content">
+                <h3>Entity Relationship Diagram</h3>
+                <img src="HogwartRelations.png" alt="Database Relations" class="schema-img" onclick="window.open(this.src)">
+                <h3>Database Schema</h3>
+                <img src="schema.png" alt="Database Schema" class="schema-img" onclick="window.open(this.src)">
+            </div>
 
-                <!-- Visualizations -->
-                <button type="button" class="collapsible">Visualizations</button>
-                <div class="content">
-                    <h3>Students by House</h3>
-                    <img src="visualizations/students_by_house.png" alt="Students by House" class="visualization-img">
-                    <h3>Grades Distribution</h3>
-                    <img src="visualizations/grades_distribution.png" alt="Grades Distribution" class="visualization-img">
-                    <h3>Subjects Popularity</h3>
-                    <img src="visualizations/subjects_popularity.png" alt="Subjects Popularity" class="visualization-img">
-                    <h3>Points by House</h3>
-                    <img src="visualizations/points_by_house.png" alt="Points by House" class="visualization-img">
-                    <h3>Gender Distribution</h3>
-                    <img src="visualizations/gender_distribution.png" alt="Gender Distribution" class="visualization-img">
-                    <h3>Quidditch Teams</h3>
-                    <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams" class="visualization-img">
-                </div>
+            <!-- Visualizations -->
+            <button type="button" class="collapsible">Visualizations</button>
+            <div class="content">
+                <h3>Students by House</h3>
+                <img src="visualizations/students_by_house.png" alt="Students by House" class="visualization-img">
+                <h3>Grades Distribution</h3>
+                <img src="visualizations/grades_distribution.png" alt="Grades Distribution" class="visualization-img">
+                <h3>Subjects Popularity</h3>
+                <img src="visualizations/subjects_popularity.png" alt="Subjects Popularity" class="visualization-img">
+                <h3>Points by House</h3>
+                <img src="visualizations/points_by_house.png" alt="Points by House" class="visualization-img">
+                <h3>Gender Distribution</h3>
+                <img src="visualizations/gender_distribution.png" alt="Gender Distribution" class="visualization-img">
+                <h3>Quidditch Teams</h3>
+                <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams" class="visualization-img">
+            </div>
 
-                <!-- Performance Analysis -->
-                <button type="button" class="collapsible">Performance Analysis</button>
-                <div class="content">
-                    <table>
-                        <tr>
-                            <th>Query Type</th>
-                            <th>Description</th>
-                            <th>Execution Time</th>
-                            <th>Rows Processed</th>
-                        </tr>
-        
-                        <tr class="success">
-                            <td>Simple SELECT</td>
-                            <td>Basic select query on students table</td>
+            <!-- Performance Analysis -->
+            <button type="button" class="collapsible">Performance Analysis</button>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th>Query Type</th>
+                        <th>Description</th>
+                        <th>Execution Time</th>
+                        <th>Rows Processed</th>
+                    </tr>
+    
+                    <tr class="success">
+                        <td>Simple SELECT</td>
+                        <td>Basic select query on students table</td>
                             <td id="simple-select-time">0.0113 seconds</td>
-                            <td>2137</td>
-                        </tr>
+                        <td>2137</td>
+                    </tr>
         
-                        <tr class="success">
-                            <td>Complex JOIN</td>
-                            <td>Complex join between students, grades, and subjects</td>
+                    <tr class="success">
+                        <td>Complex JOIN</td>
+                        <td>Complex join between students, grades, and subjects</td>
                             <td id="complex-join-time">0.0094 seconds</td>
-                            <td>1000</td>
-                        </tr>
+                        <td>1000</td>
+                    </tr>
         
-                        <tr class="success">
-                            <td>Aggregation</td>
-                            <td>Complex aggregation with grouping and having</td>
+                    <tr class="success">
+                        <td>Aggregation</td>
+                        <td>Complex aggregation with grouping and having</td>
                             <td id="aggregation-time">0.0056 seconds</td>
-                            <td>4</td>
-                        </tr>
+                        <td>4</td>
+                    </tr>
         
-                        <tr class="success">
-                            <td>Nested Subquery</td>
-                            <td>Complex nested subquery with multiple conditions</td>
+                    <tr class="success">
+                        <td>Nested Subquery</td>
+                        <td>Complex nested subquery with multiple conditions</td>
                             <td id="nested-subquery-time">0.0012 seconds</td>
                             <td>30</td>
-                        </tr>
+                    </tr>
         
-                        <tr class="error">
-                            <td>Transaction - Batch Insert</td>
-                            <td>Insert multiple grades with transaction control</td>
-                            <td>Error</td>
-                            <td>0</td>
-                        </tr>
+                    <tr class="error">
+                        <td>Transaction - Batch Insert</td>
+                        <td>Insert multiple grades with transaction control</td>
+                        <td>Error</td>
+                        <td>0</td>
+                    </tr>
         
-                        <tr class="success">
-                            <td>Transaction - Batch Update</td>
-                            <td>Update multiple grades with transaction control</td>
+                    <tr class="success">
+                        <td>Transaction - Batch Update</td>
+                        <td>Update multiple grades with transaction control</td>
                             <td id="batch-update-time">0.0281 seconds</td>
-                            <td>1000</td>
-                        </tr>
+                        <td>1000</td>
+                    </tr>
         
-                        <tr class="success">
-                            <td>Transaction - Complex Delete</td>
-                            <td>Delete with complex conditions and restore data</td>
+                    <tr class="success">
+                        <td>Transaction - Complex Delete</td>
+                        <td>Delete with complex conditions and restore data</td>
                             <td id="complex-delete-time">0.2423 seconds</td>
-                            <td>1000</td>
-                        </tr>
+                        <td>1000</td>
+                    </tr>
         
-                        <tr class="success">
-                            <td>Full Table Scan Analysis</td>
-                            <td>Analyze grade distribution with full table scan</td>
+                    <tr class="success">
+                        <td>Full Table Scan Analysis</td>
+                        <td>Analyze grade distribution with full table scan</td>
                             <td id="full-table-scan-time">0.0446 seconds</td>
-                            <td>6</td>
-                        </tr>
+                        <td>6</td>
+                    </tr>
         
-                    </table>
-                </div>
+                </table>
+            </div>
 
-                <!-- Data Wizard -->
-                <button type="button" class="collapsible">Data Wizard 🧙‍♂️</button>
-                <div class="content wizard-section">
-                    <h3>Generate and Manage Data</h3>
-                    <p>Use these magical buttons to manage your Hogwarts database:</p>
-                    <button onclick="generateConfig()" class="wizard-button">Generate Configuration 📝</button>
-                    <button onclick="generateData()" class="wizard-button">Generate Test Data 🎲</button>
-                    <button onclick="importData()" class="wizard-button">Import Data to Database 📥</button>
-                    <button onclick="clearDatabase()" class="wizard-button">Clear Database 🧹</button>
-                    <button onclick="runTests()" class="wizard-button">Run Performance Tests ⚡</button>
-                    <div id="wizardStatus"></div>
-                </div>
+            <!-- Data Wizard -->
+            <button type="button" class="collapsible">Data Wizard 🧙‍♂️</button>
+            <div class="content wizard-section">
+                <h3>Generate and Manage Data</h3>
+                <p>Use these magical buttons to manage your Hogwarts database:</p>
+                <button onclick="generateConfig()" class="wizard-button">Generate Configuration 📝</button>
+                <button onclick="generateData()" class="wizard-button">Generate Test Data 🎲</button>
+                <button onclick="importData()" class="wizard-button">Import Data to Database 📥</button>
+                <button onclick="clearDatabase()" class="wizard-button">Clear Database 🧹</button>
+                <button onclick="runTests()" class="wizard-button">Run Performance Tests ⚡</button>
+                <div id="wizardStatus"></div>
+            </div>
 
                 <div class="button-group">
                     <button id="generate-data-btn">Generate Data</button>
@@ -332,7 +332,7 @@
 
                 <div id="progress-messages"></div>
 
-                <script>
+            <script>
                     let updateInterval;
                     let lastUpdate = 0;
                     const UPDATE_INTERVAL = 5000; // Update every 5 seconds
@@ -432,18 +432,18 @@
                     });
 
                     // Add collapsible functionality
-                    var coll = document.getElementsByClassName("collapsible");
-                    for (var i = 0; i < coll.length; i++) {
-                        coll[i].addEventListener("click", function() {
-                            this.classList.toggle("active");
-                            var content = this.nextElementSibling;
-                            if (content.style.display === "block") {
-                                content.style.display = "none";
-                            } else {
-                                content.style.display = "block";
-                            }
-                        });
-                    }
+                var coll = document.getElementsByClassName("collapsible");
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.display === "block") {
+                            content.style.display = "none";
+                        } else {
+                            content.style.display = "block";
+                        }
+                    });
+                }
 
                     // Handle button clicks
                     document.getElementById('generate-data-btn').addEventListener('click', function() {
@@ -477,9 +477,9 @@
                         fetch('/generate_config', { method: 'POST' })
                             .then(response => response.json())
                             .then(data => {
-                                if (data.status === 'success') {
+                        if (data.status === 'success') {
                                     addProgressMessage(data.message);
-                                } else {
+                        } else {
                                     addProgressMessage(data.message, true);
                                 }
                             })
@@ -633,8 +633,8 @@
                                 this.disabled = false;
                             });
                     });
-                </script>
-            </div>
-        </body>
-        </html>
-        
+            </script>
+        </div>
+    </body>
+    </html>
+    

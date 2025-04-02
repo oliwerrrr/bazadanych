@@ -36,6 +36,8 @@ def execute_query_to_df(cursor, query):
         return df
     except Exception as e:
         print(f"Error executing query: {str(e)}")
+        if hasattr(e, 'help'):
+            print("Help:", e.help)
         raise
 
 def plot_students_by_house(cursor):
@@ -46,12 +48,12 @@ def plot_students_by_house(cursor):
         FROM houses h
         LEFT JOIN students s ON h.id = s.house_id
         GROUP BY h.name
-        ORDER BY student_count DESC
+        ORDER BY COUNT(s.id) DESC
         """
         df = execute_query_to_df(cursor, query)
         
         plt.figure(figsize=(10, 6))
-        sns.barplot(data=df, x='house_name', y='student_count')
+        sns.barplot(data=df, x='HOUSE_NAME', y='STUDENT_COUNT')
         plt.title('Number of Students by House')
         plt.xlabel('House')
         plt.ylabel('Number of Students')
@@ -69,15 +71,15 @@ def plot_grades_distribution(cursor):
     """Plot grade distribution"""
     try:
         query = """
-        SELECT grade, COUNT(*) as count
+        SELECT value as grade, COUNT(*) as count
         FROM grades
-        GROUP BY grade
-        ORDER BY grade
+        GROUP BY value
+        ORDER BY value
         """
         df = execute_query_to_df(cursor, query)
         
         plt.figure(figsize=(10, 6))
-        sns.barplot(data=df, x='grade', y='count')
+        sns.barplot(data=df, x='GRADE', y='COUNT')
         plt.title('Grade Distribution')
         plt.xlabel('Grade')
         plt.ylabel('Count')
@@ -98,13 +100,13 @@ def plot_subjects_popularity(cursor):
         FROM subjects s
         LEFT JOIN grades g ON s.id = g.subject_id
         GROUP BY s.name
-        ORDER BY grade_count DESC
-        LIMIT 10
+        ORDER BY COUNT(g.id) DESC
+        FETCH FIRST 10 ROWS ONLY
         """
         df = execute_query_to_df(cursor, query)
         
         plt.figure(figsize=(12, 6))
-        sns.barplot(data=df, x='grade_count', y='subject_name')
+        sns.barplot(data=df, x='GRADE_COUNT', y='SUBJECT_NAME')
         plt.title('Top 10 Most Popular Subjects')
         plt.xlabel('Number of Grades')
         plt.ylabel('Subject')
@@ -121,17 +123,17 @@ def plot_points_by_house(cursor):
     """Plot points by house"""
     try:
         query = """
-        SELECT h.name as house_name, SUM(p.points) as total_points
+        SELECT h.name as house_name, SUM(p.value) as total_points
         FROM houses h
         LEFT JOIN students s ON h.id = s.house_id
         LEFT JOIN points p ON s.id = p.student_id
         GROUP BY h.name
-        ORDER BY total_points DESC
+        ORDER BY SUM(p.value) DESC
         """
         df = execute_query_to_df(cursor, query)
         
         plt.figure(figsize=(10, 6))
-        sns.barplot(data=df, x='house_name', y='total_points')
+        sns.barplot(data=df, x='HOUSE_NAME', y='TOTAL_POINTS')
         plt.title('Total Points by House')
         plt.xlabel('House')
         plt.ylabel('Total Points')
@@ -156,7 +158,7 @@ def plot_gender_distribution(cursor):
         df = execute_query_to_df(cursor, query)
         
         plt.figure(figsize=(8, 8))
-        plt.pie(df['count'], labels=df['gender'], autopct='%1.1f%%')
+        plt.pie(df['COUNT'], labels=df['GENDER'], autopct='%1.1f%%')
         plt.title('Gender Distribution')
         plt.tight_layout()
         
@@ -176,12 +178,12 @@ def plot_quidditch_teams(cursor):
         LEFT JOIN students s ON h.id = s.house_id
         LEFT JOIN quidditch_team_members q ON s.id = q.student_id
         GROUP BY h.name
-        ORDER BY team_size DESC
+        ORDER BY COUNT(q.id) DESC
         """
         df = execute_query_to_df(cursor, query)
         
         plt.figure(figsize=(10, 6))
-        sns.barplot(data=df, x='house_name', y='team_size')
+        sns.barplot(data=df, x='HOUSE_NAME', y='TEAM_SIZE')
         plt.title('Quidditch Team Size by House')
         plt.xlabel('House')
         plt.ylabel('Team Size')

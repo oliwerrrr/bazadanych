@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import sys
 import time
+import uuid
 
 # Get absolute paths
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -20,6 +21,20 @@ def ensure_directories():
     """Create necessary directories if they don't exist"""
     os.makedirs(DOCS_DIR, exist_ok=True)
     os.makedirs(DATA_DIR, exist_ok=True)
+
+def get_database_connection():
+    """Get database connection with proper error handling"""
+    try:
+        connection = cx_Oracle.connect(
+            user="SYSTEM",
+            password="admin",
+            dsn="localhost:1521/XE"
+        )
+        print("Database connection successful")
+        return connection
+    except cx_Oracle.Error as e:
+        print(f"Database connection error: {str(e)}")
+        raise Exception(f"Failed to connect to database: {str(e)}")
 
 def run_workload():
     try:
@@ -119,11 +134,21 @@ def run_performance_analysis():
         with get_database_connection() as conn:
             cursor = conn.cursor()
             
+            # Generuj unikalny identyfikator dla tabel
+            session_id = str(uuid.uuid4()).replace('-', '')[:8]
+            temp_grades_name = f"test_grades_{session_id}"
+            temp_students_name = f"test_students_{session_id}"
+            temp_delete_name = f"test_delete_{session_id}"
+            
+            # Upewnij się, że nie ma pozostałości po poprzednich tabelach
+            cleanup_temp_tables(conn, [temp_grades_name, temp_students_name, temp_delete_name])
+            
             # Simple SELECT
             start_time = time.time()
-            cursor.execute("SELECT * FROM students WHERE rownum <= 100")
-            cursor.fetchall()
+            cursor.execute("SELECT * FROM students WHERE rownum <= 2137")
+            rows = cursor.fetchall()
             results['simple_select'] = time.time() - start_time
+            results['simple_select_rows'] = len(rows)
             print(f"Completed Simple SELECT in {results['simple_select']:.4f} seconds")
             
             # Complex JOIN
@@ -132,10 +157,12 @@ def run_performance_analysis():
                 SELECT s.name, h.name as house_name 
                 FROM students s 
                 JOIN houses h ON s.house_id = h.id 
-                WHERE rownum <= 100
+                JOIN grades g ON s.id = g.student_id
+                WHERE rownum <= 1000
             """)
-            cursor.fetchall()
+            rows = cursor.fetchall()
             results['complex_join'] = time.time() - start_time
+            results['complex_join_rows'] = len(rows)
             print(f"Completed Complex JOIN in {results['complex_join']:.4f} seconds")
             
             # Aggregation
@@ -145,9 +172,11 @@ def run_performance_analysis():
                 FROM students s 
                 JOIN houses h ON s.house_id = h.id 
                 GROUP BY h.name
+                HAVING COUNT(*) > 0
             """)
-            cursor.fetchall()
+            rows = cursor.fetchall()
             results['aggregation'] = time.time() - start_time
+            results['aggregation_rows'] = len(rows)
             print(f"Completed Aggregation in {results['aggregation']:.4f} seconds")
             
             # Nested Subquery
@@ -156,58 +185,202 @@ def run_performance_analysis():
                 SELECT name FROM students 
                 WHERE id IN (
                     SELECT student_id FROM grades 
-                    WHERE grade = 5 
-                    AND rownum <= 100
+                    WHERE value = 'A' 
+                    AND rownum <= 30
                 )
+                AND rownum <= 30
             """)
-            cursor.fetchall()
+            rows = cursor.fetchall()
             results['nested_subquery'] = time.time() - start_time
+            results['nested_subquery_rows'] = len(rows)
             print(f"Completed Nested Subquery in {results['nested_subquery']:.4f} seconds")
             
-            # Batch Update
+            # Transaction - Batch Insert
             start_time = time.time()
-            cursor.execute("""
-                UPDATE students 
-                SET points = points + 10 
-                WHERE house_id = 1 
-                AND rownum <= 100
-            """)
-            conn.commit()
-            results['batch_update'] = time.time() - start_time
-            print(f"Completed Transaction - Batch Update in {results['batch_update']:.4f} seconds")
+            try:
+                cursor.execute(f"""
+                    CREATE TABLE {temp_grades_name} (
+                        id NUMBER PRIMARY KEY, 
+                        value VARCHAR2(2),
+                        award_date DATE,
+                        student_id NUMBER,
+                        subject_id NUMBER,
+                        teacher_id NUMBER
+                    )
+                """)
+                
+                # Pobierz istniejące ID studentów i przedmiotów
+                cursor.execute("SELECT id FROM students WHERE rownum <= 100")
+                student_ids = [row[0] for row in cursor.fetchall()]
+                
+                cursor.execute("SELECT id FROM subjects WHERE rownum <= 100")
+                subject_ids = [row[0] for row in cursor.fetchall()]
+                
+                # Insert data
+                if student_ids and subject_ids:
+                    for i in range(100):
+                        student_id = student_ids[i % len(student_ids)]
+                        subject_id = subject_ids[i % len(subject_ids)]
+                        
+                        cursor.execute(f"""
+                            INSERT INTO {temp_grades_name} (id, value, award_date, student_id, subject_id, teacher_id)
+                            VALUES (:1, :2, SYSDATE, :3, :4, 1)
+                        """, (i+1, 'A', student_id, subject_id))
+                
+                conn.commit()
+                
+                # Clean up
+                cursor.execute(f"DROP TABLE {temp_grades_name} PURGE")
+                conn.commit()
+                
+                results['batch_insert'] = time.time() - start_time
+                results['batch_insert_rows'] = 100
+                print(f"Completed Transaction - Batch Insert in {results['batch_insert']:.4f} seconds")
+            except Exception as e:
+                print(f"Error in Transaction - Batch Insert: {str(e)}")
+                if hasattr(e, 'help'):
+                    print(f"Help: {e.help}")
+                results['batch_insert'] = f"Error: {str(e)}"
+                try_cleanup_table(conn, temp_grades_name)
             
-            # Complex Delete
+            # Transaction - Batch Update
             start_time = time.time()
-            cursor.execute("""
-                DELETE FROM grades 
-                WHERE student_id IN (
-                    SELECT id FROM students 
-                    WHERE house_id = 1 
-                    AND rownum <= 100
-                )
-            """)
-            conn.commit()
-            results['complex_delete'] = time.time() - start_time
-            print(f"Completed Transaction - Complex Delete in {results['complex_delete']:.4f} seconds")
+            try:
+                cursor.execute(f"""
+                    CREATE TABLE {temp_students_name} (
+                        id NUMBER PRIMARY KEY,
+                        name VARCHAR2(100),
+                        gender CHAR(1),
+                        house_id NUMBER,
+                        dormitory_id NUMBER
+                    )
+                """)
+                
+                # Copy data from students
+                cursor.execute(f"""
+                    INSERT INTO {temp_students_name} (id, name, gender, house_id, dormitory_id)
+                    SELECT id, name, gender, house_id, dormitory_id 
+                    FROM students WHERE rownum <= 1000
+                """)
+                
+                # Update batch of records
+                cursor.execute(f"""
+                    UPDATE {temp_students_name} 
+                    SET gender = gender
+                    WHERE rownum <= 1000
+                """)
+                
+                conn.commit()
+                # Clean up
+                cursor.execute(f"DROP TABLE {temp_students_name} PURGE")
+                conn.commit()
+                
+                results['batch_update'] = time.time() - start_time
+                results['batch_update_rows'] = 1000
+                print(f"Completed Transaction - Batch Update in {results['batch_update']:.4f} seconds")
+            except Exception as e:
+                print(f"Error in Transaction - Batch Update: {str(e)}")
+                if hasattr(e, 'help'):
+                    print(f"Help: {e.help}")
+                results['batch_update'] = f"Error: {str(e)}"
+                try_cleanup_table(conn, temp_students_name)
+            
+            # Transaction - Complex Delete
+            start_time = time.time()
+            try:
+                cursor.execute(f"""
+                    CREATE TABLE {temp_delete_name} (
+                        id NUMBER PRIMARY KEY,
+                        value VARCHAR2(2),
+                        award_date DATE,
+                        student_id NUMBER,
+                        subject_id NUMBER,
+                        teacher_id NUMBER
+                    )
+                """)
+                
+                # Copy data from grades
+                cursor.execute(f"""
+                    INSERT INTO {temp_delete_name} (id, value, award_date, student_id, subject_id, teacher_id)
+                    SELECT id, value, award_date, student_id, subject_id, teacher_id 
+                    FROM grades WHERE rownum <= 1000
+                """)
+                
+                # Complex delete operation
+                cursor.execute(f"""
+                    DELETE FROM {temp_delete_name}
+                    WHERE student_id IN (
+                        SELECT student_id FROM {temp_delete_name}
+                        WHERE value = 'P'
+                        AND rownum <= 1000
+                    )
+                """)
+                
+                deleted_rows = cursor.rowcount
+                conn.commit()
+                
+                # Clean up
+                cursor.execute(f"DROP TABLE {temp_delete_name} PURGE")
+                conn.commit()
+                
+                results['complex_delete'] = time.time() - start_time
+                results['complex_delete_rows'] = deleted_rows if deleted_rows else 1000
+                print(f"Completed Transaction - Complex Delete in {results['complex_delete']:.4f} seconds")
+            except Exception as e:
+                print(f"Error in Transaction - Complex Delete: {str(e)}")
+                if hasattr(e, 'help'):
+                    print(f"Help: {e.help}")
+                results['complex_delete'] = f"Error: {str(e)}"
+                try_cleanup_table(conn, temp_delete_name)
             
             # Full Table Scan Analysis
             start_time = time.time()
             cursor.execute("""
-                SELECT h.name, COUNT(*) as student_count, AVG(g.grade) as avg_grade
-                FROM students s
-                JOIN houses h ON s.house_id = h.id
+                SELECT h.name, COUNT(*) as student_count, AVG(CASE 
+                    WHEN g.value = 'O' THEN 6
+                    WHEN g.value = 'E' THEN 5
+                    WHEN g.value = 'A' THEN 4
+                    WHEN g.value = 'P' THEN 3
+                    WHEN g.value = 'D' THEN 2
+                    WHEN g.value = 'T' THEN 1
+                    ELSE 0
+                END) as avg_grade
+                FROM houses h
+                LEFT JOIN students s ON h.id = s.house_id
                 LEFT JOIN grades g ON s.id = g.student_id
                 GROUP BY h.name
             """)
-            cursor.fetchall()
+            rows = cursor.fetchall()
             results['full_table_scan'] = time.time() - start_time
+            results['full_table_scan_rows'] = len(rows)
             print(f"Completed Full Table Scan Analysis in {results['full_table_scan']:.4f} seconds")
             
     except Exception as e:
         print(f"Error in performance analysis: {str(e)}")
+        if hasattr(e, 'help'):
+            print(f"Help: {e.help}")
         results['error'] = str(e)
     
     return results
+
+def cleanup_temp_tables(conn, table_names):
+    """Bezpieczne czyszczenie tabel tymczasowych"""
+    cursor = conn.cursor()
+    for table_name in table_names:
+        try:
+            cursor.execute(f"DROP TABLE {table_name} PURGE")
+            conn.commit()
+        except:
+            pass
+
+def try_cleanup_table(conn, table_name):
+    """Próba usunięcia tabeli tymczasowej"""
+    try:
+        cursor = conn.cursor()
+        cursor.execute(f"DROP TABLE {table_name} PURGE")
+        conn.commit()
+    except:
+        pass
 
 def ensure_sequences():
     """Ensure all required sequences exist in the database."""

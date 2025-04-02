@@ -255,56 +255,56 @@
                         <td>Simple SELECT</td>
                         <td>Basic select query on students table</td>
                             <td id="simple-select-time">0.0113 seconds</td>
-                        <td>2137</td>
+                        <td id="simple-select-rows">2137</td>
                     </tr>
         
                     <tr class="success">
                         <td>Complex JOIN</td>
                         <td>Complex join between students, grades, and subjects</td>
                             <td id="complex-join-time">0.0094 seconds</td>
-                        <td>1000</td>
+                        <td id="complex-join-rows">1000</td>
                     </tr>
         
                     <tr class="success">
                         <td>Aggregation</td>
                         <td>Complex aggregation with grouping and having</td>
                             <td id="aggregation-time">0.0056 seconds</td>
-                        <td>4</td>
+                        <td id="aggregation-rows">4</td>
                     </tr>
         
                     <tr class="success">
                         <td>Nested Subquery</td>
                         <td>Complex nested subquery with multiple conditions</td>
                             <td id="nested-subquery-time">0.0012 seconds</td>
-                            <td>30</td>
+                            <td id="nested-subquery-rows">30</td>
                     </tr>
         
                     <tr class="error">
                         <td>Transaction - Batch Insert</td>
                         <td>Insert multiple grades with transaction control</td>
-                        <td>Error</td>
-                        <td>0</td>
+                        <td id="batch-insert-time">Error</td>
+                        <td id="batch-insert-rows">0</td>
                     </tr>
         
                     <tr class="success">
                         <td>Transaction - Batch Update</td>
                         <td>Update multiple grades with transaction control</td>
                             <td id="batch-update-time">0.0281 seconds</td>
-                        <td>1000</td>
+                        <td id="batch-update-rows">1000</td>
                     </tr>
         
                     <tr class="success">
                         <td>Transaction - Complex Delete</td>
                         <td>Delete with complex conditions and restore data</td>
                             <td id="complex-delete-time">0.2423 seconds</td>
-                        <td>1000</td>
+                        <td id="complex-delete-rows">1000</td>
                     </tr>
         
                     <tr class="success">
                         <td>Full Table Scan Analysis</td>
                         <td>Analyze grade distribution with full table scan</td>
                             <td id="full-table-scan-time">0.0446 seconds</td>
-                        <td>6</td>
+                        <td id="full-table-scan-rows">6</td>
                     </tr>
         
                 </table>
@@ -323,14 +323,7 @@
                 <div id="wizardStatus"></div>
             </div>
 
-                <div class="button-group">
-                    <button id="generate-data-btn">Generate Data</button>
-                    <button id="import-data-btn">Import Data</button>
-                    <button id="run-workload-btn">Run Workload</button>
-                    <button id="visualize-data-btn">Visualize Data</button>
-                </div>
-
-                <div id="progress-messages"></div>
+            <div id="progress-messages"></div>
 
             <script>
                     let updateInterval;
@@ -370,6 +363,7 @@
                                             'complex-join-time': data.performance.complex_join,
                                             'aggregation-time': data.performance.aggregation,
                                             'nested-subquery-time': data.performance.nested_subquery,
+                                            'batch-insert-time': data.performance.batch_insert,
                                             'batch-update-time': data.performance.batch_update,
                                             'complex-delete-time': data.performance.complex_delete,
                                             'full-table-scan-time': data.performance.full_table_scan
@@ -378,7 +372,39 @@
                                         for (const [id, value] of Object.entries(metrics)) {
                                             const element = document.getElementById(id);
                                             if (element && value !== undefined) {
-                                                element.textContent = `${value.toFixed(4)} seconds`;
+                                                if (typeof value === 'number') {
+                                                    element.textContent = `${value.toFixed(4)} seconds`;
+                                                    // Jeśli test się powiódł, ustaw klasę success
+                                                    element.parentElement.classList.remove('error');
+                                                    element.parentElement.classList.add('success');
+                                                } else if (typeof value === 'string' && value.startsWith('Error')) {
+                                                    element.textContent = 'Error';
+                                                    // Jeśli test się nie powiódł, ustaw klasę error
+                                                    element.parentElement.classList.remove('success');
+                                                    element.parentElement.classList.add('error');
+                                                }
+                                            }
+                                        }
+
+                                        // Aktualizuj liczby przetworzonych wierszy
+                                        const rowMetrics = {
+                                            'simple-select-rows': data.performance.simple_select_rows,
+                                            'complex-join-rows': data.performance.complex_join_rows,
+                                            'aggregation-rows': data.performance.aggregation_rows,
+                                            'nested-subquery-rows': data.performance.nested_subquery_rows,
+                                            'batch-insert-rows': data.performance.batch_insert_rows,
+                                            'batch-update-rows': data.performance.batch_update_rows,
+                                            'complex-delete-rows': data.performance.complex_delete_rows,
+                                            'full-table-scan-rows': data.performance.full_table_scan_rows
+                                        };
+
+                                        for (const [id, value] of Object.entries(rowMetrics)) {
+                                            const cells = document.querySelectorAll('table tr td');
+                                            for (let i = 0; i < cells.length; i++) {
+                                                if (cells[i].id === id) {
+                                                    cells[i].textContent = value;
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
@@ -564,8 +590,83 @@
                         const button = document.querySelector('button.wizard-button:nth-child(5)');
                         button.disabled = true;
                         addProgressMessage('Running performance tests...');
-                        updateStatistics();
-                        button.disabled = false;
+                        
+                        fetch('/run_tests')
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    addProgressMessage('Performance tests completed successfully!');
+                                    
+                                    // Aktualizuj statystyki na stronie
+                                    // Update table counts
+                                    document.getElementById('teachers-count').textContent = data.stats.teachers || 0;
+                                    document.getElementById('houses-count').textContent = data.stats.houses || 0;
+                                    document.getElementById('dormitories-count').textContent = data.stats.dormitories || 0;
+                                    document.getElementById('students-count').textContent = data.stats.students || 0;
+                                    document.getElementById('subjects-count').textContent = data.stats.subjects || 0;
+                                    document.getElementById('grades-count').textContent = data.stats.grades || 0;
+                                    document.getElementById('points-count').textContent = data.stats.points || 0;
+                                    document.getElementById('quidditch-count').textContent = data.stats.quidditch_team_members || 0;
+
+                                    // Update performance metrics
+                                    if (data.performance) {
+                                        const metrics = {
+                                            'simple-select-time': data.performance.simple_select,
+                                            'complex-join-time': data.performance.complex_join,
+                                            'aggregation-time': data.performance.aggregation,
+                                            'nested-subquery-time': data.performance.nested_subquery,
+                                            'batch-insert-time': data.performance.batch_insert,
+                                            'batch-update-time': data.performance.batch_update,
+                                            'complex-delete-time': data.performance.complex_delete,
+                                            'full-table-scan-time': data.performance.full_table_scan
+                                        };
+
+                                        for (const [id, value] of Object.entries(metrics)) {
+                                            const element = document.getElementById(id);
+                                            if (element && value !== undefined) {
+                                                if (typeof value === 'number') {
+                                                    element.textContent = `${value.toFixed(4)} seconds`;
+                                                    // Jeśli test się powiódł, ustaw klasę success
+                                                    element.parentElement.classList.remove('error');
+                                                    element.parentElement.classList.add('success');
+                                                } else if (typeof value === 'string' && value.startsWith('Error')) {
+                                                    element.textContent = 'Error';
+                                                    // Jeśli test się nie powiódł, ustaw klasę error
+                                                    element.parentElement.classList.remove('success');
+                                                    element.parentElement.classList.add('error');
+                                                }
+                                            }
+                                        }
+
+                                        // Aktualizuj liczby przetworzonych wierszy
+                                        const rowMetrics = {
+                                            'simple-select-rows': data.performance.simple_select_rows,
+                                            'complex-join-rows': data.performance.complex_join_rows,
+                                            'aggregation-rows': data.performance.aggregation_rows,
+                                            'nested-subquery-rows': data.performance.nested_subquery_rows,
+                                            'batch-insert-rows': data.performance.batch_insert_rows,
+                                            'batch-update-rows': data.performance.batch_update_rows,
+                                            'complex-delete-rows': data.performance.complex_delete_rows,
+                                            'full-table-scan-rows': data.performance.full_table_scan_rows
+                                        };
+
+                                        for (const [id, value] of Object.entries(rowMetrics)) {
+                                            const element = document.getElementById(id);
+                                            if (element && value !== undefined) {
+                                                element.textContent = value;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    addProgressMessage(data.message, true);
+                                }
+                            })
+                            .catch(error => {
+                                addProgressMessage(`Error running performance tests: ${error.message}`, true);
+                            })
+                            .finally(() => {
+                                button.disabled = false;
+                            });
                     }
 
                     document.getElementById('import-data-btn').addEventListener('click', function() {

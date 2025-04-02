@@ -134,6 +134,23 @@ def run_performance_analysis():
         with get_database_connection() as conn:
             cursor = conn.cursor()
             
+            # Pobierz liczby rekordów w kluczowych tabelach
+            cursor.execute("SELECT COUNT(*) FROM students")
+            total_students = cursor.fetchone()[0]
+            
+            cursor.execute("SELECT COUNT(*) FROM grades")
+            total_grades = cursor.fetchone()[0]
+            
+            cursor.execute("SELECT COUNT(*) FROM subjects")
+            total_subjects = cursor.fetchone()[0]
+            
+            # Oblicz limity 10-30% danych
+            students_limit = max(int(total_students * 0.2), 1)
+            grades_limit = max(int(total_grades * 0.15), 1)
+            subjects_limit = max(int(total_subjects * 0.25), 1)
+            
+            print(f"Using limits - Students: {students_limit}/{total_students}, Grades: {grades_limit}/{total_grades}, Subjects: {subjects_limit}/{total_subjects}")
+            
             # Generuj unikalny identyfikator dla tabel
             session_id = str(uuid.uuid4()).replace('-', '')[:8]
             temp_grades_name = f"test_grades_{session_id}"
@@ -145,7 +162,7 @@ def run_performance_analysis():
             
             # Simple SELECT
             start_time = time.time()
-            cursor.execute("SELECT * FROM students WHERE rownum <= 2137")
+            cursor.execute(f"SELECT * FROM students WHERE rownum <= {students_limit}")
             rows = cursor.fetchall()
             results['simple_select'] = time.time() - start_time
             results['simple_select_rows'] = len(rows)
@@ -153,12 +170,12 @@ def run_performance_analysis():
             
             # Complex JOIN
             start_time = time.time()
-            cursor.execute("""
+            cursor.execute(f"""
                 SELECT s.name, h.name as house_name 
                 FROM students s 
                 JOIN houses h ON s.house_id = h.id 
                 JOIN grades g ON s.id = g.student_id
-                WHERE rownum <= 1000
+                WHERE rownum <= {int(total_students * 0.3)}
             """)
             rows = cursor.fetchall()
             results['complex_join'] = time.time() - start_time
@@ -172,7 +189,6 @@ def run_performance_analysis():
                 FROM students s 
                 JOIN houses h ON s.house_id = h.id 
                 GROUP BY h.name
-                HAVING COUNT(*) > 0
             """)
             rows = cursor.fetchall()
             results['aggregation'] = time.time() - start_time
@@ -180,15 +196,17 @@ def run_performance_analysis():
             print(f"Completed Aggregation in {results['aggregation']:.4f} seconds")
             
             # Nested Subquery
+            nested_limit = int(total_students * 0.1)
+            nested_grades_limit = int(total_grades * 0.1)
             start_time = time.time()
-            cursor.execute("""
+            cursor.execute(f"""
                 SELECT name FROM students 
                 WHERE id IN (
                     SELECT student_id FROM grades 
                     WHERE value = 'A' 
-                    AND rownum <= 30
+                    AND rownum <= {nested_grades_limit}
                 )
-                AND rownum <= 30
+                AND rownum <= {nested_limit}
             """)
             rows = cursor.fetchall()
             results['nested_subquery'] = time.time() - start_time
@@ -209,16 +227,19 @@ def run_performance_analysis():
                     )
                 """)
                 
-                # Pobierz istniejące ID studentów i przedmiotów
-                cursor.execute("SELECT id FROM students WHERE rownum <= 100")
+                # Pobierz istniejące ID studentów i przedmiotów - 20% studentów, wszystkie przedmioty
+                cursor.execute(f"SELECT id FROM students WHERE rownum <= {students_limit}")
                 student_ids = [row[0] for row in cursor.fetchall()]
                 
-                cursor.execute("SELECT id FROM subjects WHERE rownum <= 100")
+                cursor.execute(f"SELECT id FROM subjects WHERE rownum <= {subjects_limit}")
                 subject_ids = [row[0] for row in cursor.fetchall()]
                 
-                # Insert data
+                # Insert data - 10-15% kombinacji student-przedmiot
+                max_inserts = int(0.15 * students_limit * subjects_limit)
+                insert_count = min(max_inserts, 2000)
+                
                 if student_ids and subject_ids:
-                    for i in range(100):
+                    for i in range(insert_count):
                         student_id = student_ids[i % len(student_ids)]
                         subject_id = subject_ids[i % len(subject_ids)]
                         
@@ -234,7 +255,7 @@ def run_performance_analysis():
                 conn.commit()
                 
                 results['batch_insert'] = time.time() - start_time
-                results['batch_insert_rows'] = 100
+                results['batch_insert_rows'] = insert_count
                 print(f"Completed Transaction - Batch Insert in {results['batch_insert']:.4f} seconds")
             except Exception as e:
                 print(f"Error in Transaction - Batch Insert: {str(e)}")
@@ -244,6 +265,7 @@ def run_performance_analysis():
                 try_cleanup_table(conn, temp_grades_name)
             
             # Transaction - Batch Update
+            update_limit = int(total_students * 0.2)
             start_time = time.time()
             try:
                 cursor.execute(f"""
@@ -256,18 +278,22 @@ def run_performance_analysis():
                     )
                 """)
                 
-                # Copy data from students
+                # Copy data from students - use ~20% of students
                 cursor.execute(f"""
                     INSERT INTO {temp_students_name} (id, name, gender, house_id, dormitory_id)
                     SELECT id, name, gender, house_id, dormitory_id 
-                    FROM students WHERE rownum <= 1000
+                    FROM students
+                    WHERE rownum <= {update_limit}
                 """)
+                
+                # Get count of inserted rows
+                cursor.execute(f"SELECT COUNT(*) FROM {temp_students_name}")
+                update_row_count = cursor.fetchone()[0]
                 
                 # Update batch of records
                 cursor.execute(f"""
                     UPDATE {temp_students_name} 
                     SET gender = gender
-                    WHERE rownum <= 1000
                 """)
                 
                 conn.commit()
@@ -276,7 +302,7 @@ def run_performance_analysis():
                 conn.commit()
                 
                 results['batch_update'] = time.time() - start_time
-                results['batch_update_rows'] = 1000
+                results['batch_update_rows'] = update_row_count
                 print(f"Completed Transaction - Batch Update in {results['batch_update']:.4f} seconds")
             except Exception as e:
                 print(f"Error in Transaction - Batch Update: {str(e)}")
@@ -286,6 +312,7 @@ def run_performance_analysis():
                 try_cleanup_table(conn, temp_students_name)
             
             # Transaction - Complex Delete
+            delete_limit = int(total_grades * 0.15)
             start_time = time.time()
             try:
                 cursor.execute(f"""
@@ -299,12 +326,17 @@ def run_performance_analysis():
                     )
                 """)
                 
-                # Copy data from grades
+                # Copy data from grades - use ~15% of grades
                 cursor.execute(f"""
                     INSERT INTO {temp_delete_name} (id, value, award_date, student_id, subject_id, teacher_id)
                     SELECT id, value, award_date, student_id, subject_id, teacher_id 
-                    FROM grades WHERE rownum <= 1000
+                    FROM grades
+                    WHERE rownum <= {delete_limit}
                 """)
+                
+                # Get count of inserted rows
+                cursor.execute(f"SELECT COUNT(*) FROM {temp_delete_name}")
+                initial_row_count = cursor.fetchone()[0]
                 
                 # Complex delete operation
                 cursor.execute(f"""
@@ -312,7 +344,6 @@ def run_performance_analysis():
                     WHERE student_id IN (
                         SELECT student_id FROM {temp_delete_name}
                         WHERE value = 'P'
-                        AND rownum <= 1000
                     )
                 """)
                 
@@ -324,7 +355,7 @@ def run_performance_analysis():
                 conn.commit()
                 
                 results['complex_delete'] = time.time() - start_time
-                results['complex_delete_rows'] = deleted_rows if deleted_rows else 1000
+                results['complex_delete_rows'] = deleted_rows if deleted_rows else 0
                 print(f"Completed Transaction - Complex Delete in {results['complex_delete']:.4f} seconds")
             except Exception as e:
                 print(f"Error in Transaction - Complex Delete: {str(e)}")

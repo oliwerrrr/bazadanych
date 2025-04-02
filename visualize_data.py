@@ -33,7 +33,9 @@ def plot_students_by_house(cursor):
     
     plt.figure(figsize=(10, 6))
     sns.barplot(data=df, x='house_name', y='student_count')
-    plt.title('Liczba uczniów w każdym domu')
+    plt.title('Number of Students per House')
+    plt.xlabel('House')
+    plt.ylabel('Number of Students')
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.savefig('visualizations/students_by_house.png')
@@ -58,7 +60,9 @@ def plot_grades_distribution(cursor):
     
     plt.figure(figsize=(10, 6))
     sns.barplot(data=df, x='grade_value', y='count')
-    plt.title('Rozkład ocen')
+    plt.title('Grade Distribution')
+    plt.xlabel('Grade')
+    plt.ylabel('Number of Grades')
     plt.tight_layout()
     plt.savefig('visualizations/grades_distribution.png')
     plt.close()
@@ -75,7 +79,9 @@ def plot_points_by_house(cursor):
     
     plt.figure(figsize=(10, 6))
     sns.barplot(data=df, x='house_name', y='total_points')
-    plt.title('Suma punktów dla każdego domu')
+    plt.title('Total Points per House')
+    plt.xlabel('House')
+    plt.ylabel('Total Points')
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.savefig('visualizations/points_by_house.png')
@@ -94,7 +100,9 @@ def plot_subjects_popularity(cursor):
     
     plt.figure(figsize=(12, 6))
     sns.barplot(data=df, x='student_count', y='subject_name')
-    plt.title('Top 10 najpopularniejszych przedmiotów')
+    plt.title('Top 10 Most Popular Subjects')
+    plt.xlabel('Number of Students')
+    plt.ylabel('Subject')
     plt.tight_layout()
     plt.savefig('visualizations/subjects_popularity.png')
     plt.close()
@@ -109,7 +117,7 @@ def plot_gender_distribution(cursor):
     
     plt.figure(figsize=(8, 8))
     plt.pie(df['count'], labels=df['gender'], autopct='%1.1f%%')
-    plt.title('Rozkład płci wśród uczniów')
+    plt.title('Gender Distribution Among Students')
     plt.tight_layout()
     plt.savefig('visualizations/gender_distribution.png')
     plt.close()
@@ -126,7 +134,9 @@ def plot_quidditch_teams(cursor):
     
     plt.figure(figsize=(10, 6))
     sns.barplot(data=df, x='house_name', y='team_size')
-    plt.title('Wielkość drużyn Quidditcha w każdym domu')
+    plt.title('Quidditch Team Size by House')
+    plt.xlabel('House')
+    plt.ylabel('Team Size')
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.savefig('visualizations/quidditch_teams.png')
@@ -136,7 +146,7 @@ def generate_html_report(stats):
     html_content = f"""
     <html>
     <head>
-        <title>Raport Hogwartu</title>
+        <title>Hogwarts Report</title>
         <style>
             body {{ font-family: Arial, sans-serif; margin: 20px; }}
             .container {{ max-width: 1200px; margin: 0 auto; }}
@@ -147,40 +157,40 @@ def generate_html_report(stats):
     </head>
     <body>
         <div class="container">
-            <h1>Raport Hogwartu</h1>
+            <h1>Hogwarts School Statistics Report</h1>
             <div class="stats">
-                <h2>Statystyki bazy danych</h2>
-                <p>Data generowania: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+                <h2>Database Statistics</h2>
+                <p>Generated on: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
                 <ul>
-                    <li>Nauczyciele: {stats['teachers']}</li>
-                    <li>Domy: {stats['houses']}</li>
-                    <li>Dormitoria: {stats['dormitories']}</li>
-                    <li>Uczniowie: {stats['students']}</li>
-                    <li>Przedmioty: {stats['subjects']}</li>
-                    <li>Oceny: {stats['grades']}</li>
-                    <li>Punkty: {stats['points']}</li>
-                    <li>Członkowie drużyn Quidditcha: {stats['quidditch_team_members']}</li>
+                    <li>Teachers: {stats['teachers']}</li>
+                    <li>Houses: {stats['houses']}</li>
+                    <li>Dormitories: {stats['dormitories']}</li>
+                    <li>Students: {stats['students']}</li>
+                    <li>Subjects: {stats['subjects']}</li>
+                    <li>Grades: {stats['grades']}</li>
+                    <li>Points: {stats['points']}</li>
+                    <li>Quidditch Team Members: {stats['quidditch_team_members']}</li>
                 </ul>
             </div>
             <div class="visualization">
-                <h2>Wizualizacje</h2>
-                <h3>Liczba uczniów w każdym domu</h3>
-                <img src="visualizations/students_by_house.png" alt="Uczniowie w domach">
+                <h2>Visualizations</h2>
+                <h3>Number of Students per House</h3>
+                <img src="visualizations/students_by_house.png" alt="Students per House">
                 
-                <h3>Rozkład ocen</h3>
-                <img src="visualizations/grades_distribution.png" alt="Rozkład ocen">
+                <h3>Grade Distribution</h3>
+                <img src="visualizations/grades_distribution.png" alt="Grade Distribution">
                 
-                <h3>Suma punktów dla każdego domu</h3>
-                <img src="visualizations/points_by_house.png" alt="Punkty w domach">
+                <h3>Total Points per House</h3>
+                <img src="visualizations/points_by_house.png" alt="Points per House">
                 
-                <h3>Top 10 najpopularniejszych przedmiotów</h3>
-                <img src="visualizations/subjects_popularity.png" alt="Popularność przedmiotów">
+                <h3>Top 10 Most Popular Subjects</h3>
+                <img src="visualizations/subjects_popularity.png" alt="Subject Popularity">
                 
-                <h3>Rozkład płci wśród uczniów</h3>
-                <img src="visualizations/gender_distribution.png" alt="Rozkład płci">
+                <h3>Gender Distribution Among Students</h3>
+                <img src="visualizations/gender_distribution.png" alt="Gender Distribution">
                 
-                <h3>Wielkość drużyn Quidditcha</h3>
-                <img src="visualizations/quidditch_teams.png" alt="Drużyny Quidditcha">
+                <h3>Quidditch Team Size by House</h3>
+                <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams">
             </div>
         </div>
     </body>
@@ -191,20 +201,20 @@ def generate_html_report(stats):
         f.write(html_content)
 
 def main():
-    # Konfiguracja połączenia z bazą danych
+    # Database connection configuration
     connection_string = "SYSTEM/admin@localhost:1521/XE"
     
     try:
-        # Połącz z bazą danych
+        # Connect to database
         connection = oracledb.connect(connection_string)
         cursor = connection.cursor()
-        debug_print("Połączono z bazą danych")
+        debug_print("Connected to database")
         
-        # Utwórz katalog na wizualizacje
+        # Create visualizations directory
         os.makedirs('visualizations', exist_ok=True)
         
-        # Pobierz statystyki
-        debug_print("Pobieram statystyki...")
+        # Get statistics
+        debug_print("Getting statistics...")
         stats = {
             'teachers': get_table_stats(cursor, 'teachers'),
             'houses': get_table_stats(cursor, 'houses'),
@@ -216,8 +226,8 @@ def main():
             'quidditch_team_members': get_table_stats(cursor, 'quidditch_team_members')
         }
         
-        # Generuj wizualizacje
-        debug_print("Generuję wizualizacje...")
+        # Generate visualizations
+        debug_print("Generating visualizations...")
         plot_students_by_house(cursor)
         plot_grades_distribution(cursor)
         plot_points_by_house(cursor)
@@ -225,24 +235,24 @@ def main():
         plot_gender_distribution(cursor)
         plot_quidditch_teams(cursor)
         
-        # Generuj raport HTML
-        debug_print("Generuję raport HTML...")
+        # Generate HTML report
+        debug_print("Generating HTML report...")
         generate_html_report(stats)
         
-        debug_print("\nPODSUMOWANIE:")
+        debug_print("\nSUMMARY:")
         for table, count in stats.items():
-            debug_print(f"{table}: {count} rekordów")
+            debug_print(f"{table}: {count} records")
         
-        debug_print("\nRaport został wygenerowany w pliku hogwarts_report.html")
+        debug_print("\nReport has been generated in hogwarts_report.html")
         
     except Exception as e:
-        debug_print(f"BŁĄD: {str(e)}")
+        debug_print(f"ERROR: {str(e)}")
     finally:
         if 'cursor' in locals():
             cursor.close()
         if 'connection' in locals():
             connection.close()
-            debug_print("Zamknięto połączenie z bazą danych")
+            debug_print("Database connection closed")
 
 if __name__ == "__main__":
     main() 

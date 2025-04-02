@@ -23,6 +23,14 @@ DATABASE_DIR = os.path.join(BASE_DIR, 'src', 'database')
 DATA_DIR = os.path.join(BASE_DIR, 'data', 'hogwarts_data')
 VISUALIZATIONS_DIR = os.path.join(DOCS_DIR, 'visualizations')
 
+# Mierzenie czasu operacji
+performance_stats = {
+    "generate_time": None,
+    "clear_time": None,
+    "load_time": None,
+    "last_updated": None
+}
+
 def ensure_directories():
     """Create necessary directories if they don't exist"""
     os.makedirs(DOCS_DIR, exist_ok=True)
@@ -691,6 +699,108 @@ def visualize_data():
         print(f"Error in visualize_data: {str(e)}")
         emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/db_operations', methods=['GET', 'POST'])
+def db_operations():
+    global performance_stats
+    
+    if request.method == 'GET':
+        # Zamiast renderowania szablonu, zwracamy dane JSON
+        return jsonify(performance_stats)
+    
+    operation = request.form.get('operation', '')
+    
+    if operation == 'generate':
+        start_time = time.time()
+        result = run_command(['python', 'src/data_generation/generate_hogwarts_data.py'])
+        end_time = time.time()
+        performance_stats['generate_time'] = round(end_time - start_time, 2)
+        performance_stats['last_updated'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return jsonify({"success": True, "message": "Data generated", "stats": performance_stats, "output": result})
+    
+    elif operation == 'clear':
+        from src.database import oracle_connection
+        start_time = time.time()
+        conn = oracle_connection.get_connection()
+        cursor = conn.cursor()
+        
+        # List of tables to clear in proper order
+        tables = ['POINTS', 'GRADES', 'STUDENTS_SUBJECTS', 'QUIDDITCH_TEAM_MEMBERS', 
+                  'STUDENTS', 'SUBJECTS', 'DORMITORIES', 'HOUSES', 'TEACHERS']
+        
+        for table in tables:
+            try:
+                cursor.execute(f"DELETE FROM {table}")
+            except Exception as e:
+                print(f"Error clearing table {table}: {str(e)}")
+        
+        conn.commit()
+        conn.close()
+        end_time = time.time()
+        
+        performance_stats['clear_time'] = round(end_time - start_time, 2)
+        performance_stats['last_updated'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return jsonify({"success": True, "message": "Database cleared", "stats": performance_stats})
+    
+    elif operation == 'load':
+        from src.database import import_data
+        start_time = time.time()
+        import_data.main()
+        end_time = time.time()
+        
+        performance_stats['load_time'] = round(end_time - start_time, 2)
+        performance_stats['last_updated'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return jsonify({"success": True, "message": "Data loaded", "stats": performance_stats})
+    
+    elif operation == 'visualize':
+        from src.database import visualize_data
+        start_time = time.time()
+        visualize_data.main()
+        end_time = time.time()
+        
+        performance_stats['visualize_time'] = round(end_time - start_time, 2)
+        performance_stats['last_updated'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return jsonify({"success": True, "message": "Visualizations generated", "stats": performance_stats})
+    
+    return jsonify({"success": False, "message": "Unknown operation"})
+
+def run_command(cmd):
+    """Run a command and return output"""
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    stdout, stderr = process.communicate()
+    if process.returncode != 0:
+        return f"Error: {stderr}"
+    return stdout
+
+@app.route('/api/db_stats')
+def db_stats():
+    """
+    Endpoint to retrieve database statistics showing number of records in each table
+    """
+    try:
+        from src.database import oracle_connection
+        conn = oracle_connection.get_connection()
+        cursor = conn.cursor()
+        
+        tables = ['TEACHERS', 'HOUSES', 'DORMITORIES', 'STUDENTS', 
+                 'SUBJECTS', 'GRADES', 'POINTS', 'QUIDDITCH_TEAM_MEMBERS']
+        
+        results = {}
+        
+        for table in tables:
+            try:
+                cursor.execute(f"SELECT COUNT(*) FROM {table}")
+                count = cursor.fetchone()[0]
+                results[table.lower()] = count
+            except Exception as e:
+                print(f"Error getting count for table {table}: {str(e)}")
+                results[table.lower()] = 0
+        
+        conn.close()
+        return jsonify(results)
+    except Exception as e:
+        print(f"Error retrieving database stats: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     ensure_directories()

@@ -1,11 +1,11 @@
 {
     "nTeachers": 111,
-    "nStudents": 10000,
-    "female_percentage": 50,
-    "min_teacher_birth_year": 1950,
+    "nStudents": 1000,
+    "female_percentage": 69,
+    "min_teacher_birth_year": 1970,
     "max_teacher_birth_year": 1990,
-    "min_student_birth_year": 2006,
-    "max_student_birth_year": 2013,
+    "min_student_birth_year": 2000,
+    "max_student_birth_year": 2010,
     "min_classroom": 100,
     "max_classroom": 999,
     "grade_values": [
@@ -16,8 +16,8 @@
         "D",
         "T"
     ],
-    "min_grades_per_subject": 2,
-    "max_grades_per_subject": 10,
+    "min_grades_per_subject": 1,
+    "max_grades_per_subject": 5,
     "min_points": -50,
     "max_points": 50,
     "pointsPerStudent": 3,
@@ -39,5 +39,5 @@
     "allow_empty_dormitories": false,
     "enforce_min_subjects": true,
     "allow_multiple_captains": false,
-    "timestamp": "2025-04-02 05:13:14"
+    "timestamp": "2024-04-09 14:28:00"
 }

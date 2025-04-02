@@ -2,6 +2,40 @@
 
 This project contains a comprehensive database management system for Hogwarts School of Witchcraft and Wizardry, including information about students, teachers, grades, and other aspects of the magical school.
 
+## Project Structure
+
+```
+hogwarts-db/
+├── src/
+│   ├── data_generation/     # Data generation scripts
+│   │   ├── generate_hogwarts_data.py
+│   │   └── config_generator.py
+│   ├── database/           # Database operations
+│   │   ├── import_data.py
+│   │   └── clear_tables.sql
+│   └── visualization/      # Data visualization scripts
+│       └── visualize_data.py
+├── config/                 # Configuration files
+│   └── hogwarts_config.json
+├── data/
+│   ├── names/             # Name data files
+│   │   ├── feminineNames.csv
+│   │   ├── masculineNames.csv
+│   │   └── surnames.csv
+│   └── hogwarts_data/     # Generated data files
+│       ├── teachers.csv
+│       ├── houses.csv
+│       ├── dormitories.csv
+│       ├── students.csv
+│       ├── subjects.csv
+│       ├── students_subjects.csv
+│       ├── grades.csv
+│       ├── points.csv
+│       └── quidditch_team_members.csv
+└── docs/                  # Documentation
+    └── README.md
+```
+
 ## Requirements
 
 - Python 3.8 or newer
@@ -27,38 +61,21 @@ pip install oracledb pandas matplotlib seaborn tqdm
    - Port: 1521
    - Service: XE
 
-## Project Structure
-
-- `generate_hogwarts_data.py` - script for generating sample data
-- `import_data.py` - script for importing data into the database
-- `visualize_data.py` - script for data visualization
-- `clear_tables.sql` - SQL script for clearing tables
-- `hogwarts_data/` - directory containing CSV files
-  - teachers.csv
-  - houses.csv
-  - dormitories.csv
-  - students.csv
-  - subjects.csv
-  - students_subjects.csv
-  - grades.csv
-  - points.csv
-  - quidditch_team_members.csv
-
 ## Usage
 
 1. Generate data:
 ```bash
-python generate_hogwarts_data.py
+python src/data_generation/generate_hogwarts_data.py
 ```
 
 2. Import data into the database:
 ```bash
-python import_data.py
+python src/database/import_data.py
 ```
 
 3. Visualize the data:
 ```bash
-python visualize_data.py
+python src/visualization/visualize_data.py
 ```
 
 ## Database Structure
@@ -149,13 +166,13 @@ The system generates data in this specific order to maintain data integrity:
    - Ensure port 1521 is available
 
 2. If you encounter import errors:
-   - Check if all CSV files exist in the hogwarts_data directory
+   - Check if all CSV files exist in the data/hogwarts_data directory
    - Verify CSV file formats
    - Ensure database tables are properly created
 
 3. If you encounter data generation problems:
-   - Check if all required name files exist (feminineNames.csv, masculineNames.csv, surnames.csv)
-   - Verify hogwarts_config.json exists and is properly formatted
+   - Check if all required name files exist in data/names directory
+   - Verify config/hogwarts_config.json exists and is properly formatted
    - Ensure you have sufficient disk space
 
 ## Additional Notes

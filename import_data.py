@@ -9,7 +9,10 @@ from tqdm import tqdm
 
 # Get absolute paths
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+DATA_DIR = os.path.join(BASE_DIR, 'data', 'hogwarts_data')
+
+# Ensure data directory exists
+os.makedirs(DATA_DIR, exist_ok=True)
 
 # Disable output buffering completely
 os.environ['PYTHONUNBUFFERED'] = '1'
@@ -47,18 +50,20 @@ def debug_print(message, data=None):
         sys.stdout.flush()
 
 def count_rows_in_file(filename):
-    if not os.path.exists(filename):
+    file_path = os.path.join(DATA_DIR, filename)
+    if not os.path.exists(file_path):
         debug_print(f"[ERROR] File {filename} does not exist!")
         return 0
-    with open(filename, "r", newline='', encoding='utf-8') as f:
+    with open(file_path, "r", newline='', encoding='utf-8') as f:
         return sum(1 for row in f) - 1  # -1 for header
 
 def import_csv(cursor, filename, table_name, columns):
     global stop_process
     if stop_process:
         return False
-        
-    if not os.path.exists(filename):
+    
+    file_path = os.path.join(DATA_DIR, filename)
+    if not os.path.exists(file_path):
         debug_print(f"[ERROR] File {filename} does not exist!")
         return False
     
@@ -66,7 +71,7 @@ def import_csv(cursor, filename, table_name, columns):
     row_count = 0
     
     try:
-        with open(filename, "r", newline='', encoding='utf-8') as f:
+        with open(file_path, "r", newline='', encoding='utf-8') as f:
             reader = csv.DictReader(f, delimiter=';')
             total_rows = count_rows_in_file(filename)
             
@@ -153,21 +158,21 @@ def main():
         
         for filename, table_name, columns in tables:
             check_stop()
-            file_path = os.path.join(DATA_DIR, filename)
             debug_print(f"[>>>] Processing {filename}")
             
+            file_path = os.path.join(DATA_DIR, filename)
             if not os.path.exists(file_path):
                 debug_print(f"[ERROR] File {filename} does not exist in directory {DATA_DIR}")
                 continue
                 
-            row_count = count_rows_in_file(file_path)
+            row_count = count_rows_in_file(filename)
             debug_print(f"[INFO] Found {row_count:,} rows in file {filename}")
             
             if row_count == 0:
                 debug_print(f"[WARN] File {filename} is empty!")
                 continue
                 
-            if import_csv(cursor, file_path, table_name, columns):
+            if import_csv(cursor, filename, table_name, columns):
                 connection.commit()
             else:
                 connection.rollback()

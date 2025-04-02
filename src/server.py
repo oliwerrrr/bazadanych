@@ -8,9 +8,11 @@ import subprocess
 import shutil
 from datetime import datetime
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+socketio = SocketIO(app, cors_allowed_origins="*")  # Enable WebSocket with CORS
 
 # Get absolute paths
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -86,12 +88,37 @@ def serve_static(filename):
         return send_from_directory(DOCS_DIR, filename)
     return jsonify({"error": f"File {filename} not found"}), 404
 
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+    emit('status', {'data': 'Connected to server'})
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
+def emit_progress(message, data=None):
+    """Emit progress updates to connected clients"""
+    socketio.emit('progress', {
+        'message': message,
+        'data': data,
+        'timestamp': datetime.now().isoformat()
+    })
+
 @app.route('/run_tests', methods=['POST'])
 def run_tests():
     try:
-        config = request.json
+        if not request.is_json:
+            return jsonify({"error": "Content-Type must be application/json"}), 400
+            
+        config = request.get_json()
+        if not config:
+            config = {}
+            
         connection = get_db_connection()
         cursor = connection.cursor()
+        
+        emit_progress("Starting performance tests...")
         
         stats = {
             'teachers': get_table_stats(cursor, 'teachers'),
@@ -104,11 +131,16 @@ def run_tests():
             'quidditch': get_table_stats(cursor, 'quidditch_team_members')
         }
         
+        emit_progress("Running performance analysis...")
         performance_results = run_performance_analysis(cursor, config)
+        
+        emit_progress("Generating HTML report...")
         generate_html_report(stats, performance_results)
         
         cursor.close()
         connection.close()
+        
+        emit_progress("Tests completed successfully")
         
         return jsonify({
             "status": "success", 
@@ -117,12 +149,18 @@ def run_tests():
         })
     except Exception as e:
         print(f"Error in run_tests: {str(e)}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/generate_config', methods=['POST'])
 def generate_config():
     try:
-        config_data = request.json or {}  # Use empty dict if no JSON provided
+        if not request.is_json:
+            return jsonify({"error": "Content-Type must be application/json"}), 400
+            
+        config_data = request.get_json()
+        if not config_data:
+            config_data = {}
         
         # Add default values if not provided
         default_config = {
@@ -149,11 +187,13 @@ def generate_config():
         }
         
         # Update with provided values
-        config_data = {**default_config, **(config_data or {})}
+        config_data = {**default_config, **config_data}
         
         config_path = os.path.join(BASE_DIR, 'hogwarts_config.json')
         with open(config_path, 'w', encoding='utf-8') as f:
             json.dump(config_data, f, indent=4)
+        
+        emit_progress("Configuration saved successfully")
         
         return jsonify({
             "status": "success", 
@@ -162,6 +202,7 @@ def generate_config():
         })
     except Exception as e:
         print(f"Error in generate_config: {str(e)}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/generate_data', methods=['POST'])
@@ -172,6 +213,8 @@ def generate_data():
         if not os.path.exists(script_path):
             raise Exception(f"Script not found: {script_path}")
             
+        emit_progress("Starting data generation...")
+        
         result = subprocess.run(
             [sys.executable, script_path],
             capture_output=True,
@@ -184,6 +227,8 @@ def generate_data():
         if result.stderr:
             print(f"Generate data errors: {result.stderr}")
             
+        emit_progress("Data generation completed")
+            
         return jsonify({
             "status": "success", 
             "message": "Data generated successfully",
@@ -192,9 +237,11 @@ def generate_data():
     except subprocess.CalledProcessError as e:
         print(f"Error in generate_data: {str(e)}")
         print(f"Process output: {e.output}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
     except Exception as e:
         print(f"Error in generate_data: {str(e)}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/import_data', methods=['POST'])
@@ -204,6 +251,8 @@ def import_data():
         script_path = os.path.join(BASE_DIR, 'import_data.py')
         if not os.path.exists(script_path):
             raise Exception(f"Script not found: {script_path}")
+            
+        emit_progress("Starting data import...")
             
         result = subprocess.run(
             [sys.executable, script_path],
@@ -218,6 +267,8 @@ def import_data():
         if result.stderr:
             print(f"Import data errors: {result.stderr}")
             
+        emit_progress("Data import completed")
+            
         return jsonify({
             "status": "success", 
             "message": "Data imported successfully",
@@ -226,14 +277,18 @@ def import_data():
     except subprocess.CalledProcessError as e:
         print(f"Error in import_data: {str(e)}")
         print(f"Process output: {e.output}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
     except Exception as e:
         print(f"Error in import_data: {str(e)}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/clear_database', methods=['POST'])
 def clear_database():
     try:
+        emit_progress("Starting database cleanup...")
+        
         connection = oracledb.connect("SYSTEM/admin@localhost:1521/XE")
         cursor = connection.cursor()
         
@@ -250,19 +305,27 @@ def clear_database():
         ]
         
         for table in tables:
-            cursor.execute(f"DELETE FROM {table}")
+            try:
+                cursor.execute(f"TRUNCATE TABLE {table} CASCADE")
+                emit_progress(f"Cleared table: {table}")
+            except oracledb.Error as e:
+                print(f"Error clearing table {table}: {str(e)}")
+                emit_progress(f"Error clearing table {table}: {str(e)}", {'error': True})
         
         connection.commit()
         cursor.close()
         connection.close()
         
+        emit_progress("Database cleanup completed")
+        
         return jsonify({
-            "status": "success", 
+            "status": "success",
             "message": "Database cleared successfully",
             "loading_message": get_loading_message()
         })
     except Exception as e:
         print(f"Error in clear_database: {str(e)}")
+        emit_progress(f"Error: {str(e)}", {'error': True})
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/docs/<path:filename>')
@@ -274,16 +337,12 @@ def serve_docs(filename):
 
 @app.route('/visualizations/<path:filename>')
 def serve_visualizations(filename):
-    """Serve files from visualizations directory"""
+    """Serve visualization files"""
     if os.path.exists(os.path.join(VISUALIZATIONS_DIR, filename)):
         return send_from_directory(VISUALIZATIONS_DIR, filename)
     return jsonify({"error": f"File {filename} not found"}), 404
 
 if __name__ == '__main__':
-    # Create necessary directories and copy files
     ensure_directories()
     copy_schema_files()
-    
-    print(f"Serving files from: {DOCS_DIR}")
-    print(f"Visualizations from: {VISUALIZATIONS_DIR}")
-    app.run(port=5000, debug=True) 
+    socketio.run(app, debug=True, port=5000) 

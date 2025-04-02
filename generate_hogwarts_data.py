@@ -10,8 +10,13 @@ from tqdm import tqdm
 
 # Get absolute paths
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+DATA_DIR = os.path.join(BASE_DIR, 'data', 'hogwarts_data')
 CONFIG_FILE = os.path.join(BASE_DIR, 'hogwarts_config.json')
+NAMES_DIR = os.path.join(BASE_DIR, 'names')
+
+# Ensure directories exist
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(NAMES_DIR, exist_ok=True)
 
 # Disable output buffering completely
 os.environ['PYTHONUNBUFFERED'] = '1'
@@ -130,18 +135,15 @@ def main():
         
         # Load name files
         try:
-            names_dir = os.path.join(BASE_DIR, 'names')
-            os.makedirs(names_dir, exist_ok=True)
-            
-            with open(os.path.join(names_dir, "feminineNames.csv"), "r", encoding="utf-8") as f:
+            with open(os.path.join(NAMES_DIR, "feminineNames.csv"), "r", encoding="utf-8") as f:
                 feminine_names = f.read().split(";")
                 feminine_names = [name.strip() for name in feminine_names if name.strip()]
             
-            with open(os.path.join(names_dir, "masculineNames.csv"), "r", encoding="utf-8") as f:
+            with open(os.path.join(NAMES_DIR, "masculineNames.csv"), "r", encoding="utf-8") as f:
                 masculine_names = f.read().split(";")
                 masculine_names = [name.strip() for name in masculine_names if name.strip()]
             
-            with open(os.path.join(names_dir, "surnames.csv"), "r", encoding="utf-8") as f:
+            with open(os.path.join(NAMES_DIR, "surnames.csv"), "r", encoding="utf-8") as f:
                 surnames = f.read().split(";")
                 surnames = [surname.strip() for surname in surnames if surname.strip()]
             
@@ -155,9 +157,6 @@ def main():
             feminine_names = ["Emma", "Olivia", "Ava", "Isabella", "Sophia", "Charlotte", "Mia", "Amelia", "Harper", "Evelyn"]
             masculine_names = ["Liam", "Noah", "William", "James", "Oliver", "Benjamin", "Elijah", "Lucas", "Mason", "Logan"]
             surnames = ["Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor"]
-
-        # Ensure data directory exists
-        os.makedirs(DATA_DIR, exist_ok=True)
 
         # 1. Teachers
         check_stop()

@@ -1,920 +1,355 @@
-    <!DOCTYPE html>
-    <html lang="pl">
-    <head>
-        <meta charset="UTF-8">
-        <title>Hogwarts Database Report</title>
-            <!-- Add Socket.IO client library -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 20px;
-                background-color: #f5f5f5;
-            }
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                background-color: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            }
-            h1, h2 {
-                color: #1a237e;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 20px 0;
-            }
-            th, td {
-                padding: 12px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
-            th {
-                background-color: #1a237e;
-                color: white;
-            }
-            tr:nth-child(even) {
-                background-color: #f8f9fa;
-            }
-            /* Dodaj style dla klikalnych wierszy */
-            tr.clickable {
-                cursor: pointer;
-                transition: background-color 0.2s;
-            }
-            tr.clickable:hover {
-                background-color: #e3f2fd;
-            }
-            .section {
-                margin: 30px 0;
-                padding: 20px;
-                background-color: white;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            }
-            .collapsible {
-                background-color: #1a237e;
-                color: white;
-                cursor: pointer;
-                padding: 18px;
-                width: 100%;
-                border: none;
-                text-align: left;
-                outline: none;
-                font-size: 15px;
-                border-radius: 5px;
-                margin: 10px 0;
-            }
-            .active, .collapsible:hover {
-                background-color: #0d47a1;
-            }
-            .content {
-                padding: 0 18px;
-                display: none;
-                overflow: hidden;
-                background-color: #f1f1f1;
-                border-radius: 0 0 5px 5px;
-            }
-            .schema-img {
-                max-width: 100%;
-                height: auto;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-            }
-            .schema-img:hover {
-                transform: scale(1.05);
-            }
-            .visualization-img {
-                max-width: 100%;
-                height: auto;
-                margin: 10px 0;
-            }
-            .wizard-section {
-                background-color: #e3f2fd;
-                padding: 20px;
-                border-radius: 5px;
-                margin: 20px 0;
-            }
-            .wizard-button {
-                background-color: #1a237e;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                margin: 5px;
-                font-size: 14px;
-            }
-            .wizard-button:hover {
-                background-color: #0d47a1;
-            }
-            .error {
-                color: #d32f2f;
-                background-color: #ffebee;
-                padding: 10px;
-                border-radius: 5px;
-                margin: 5px 0;
-            }
-            .success {
-                color: #1b5e20;
-                background-color: #e8f5e9;
-                padding: 10px;
-                border-radius: 5px;
-                margin: 5px 0;
-            }
-            .progress-message {
-                padding: 5px;
-                margin: 2px 0;
-                font-family: monospace;
-                font-size: 14px;
-                color: #333;
-            }
-            .progress-message.error {
-                color: #d32f2f;
-                background-color: #ffebee;
-                border-left: 4px solid #d32f2f;
-            }
-            #progress-messages {
-                max-height: 300px;
-                overflow-y: auto;
-                padding: 10px;
-                background-color: #f5f5f5;
-                border-radius: 4px;
-                margin-top: 10px;
-            }
-            .button-group {
-                margin: 20px 0;
-            }
-            button {
-                margin: 5px;
-                padding: 8px 16px;
-                border: none;
-                border-radius: 4px;
-                background-color: #2196f3;
-                color: white;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-            button:hover {
-                background-color: #1976d2;
-            }
-            button:disabled {
-                background-color: #bdbdbd;
-                cursor: not-allowed;
-            }
-            
-            /* Style dla przycisków w tabeli testów */
-            .wizard-button.details-btn {
-                background-color: #1565c0;
-                color: white;
-                padding: 5px 10px;
-                border: none;
-                border-radius: 3px;
-                cursor: pointer;
-                font-size: 12px;
-                transition: background-color 0.3s;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-            
-            .wizard-button.details-btn:hover {
-                background-color: #0d47a1;
-                box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-            }
-            
-            /* Style dla okna modalnego */
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 1000;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0,0,0,0.5);
-                overflow-y: auto;
-            }
-            .modal-content {
-                background-color: #fefefe;
-                margin: 5% auto;
-                padding: 20px;
-                border: 1px solid #888;
-                width: 70%;
-                max-width: 900px;
-                max-height: 90vh;
-                overflow-y: auto;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                position: relative;
-            }
-            .close-modal {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-                cursor: pointer;
-            }
-            .close-modal:hover {
-                color: black;
-            }
-            .test-detail-title {
-                color: #1a237e;
-                margin-top: 0;
-                border-bottom: 2px solid #1a237e;
-                padding-bottom: 10px;
-            }
-            .test-stats {
-                background-color: #e3f2fd;
-                padding: 15px;
-                border-radius: 5px;
-                margin: 15px 0;
-            }
-            .sql-code {
-                background-color: #f5f5f5;
-                padding: 15px;
-                border-radius: 5px;
-                font-family: monospace;
-                white-space: pre-wrap;
-                overflow-x: auto;
-                border-left: 4px solid #1a237e;
-            }
-            .test-explanation {
-                margin: 15px 0;
-                line-height: 1.5;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Hogwarts Database Report</h1>
-            
-            <!-- Database Statistics -->
-            <button type="button" class="collapsible">Database Statistics</button>
-            <div class="content">
-                <table>
-                    <tr>
-                        <th>Table</th>
-                        <th>Row Count</th>
-                    </tr>
-    
-                    <tr>
-                        <td>teachers</td>
-                            <td id="teachers-count">111</td>
-                    </tr>
-        
-                    <tr>
-                        <td>houses</td>
-                            <td id="houses-count">4</td>
-                    </tr>
-        
-                    <tr>
-                        <td>dormitories</td>
-                            <td id="dormitories-count">110</td>
-                    </tr>
-        
-                    <tr>
-                        <td>students</td>
-                            <td id="students-count">10000</td>
-                    </tr>
-        
-                    <tr>
-                        <td>subjects</td>
-                            <td id="subjects-count">78</td>
-                    </tr>
-        
-                    <tr>
-                        <td>grades</td>
-                            <td id="grades-count">579409</td>
-                    </tr>
-        
-                    <tr>
-                        <td>points</td>
-                            <td id="points-count">30000</td>
-                    </tr>
-        
-                    <tr>
-                        <td>quidditch</td>
-                            <td id="quidditch-count">38</td>
-                    </tr>
-        
-                </table>
-            </div>
 
-            <!-- Database Schema -->
-            <button type="button" class="collapsible">Database Schema</button>
-            <div class="content">
-                <h3>Entity Relationship Diagram</h3>
-                <img src="HogwartRelations.png" alt="Database Relations" class="schema-img" onclick="window.open(this.src)">
-                <h3>Database Schema</h3>
-                <img src="schema.png" alt="Database Schema" class="schema-img" onclick="window.open(this.src)">
-            </div>
-
-            <!-- Visualizations -->
-            <button type="button" class="collapsible">Visualizations</button>
-            <div class="content">
-                <h3>Students by House</h3>
-                <img src="visualizations/students_by_house.png" alt="Students by House" class="visualization-img">
-                <h3>Grades Distribution</h3>
-                <img src="visualizations/grades_distribution.png" alt="Grades Distribution" class="visualization-img">
-                <h3>Subjects Popularity</h3>
-                <img src="visualizations/subjects_popularity.png" alt="Subjects Popularity" class="visualization-img">
-                <h3>Points by House</h3>
-                <img src="visualizations/points_by_house.png" alt="Points by House" class="visualization-img">
-                <h3>Gender Distribution</h3>
-                <img src="visualizations/gender_distribution.png" alt="Gender Distribution" class="visualization-img">
-                <h3>Quidditch Teams</h3>
-                <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams" class="visualization-img">
-            </div>
-
-            <!-- Performance Analysis -->
-            <button type="button" class="collapsible">Performance Analysis</button>
-            <div class="content">
-                <table>
-                    <tr>
-                        <th>Query Type</th>
-                        <th>Description</th>
-                        <th>Execution Time</th>
-                        <th>Rows Processed</th>
-                        <th>Action</th>
-                    </tr>
-    
-                    <tr class="success clickable" data-test="simple-select">
-                        <td>Simple SELECT</td>
-                        <td>Basic select query on students table</td>
-                            <td id="simple-select-time">0.0113 seconds</td>
-                        <td id="simple-select-rows">2137</td>
-                        <td><button onclick="showTestDetails('simple-select'); event.stopPropagation();" class="wizard-button details-btn" data-test="simple-select">View details</button></td>
-                    </tr>
+        <!DOCTYPE html>
+        <html lang="pl">
+        <head>
+            <meta charset="UTF-8">
+            <title>Hogwarts Database Report</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                    background-color: #f5f5f5;
+                }
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    background-color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                }
+                h1, h2 {
+                    color: #1a237e;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 20px 0;
+                }
+                th, td {
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+                th {
+                    background-color: #1a237e;
+                    color: white;
+                }
+                tr:nth-child(even) {
+                    background-color: #f8f9fa;
+                }
+                .section {
+                    margin: 30px 0;
+                    padding: 20px;
+                    background-color: white;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                }
+                .collapsible {
+                    background-color: #1a237e;
+                    color: white;
+                    cursor: pointer;
+                    padding: 18px;
+                    width: 100%;
+                    border: none;
+                    text-align: left;
+                    outline: none;
+                    font-size: 15px;
+                    border-radius: 5px;
+                    margin: 10px 0;
+                }
+                .active, .collapsible:hover {
+                    background-color: #0d47a1;
+                }
+                .content {
+                    padding: 0 18px;
+                    display: none;
+                    overflow: hidden;
+                    background-color: #f1f1f1;
+                    border-radius: 0 0 5px 5px;
+                }
+                .schema-img {
+                    max-width: 100%;
+                    height: auto;
+                    cursor: pointer;
+                    transition: transform 0.3s ease;
+                }
+                .schema-img:hover {
+                    transform: scale(1.05);
+                }
+                .visualization-img {
+                    max-width: 100%;
+                    height: auto;
+                    margin: 10px 0;
+                }
+                .wizard-section {
+                    background-color: #e3f2fd;
+                    padding: 20px;
+                    border-radius: 5px;
+                    margin: 20px 0;
+                }
+                .wizard-button {
+                    background-color: #1a237e;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    margin: 5px;
+                    font-size: 14px;
+                }
+                .wizard-button:hover {
+                    background-color: #0d47a1;
+                }
+                .error {
+                    color: #d32f2f;
+                    background-color: #ffebee;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin: 5px 0;
+                }
+                .success {
+                    color: #1b5e20;
+                    background-color: #e8f5e9;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin: 5px 0;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Hogwarts Database Report</h1>
+                
+                <!-- Database Statistics -->
+                <button type="button" class="collapsible">Database Statistics</button>
+                <div class="content">
+                    <table>
+                        <tr>
+                            <th>Table</th>
+                            <th>Row Count</th>
+                        </tr>
         
-                    <tr class="success clickable" data-test="complex-join">
-                        <td>Complex JOIN</td>
-                        <td>Complex join between students, grades, and subjects</td>
-                            <td id="complex-join-time">0.0094 seconds</td>
-                        <td id="complex-join-rows">1000</td>
-                        <td><button onclick="showTestDetails('complex-join'); event.stopPropagation();" class="wizard-button details-btn" data-test="complex-join">View details</button></td>
-                    </tr>
+                        <tr>
+                            <td>teachers</td>
+                            <td>111</td>
+                        </tr>
         
-                    <tr class="success clickable" data-test="aggregation">
-                        <td>Aggregation</td>
-                        <td>Complex aggregation with grouping and having</td>
-                            <td id="aggregation-time">0.0056 seconds</td>
-                        <td id="aggregation-rows">4</td>
-                        <td><button onclick="showTestDetails('aggregation'); event.stopPropagation();" class="wizard-button details-btn" data-test="aggregation">View details</button></td>
-                    </tr>
+                        <tr>
+                            <td>houses</td>
+                            <td>4</td>
+                        </tr>
         
-                    <tr class="success clickable" data-test="nested-subquery">
-                        <td>Nested Subquery</td>
-                        <td>Complex nested subquery with multiple conditions</td>
-                            <td id="nested-subquery-time">0.0012 seconds</td>
-                            <td id="nested-subquery-rows">30</td>
-                        <td><button onclick="showTestDetails('nested-subquery'); event.stopPropagation();" class="wizard-button details-btn" data-test="nested-subquery">View details</button></td>
-                    </tr>
+                        <tr>
+                            <td>dormitories</td>
+                            <td>111</td>
+                        </tr>
         
-                    <tr class="error clickable" data-test="batch-insert">
-                        <td>Transaction - Batch Insert</td>
-                        <td>Insert multiple grades with transaction control</td>
-                        <td id="batch-insert-time">Error</td>
-                        <td id="batch-insert-rows">0</td>
-                        <td><button onclick="showTestDetails('batch-insert'); event.stopPropagation();" class="wizard-button details-btn" data-test="batch-insert">View details</button></td>
-                    </tr>
+                        <tr>
+                            <td>students</td>
+                            <td>1000</td>
+                        </tr>
         
-                    <tr class="success clickable" data-test="batch-update">
-                        <td>Transaction - Batch Update</td>
-                        <td>Update multiple grades with transaction control</td>
-                            <td id="batch-update-time">0.0281 seconds</td>
-                        <td id="batch-update-rows">1000</td>
-                        <td><button onclick="showTestDetails('batch-update'); event.stopPropagation();" class="wizard-button details-btn" data-test="batch-update">View details</button></td>
-                    </tr>
+                        <tr>
+                            <td>subjects</td>
+                            <td>78</td>
+                        </tr>
         
-                    <tr class="success clickable" data-test="complex-delete">
-                        <td>Transaction - Complex Delete</td>
-                        <td>Delete with complex conditions and restore data</td>
-                            <td id="complex-delete-time">0.2423 seconds</td>
-                        <td id="complex-delete-rows">1000</td>
-                        <td><button onclick="showTestDetails('complex-delete'); event.stopPropagation();" class="wizard-button details-btn" data-test="complex-delete">View details</button></td>
-                    </tr>
+                        <tr>
+                            <td>grades</td>
+                            <td>7270</td>
+                        </tr>
         
-                    <tr class="success clickable" data-test="full-table-scan">
-                        <td>Full Table Scan Analysis</td>
-                        <td>Analyze grade distribution with full table scan</td>
-                            <td id="full-table-scan-time">0.0446 seconds</td>
-                        <td id="full-table-scan-rows">6</td>
-                        <td><button onclick="showTestDetails('full-table-scan'); event.stopPropagation();" class="wizard-button details-btn" data-test="full-table-scan">View details</button></td>
-                    </tr>
+                        <tr>
+                            <td>points</td>
+                            <td>12900</td>
+                        </tr>
         
-                </table>
-            </div>
-
-            <!-- Modal for test details -->
-            <div id="testDetailsModal" class="modal">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <h2 id="testDetailTitle" class="test-detail-title">Test Details</h2>
-                    <div class="test-stats">
-                        <p><strong>Execution time:</strong> <span id="detailExecutionTime">0.0000 seconds</span></p>
-                        <p><strong>Rows processed:</strong> <span id="detailRowsProcessed">0</span></p>
-                        <p><strong>Data percentage:</strong> <span id="detailDataPercentage">0%</span> of database</p>
-                    </div>
-                    <div>
-                        <h3>Test description</h3>
-                        <p id="detailDescription" class="test-explanation"></p>
-                    </div>
-                    <div>
-                        <h3>SQL Query</h3>
-                        <pre id="detailSql" class="sql-code"></pre>
-                    </div>
-                    <div>
-                        <h3>How the test works</h3>
-                        <p id="detailExplanation" class="test-explanation"></p>
-                    </div>
+                        <tr>
+                            <td>quidditch</td>
+                            <td>39</td>
+                        </tr>
+        
+                    </table>
                 </div>
+
+                <!-- Database Schema -->
+                <button type="button" class="collapsible">Database Schema</button>
+                <div class="content">
+                    <h3>Entity Relationship Diagram</h3>
+                    <img src="HogwartRelations.png" alt="Database Relations" class="schema-img" onclick="window.open(this.src)">
+                    <h3>Database Schema</h3>
+                    <img src="schema.png" alt="Database Schema" class="schema-img" onclick="window.open(this.src)">
+                </div>
+
+                <!-- Visualizations -->
+                <button type="button" class="collapsible">Visualizations</button>
+                <div class="content">
+                    <h3>Students by House</h3>
+                    <img src="visualizations/students_by_house.png" alt="Students by House" class="visualization-img">
+                    <h3>Grades Distribution</h3>
+                    <img src="visualizations/grades_distribution.png" alt="Grades Distribution" class="visualization-img">
+                    <h3>Subjects Popularity</h3>
+                    <img src="visualizations/subjects_popularity.png" alt="Subjects Popularity" class="visualization-img">
+                    <h3>Points by House</h3>
+                    <img src="visualizations/points_by_house.png" alt="Points by House" class="visualization-img">
+                    <h3>Gender Distribution</h3>
+                    <img src="visualizations/gender_distribution.png" alt="Gender Distribution" class="visualization-img">
+                    <h3>Quidditch Teams</h3>
+                    <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams" class="visualization-img">
+                </div>
+
+                <!-- Performance Analysis -->
+                <button type="button" class="collapsible">Performance Analysis</button>
+                <div class="content">
+                    <table>
+                        <tr>
+                            <th>Query Type</th>
+                            <th>Description</th>
+                            <th>Execution Time</th>
+                            <th>Rows Processed</th>
+                        </tr>
+        
+                        <tr class="success">
+                            <td>Simple SELECT</td>
+                            <td>Basic select query on students table</td>
+                            <td>0.0032 seconds</td>
+                            <td>1000</td>
+                        </tr>
+        
+                        <tr class="success">
+                            <td>Complex JOIN</td>
+                            <td>Complex join between students, grades, and subjects</td>
+                            <td>0.0058 seconds</td>
+                            <td>1000</td>
+                        </tr>
+        
+                        <tr class="success">
+                            <td>Aggregation</td>
+                            <td>Complex aggregation with grouping and having</td>
+                            <td>0.0011 seconds</td>
+                            <td>4</td>
+                        </tr>
+        
+                        <tr class="success">
+                            <td>Nested Subquery</td>
+                            <td>Complex nested subquery with multiple conditions</td>
+                            <td>0.0046 seconds</td>
+                            <td>36</td>
+                        </tr>
+        
+                        <tr class="success">
+                            <td>Transaction - Batch Insert</td>
+                            <td>Insert multiple grades with transaction control</td>
+                            <td>0.0274 seconds</td>
+                            <td>100</td>
+                        </tr>
+        
+                        <tr class="success">
+                            <td>Transaction - Batch Update</td>
+                            <td>Update multiple grades with transaction control</td>
+                            <td>0.0087 seconds</td>
+                            <td>1000</td>
+                        </tr>
+        
+                        <tr class="success">
+                            <td>Transaction - Complex Delete</td>
+                            <td>Delete with complex conditions and restore data</td>
+                            <td>0.2075 seconds</td>
+                            <td>1000</td>
+                        </tr>
+        
+                        <tr class="success">
+                            <td>Full Table Scan Analysis</td>
+                            <td>Analyze grade distribution with full table scan</td>
+                            <td>0.0052 seconds</td>
+                            <td>6</td>
+                        </tr>
+        
+                    </table>
+                </div>
+
+                <!-- Data Wizard -->
+                <button type="button" class="collapsible">Data Wizard 🧙‍♂️</button>
+                <div class="content wizard-section">
+                    <h3>Generate and Manage Data</h3>
+                    <p>Use these magical buttons to manage your Hogwarts database:</p>
+                    <button onclick="generateConfig()" class="wizard-button">Generate Configuration 📝</button>
+                    <button onclick="generateData()" class="wizard-button">Generate Test Data 🎲</button>
+                    <button onclick="importData()" class="wizard-button">Import Data to Database 📥</button>
+                    <button onclick="clearDatabase()" class="wizard-button">Clear Database 🧹</button>
+                    <button onclick="runTests()" class="wizard-button">Run Performance Tests ⚡</button>
+                    <div id="wizardStatus"></div>
+                </div>
+
+                <script>
+                    // Collapsible sections
+                    var coll = document.getElementsByClassName("collapsible");
+                    for (var i = 0; i < coll.length; i++) {
+                        coll[i].addEventListener("click", function() {
+                            this.classList.toggle("active");
+                            var content = this.nextElementSibling;
+                            if (content.style.display === "block") {
+                                content.style.display = "none";
+                            } else {
+                                content.style.display = "block";
+                            }
+                        });
+                    }
+
+                    // Wizard functions
+                    async function showStatus(message, isError = false) {
+                        const statusDiv = document.getElementById('wizardStatus');
+                        statusDiv.innerHTML = `<div class="${isError ? 'error' : 'success'}">${message}</div>`;
+                    }
+
+                    async function makeRequest(endpoint, message) {
+                        try {
+                            const response = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                            });
+                            const data = await response.json();
+                            
+                            if (data.status === 'success') {
+                                showStatus(data.loading_message || message);
+                                if (endpoint === '/run_tests') {
+                                    setTimeout(() => window.location.reload(), 2000);
+                                }
+                            } else {
+                                showStatus(data.message || 'An error occurred', true);
+                            }
+                        } catch (error) {
+                            showStatus(`Error: ${error.message}`, true);
+                        }
+                    }
+
+                    async function generateConfig() {
+                        await makeRequest('/generate_config', '🧙‍♂️ Configuration generated successfully!');
+                    }
+
+                    async function generateData() {
+                        await makeRequest('/generate_data', '🎲 Test data generated successfully!');
+                    }
+
+                    async function importData() {
+                        await makeRequest('/import_data', '📥 Data imported successfully!');
+                    }
+
+                    async function clearDatabase() {
+                        if (confirm('Are you sure you want to clear the database? This action cannot be undone!')) {
+                            await makeRequest('/clear_database', '🧹 Database cleared successfully!');
+                        }
+                    }
+
+                    async function runTests() {
+                        await makeRequest('/run_tests', '⚡ Running performance tests...');
+                    }
+
+                    // Open first section by default
+                    document.getElementsByClassName("collapsible")[0].click();
+                </script>
             </div>
-
-            <!-- Data Wizard -->
-            <button type="button" class="collapsible">Data Wizard 🧙‍♂️</button>
-            <div class="content wizard-section">
-                <h3>Generate and Manage Data</h3>
-                <p>Use these magical buttons to manage your Hogwarts database:</p>
-                <button onclick="generateConfig()" class="wizard-button">Generate Configuration 📝</button>
-                <button onclick="generateData()" class="wizard-button">Generate Test Data 🎲</button>
-                <button onclick="importData()" class="wizard-button">Import Data to Database 📥</button>
-                <button onclick="clearDatabase()" class="wizard-button">Clear Database 🧹</button>
-                <button onclick="runTests()" class="wizard-button">Run Performance Tests ⚡</button>
-                <div id="wizardStatus"></div>
-            </div>
-
-            <div id="progress-messages"></div>
-
-            <script>
-                    let updateInterval;
-                    let lastUpdate = 0;
-                    const UPDATE_INTERVAL = 5000; // Update every 5 seconds
-
-                    function updateStatistics() {
-                        const now = Date.now();
-                        if (now - lastUpdate < UPDATE_INTERVAL) {
-                            return; // Skip if too soon
-                        }
-                        lastUpdate = now;
-
-                        fetch('/run_tests')
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error(`HTTP error! status: ${response.status}`);
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                if (data.status === 'success') {
-                                    // Update table counts
-                                    document.getElementById('teachers-count').textContent = data.stats.teachers || 0;
-                                    document.getElementById('houses-count').textContent = data.stats.houses || 0;
-                                    document.getElementById('dormitories-count').textContent = data.stats.dormitories || 0;
-                                    document.getElementById('students-count').textContent = data.stats.students || 0;
-                                    document.getElementById('subjects-count').textContent = data.stats.subjects || 0;
-                                    document.getElementById('grades-count').textContent = data.stats.grades || 0;
-                                    document.getElementById('points-count').textContent = data.stats.points || 0;
-                                    document.getElementById('quidditch-count').textContent = data.stats.quidditch_team_members || 0;
-
-                                    // Update performance metrics
-                                    if (data.performance) {
-                                        const metrics = {
-                                            'simple-select-time': data.performance.simple_select,
-                                            'complex-join-time': data.performance.complex_join,
-                                            'aggregation-time': data.performance.aggregation,
-                                            'nested-subquery-time': data.performance.nested_subquery,
-                                            'batch-insert-time': data.performance.batch_insert,
-                                            'batch-update-time': data.performance.batch_update,
-                                            'complex-delete-time': data.performance.complex_delete,
-                                            'full-table-scan-time': data.performance.full_table_scan
-                                        };
-
-                                        for (const [id, value] of Object.entries(metrics)) {
-                                            const element = document.getElementById(id);
-                                            if (element && value !== undefined) {
-                                                if (typeof value === 'number') {
-                                                    element.textContent = `${value.toFixed(4)} seconds`;
-                                                    // Jeśli test się powiódł, ustaw klasę success
-                                                    element.parentElement.classList.remove('error');
-                                                    element.parentElement.classList.add('success');
-                                                } else if (typeof value === 'string' && value.startsWith('Error')) {
-                                                    element.textContent = 'Error';
-                                                    // Jeśli test się nie powiódł, ustaw klasę error
-                                                    element.parentElement.classList.remove('success');
-                                                    element.parentElement.classList.add('error');
-                                                }
-                                            }
-                                        }
-
-                                        // Aktualizuj liczby przetworzonych wierszy
-                                        const rowMetrics = {
-                                            'simple-select-rows': data.performance.simple_select_rows,
-                                            'complex-join-rows': data.performance.complex_join_rows,
-                                            'aggregation-rows': data.performance.aggregation_rows,
-                                            'nested-subquery-rows': data.performance.nested_subquery_rows,
-                                            'batch-insert-rows': data.performance.batch_insert_rows,
-                                            'batch-update-rows': data.performance.batch_update_rows,
-                                            'complex-delete-rows': data.performance.complex_delete_rows,
-                                            'full-table-scan-rows': data.performance.full_table_scan_rows
-                                        };
-
-                                        for (const [id, value] of Object.entries(rowMetrics)) {
-                                            const cells = document.querySelectorAll('table tr td');
-                                            for (let i = 0; i < cells.length; i++) {
-                                                if (cells[i].id === id) {
-                                                    cells[i].textContent = value;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    console.error('Error in response:', data.message);
-                                    addProgressMessage(data.message, true);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error updating statistics:', error);
-                                addProgressMessage(`Error updating statistics: ${error.message}`, true);
-                            });
-                    }
-
-                    function addProgressMessage(message, isError = false) {
-                        const progressDiv = document.getElementById('progress-messages');
-                        const messageElement = document.createElement('div');
-                        messageElement.className = isError ? 'progress-message error' : 'progress-message';
-                        messageElement.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-                        progressDiv.appendChild(messageElement);
-                        progressDiv.scrollTop = progressDiv.scrollHeight;
-                    }
-
-                    // Socket.IO connection
-                    const socket = io();
-                    socket.on('connect', () => {
-                        console.log('Connected to server');
-                        addProgressMessage('Connected to server');
-                    });
-                    socket.on('disconnect', () => {
-                        console.log('Disconnected from server');
-                        addProgressMessage('Disconnected from server', true);
-                    });
-                    socket.on('progress', function(data) {
-                        if (data.type === 'progress') {
-                            addProgressMessage(data.message, data.message.toLowerCase().includes('error'));
-                        }
-                    });
-
-                    // Function for collapsible elements
-                    function setupCollapsibles() {
-                        const coll = document.getElementsByClassName("collapsible");
-                        if (!coll || coll.length === 0) {
-                            console.error("No collapsible elements found");
-                            return;
-                        }
-                        
-                        console.log(`Found ${coll.length} collapsible elements`);
-                        for (let i = 0; i < coll.length; i++) {
-                            if (!coll[i]) continue;
-                            
-                            // Reset onclick to avoid duplication
-                            coll[i].onclick = null;
-                            
-                            // Add event listener with safety checks
-                            coll[i].addEventListener("click", function() {
-                                if (!this) return;
-                                
-                                this.classList.toggle("active");
-                                const content = this.nextElementSibling;
-                                
-                                if (!content) {
-                                    console.error("No content element found after collapsible");
-                                    return;
-                                }
-                                
-                                if (content.style.display === "block") {
-                                    content.style.display = "none";
-                                } else {
-                                    content.style.display = "block";
-                                    
-                                    // If we're opening the performance section, reinitialize clickable rows
-                                    if (this.textContent && this.textContent.includes("Performance Analysis")) {
-                                        console.log("Performance Analysis section opened, reinitializing click handlers");
-                                        setTimeout(function() {
-                                            initializeClickHandlers();
-                                        }, 100);
-                                    }
-                                }
-                            });
-                        }
-                    }
-                    
-                    // Simplified click handler initialization
-                    function initializeClickHandlers() {
-                        console.log("Initializing click handlers");
-                        
-                        try {
-                            // Buttons in the table
-                            const detailButtons = document.querySelectorAll('.wizard-button.details-btn');
-                            if (detailButtons && detailButtons.length > 0) {
-                                detailButtons.forEach(button => {
-                                    if (!button) return;
-                                    
-                                    // Get testId directly from the button
-                                    const testId = button.getAttribute('data-test');
-                                    if (!testId) {
-                                        console.warn("Button without data-test attribute", button);
-                                        return;
-                                    }
-                                    
-                                    console.log(`Adding direct click handler to button for test ${testId}`);
-                                    
-                                    // Remove onclick to avoid duplication issues
-                                    button.onclick = null;
-                                    
-                                    // Add a simple onclick handler for each button
-                                    button.onclick = function(event) {
-                                        console.log("Button clicked for test:", testId);
-                                        if (event) event.stopPropagation();
-                                        showTestDetails(testId);
-                                        return false;
-                                    };
-                                });
-                            } else {
-                                console.log("No detail buttons found yet");
-                            }
-                            
-                            // Table rows
-                            const tableRows = document.querySelectorAll('tr.clickable');
-                            if (tableRows && tableRows.length > 0) {
-                                tableRows.forEach(row => {
-                                    if (!row) return;
-                                    
-                                    const testId = row.getAttribute('data-test');
-                                    if (!testId) {
-                                        console.warn("Row without data-test attribute", row);
-                                        return;
-                                    }
-                                    
-                                    console.log(`Adding direct click handler to row for test ${testId}`);
-                                    
-                                    // Remove onclick to avoid duplication issues
-                                    row.onclick = null;
-                                    
-                                    // Add a simple onclick handler for each row
-                                    row.onclick = function(event) {
-                                        // Check if the click is not on a button
-                                        if (event && event.target && !event.target.classList.contains('details-btn')) {
-                                            console.log("Row clicked for test:", testId);
-                                            showTestDetails(testId);
-                                        }
-                                    };
-                                });
-                            } else {
-                                console.log("No clickable rows found yet");
-                            }
-                            
-                            // Modal window
-                            const modal = document.getElementById('testDetailsModal');
-                            const closeModal = document.querySelector('.close-modal');
-                            
-                            if (modal && closeModal) {
-                                console.log("Setting up modal close handlers");
-                                
-                                // Reset onclick to avoid duplication
-                                closeModal.onclick = null;
-                                
-                                // Handler for the X close button
-                                closeModal.onclick = function() {
-                                    console.log("Close button clicked");
-                                    modal.style.display = 'none';
-                                };
-                                
-                                // Handler for clicking outside the modal
-                                window.onclick = function(event) {
-                                    if (event && event.target === modal) {
-                                        console.log("Clicked outside modal");
-                                        modal.style.display = 'none';
-                                    }
-                                };
-                            } else {
-                                console.log("Modal elements not found yet");
-                            }
-                        } catch (error) {
-                            console.error("Error initializing click handlers:", error);
-                        }
-                    }
-                    
-                    // Function displaying test details
-                    function showTestDetails(testId) {
-                        console.log("showTestDetails called for test ID:", testId);
-                        const details = testDetails[testId];
-                        if (!details) {
-                            console.error("No details found for test ID:", testId);
-                            return;
-                        }
-                        
-                        const timeElement = document.getElementById(`${testId}-time`);
-                        const rowsElement = document.getElementById(`${testId}-rows`);
-                        
-                        if (!timeElement || !rowsElement) {
-                            console.error("Time or rows element not found:", {
-                                timeElementId: `${testId}-time`,
-                                rowsElementId: `${testId}-rows`,
-                                timeElement,
-                                rowsElement
-                            });
-                        }
-                        
-                        console.log("Filling modal with details:", details);
-                        
-                        try {
-                            // Fill data in the modal window
-                            document.getElementById('testDetailTitle').textContent = details.title;
-                            document.getElementById('detailDescription').textContent = details.description;
-                            document.getElementById('detailSql').textContent = details.sql;
-                            document.getElementById('detailExplanation').textContent = details.explanation;
-                            
-                            // Fill statistics
-                            document.getElementById('detailExecutionTime').textContent = timeElement ? timeElement.textContent : 'N/A';
-                            document.getElementById('detailRowsProcessed').textContent = rowsElement ? rowsElement.textContent : 'N/A';
-                            
-                            // Calculate and display data percentage
-                            let totalRows = 0;
-                            if (details.tableName.includes('students')) {
-                                totalRows = parseInt(document.getElementById('students-count').textContent) || 0;
-                            } else if (details.tableName.includes('grades')) {
-                                totalRows = parseInt(document.getElementById('grades-count').textContent) || 0;
-                            }
-                            
-                            let percentage = 0;
-                            if (totalRows > 0) {
-                                const processedRows = parseInt(rowsElement ? rowsElement.textContent : '0') || 0;
-                                percentage = ((processedRows / totalRows) * 100).toFixed(2);
-                            }
-                            
-                            document.getElementById('detailDataPercentage').textContent = `${percentage}%`;
-                            
-                            // Show the modal window
-                            const modal = document.getElementById('testDetailsModal');
-                            if (modal) {
-                                console.log("Showing modal");
-                                modal.style.display = 'block';
-                            } else {
-                                console.error("Modal element not found");
-                            }
-                        } catch (error) {
-                            console.error("Error showing test details:", error);
-                        }
-                    }
-                    
-                    // Test details data
-                    const testDetails = {
-                        'simple-select': {
-                            title: 'Simple SELECT',
-                            description: 'This test performs a simple SELECT query, retrieving data from the students table with a row limit.',
-                            sql: 'SELECT * FROM students WHERE rownum <= {limit}',
-                            explanation: 'This test measures the basic performance of the database for simple SELECT queries. It is a fundamental operation in databases that allows data retrieval from a single table. The test checks the access speed to the students table and the efficiency of the database engine for sequential data reading. The row limit is set to 10-30% of the total number of students in the database.',
-                            tableName: 'students'
-                        },
-                        'complex-join': {
-                            title: 'Complex JOIN',
-                            description: 'This test performs a complex query with multiple JOIN operations, connecting students, houses, and grades tables.',
-                            sql: 'SELECT s.name, h.name as house_name, g.value as grade\nFROM students s\nJOIN houses h ON s.house_id = h.id\nJOIN grades g ON s.id = g.student_id\nWHERE rownum <= {limit}',
-                            explanation: 'JOIN operations are among the most expensive operations in databases, especially when combining multiple tables. This test checks the database performance when executing complex joins between the students, houses, and grades tables. The system must find matching records in different tables based on foreign keys. The test simulates a typical analytical query that combines student data, their houses, and grades.',
-                            tableName: 'students, houses, grades'
-                        },
-                        'aggregation': {
-                            title: 'Data Aggregation',
-                            description: 'This test performs a query with COUNT() aggregation functions and groups results by house name.',
-                            sql: 'SELECT h.name, COUNT(*) as student_count\nFROM students s\nJOIN houses h ON s.house_id = h.id\nGROUP BY h.name',
-                            explanation: 'Aggregation functions such as COUNT(), SUM(), AVG() are frequently used in data analysis and reporting. This test measures database performance when executing aggregating queries that process large amounts of data and generate summaries. The query calculates the number of students in each Hogwarts house, which requires scanning the entire students table, grouping results by house, and then counting records in each group.',
-                            tableName: 'students, houses'
-                        },
-                        'nested-subquery': {
-                            title: 'Nested Subquery',
-                            description: 'This test performs a query with a nested subquery that searches for students with specific grades.',
-                            sql: 'SELECT name FROM students\nWHERE id IN (\n    SELECT student_id FROM grades\n    WHERE value = \'A\'\n    AND rownum <= {limit}\n)\nAND rownum <= {limit}',
-                            explanation: 'Nested subqueries are an advanced SQL feature that allows creating more complex queries. This test checks database performance when executing queries with subqueries, which often require complex internal processing. In this case, the system must first execute a subquery to find student IDs with an "A" grade, and then use these IDs in the main query. This requires additional memory and processing time.',
-                            tableName: 'students, grades'
-                        },
-                        'batch-insert': {
-                            title: 'Transaction - Batch Insert',
-                            description: 'This test creates a temporary table and performs a series of INSERT operations within a single transaction.',
-                            sql: 'CREATE TABLE test_grades_{uuid} (\n    id NUMBER PRIMARY KEY,\n    value VARCHAR2(2),\n    award_date DATE,\n    student_id NUMBER,\n    subject_id NUMBER,\n    teacher_id NUMBER\n);\n\n-- Then performs multiple INSERT operations:\nINSERT INTO test_grades_{uuid} VALUES (...);',
-                            explanation: 'Batch data insertion is a key operation for systems that must regularly import or generate large amounts of new data. This test measures database performance when executing multiple INSERT operations within a single transaction. The system must manage data blocks, indexes, and ensure data consistency while adding multiple records. The test simulates a scenario of importing student grades into the system.',
-                            tableName: 'test_grades (temporary)'
-                        },
-                        'batch-update': {
-                            title: 'Transaction - Batch Update',
-                            description: 'This test creates a temporary table with copies of student data, then performs an UPDATE operation on multiple rows.',
-                            sql: 'CREATE TABLE test_students_{uuid} (\n    id NUMBER PRIMARY KEY,\n    name VARCHAR2(100),\n    gender CHAR(1),\n    house_id NUMBER,\n    dormitory_id NUMBER\n);\n\n-- Copying data:\nINSERT INTO test_students_{uuid} SELECT * FROM students WHERE rownum <= {limit};\n\n-- Update:\nUPDATE test_students_{uuid} SET gender = gender;',
-                            explanation: 'Data update operations are common in database systems, especially in transactional systems. This test measures database performance when executing UPDATE operations on multiple rows simultaneously. The system must read existing data, apply changes, and write updated values while managing data blocks, indexes, and ensuring consistency. The test updates all records in a temporary table, simulating a mass update operation of student data.',
-                            tableName: 'test_students (temporary)'
-                        },
-                        'complex-delete': {
-                            title: 'Transaction - Complex Delete',
-                            description: 'This test creates a temporary table with copies of grades, then performs a DELETE operation with a conditional subquery.',
-                            sql: 'CREATE TABLE test_delete_{uuid} (\n    id NUMBER PRIMARY KEY,\n    value VARCHAR2(2),\n    award_date DATE,\n    student_id NUMBER,\n    subject_id NUMBER,\n    teacher_id NUMBER\n);\n\n-- Copying data:\nINSERT INTO test_delete_{uuid} SELECT * FROM grades WHERE rownum <= {limit};\n\n-- Complex deletion:\nDELETE FROM test_delete_{uuid}\nWHERE student_id IN (\n    SELECT student_id FROM test_delete_{uuid}\n    WHERE value = \'P\'\n);',
-                            explanation: 'Deleting data based on complex conditions is an advanced database operation. This test checks database performance when executing DELETE operations with a subquery, which requires complex processing logic. The system must first find students with a specific grade, then delete all their grades. This requires multiple read operations, query execution path planning, and efficient data deletion management. The test deletes data from a temporary table, so it does not affect actual data in the database.',
-                            tableName: 'test_delete (temporary)'
-                        },
-                        'full-table-scan': {
-                            title: 'Full Table Scan Analysis',
-                            description: 'This test performs a complicated analytical query that requires a full scan of several tables and statistical calculations.',
-                            sql: 'SELECT h.name, COUNT(*) as student_count, AVG(CASE\n    WHEN g.value = \'O\' THEN 6\n    WHEN g.value = \'E\' THEN 5\n    WHEN g.value = \'A\' THEN 4\n    WHEN g.value = \'P\' THEN 3\n    WHEN g.value = \'D\' THEN 2\n    WHEN g.value = \'T\' THEN 1\n    ELSE 0\nEND) as avg_grade\nFROM houses h\nLEFT JOIN students s ON h.id = s.house_id\nLEFT JOIN grades g ON s.id = g.student_id\nGROUP BY h.name',
-                            explanation: 'A full table scan is an operation where the database must examine every row in a table, which can be very expensive for large tables. This test measures database performance when executing a complex analytical query that requires a full scan of the houses, students, and grades tables. The query calculates the number of students and average grade for each house, requiring advanced calculations and aggregation. This simulates typical reporting and data analysis operations frequently performed in database systems.',
-                            tableName: 'houses, students, grades'
-                        }
-                    };
-                    
-                    // IMPORTANT: All initializations and scripts are now moved to the end
-                    // First function definitions, then initialization after DOM loading
-                    
-                    // Main initialization at DOMContentLoaded
-                    document.addEventListener('DOMContentLoaded', function() {
-                        console.log("DOMContentLoaded event fired");
-                        
-                        try {
-                            // Initialize all functions and interactions
-                            updateStatistics();
-                            setupCollapsibles(); 
-                            
-                            // Set up click handlers for buttons
-                            document.querySelectorAll('.wizard-button.details-btn').forEach(button => {
-                                const testId = button.getAttribute('data-test');
-                                if (testId) {
-                                    // Remove existing onclick (set in HTML) and add new, simpler one
-                                    button.removeAttribute('onclick');
-                                    button.addEventListener('click', function(e) {
-                                        e.stopPropagation();
-                                        showTestDetails(testId);
-                                    });
-                                    console.log(`Set up click handler for button ${testId}`);
-                                }
-                            });
-                            
-                            // Set up click handlers for rows
-                            document.querySelectorAll('tr.clickable').forEach(row => {
-                                const testId = row.getAttribute('data-test');
-                                if (testId) {
-                                    row.addEventListener('click', function(e) {
-                                        // If the click is not on a button
-                                        if (!e.target.classList.contains('details-btn')) {
-                                            showTestDetails(testId);
-                                        }
-                                    });
-                                    console.log(`Set up click handler for row ${testId}`);
-                                }
-                            });
-                            
-                            // Modal window close handlers
-                            const modal = document.getElementById('testDetailsModal');
-                            const closeModal = document.querySelector('.close-modal');
-                            
-                            if (modal && closeModal) {
-                                closeModal.addEventListener('click', function() {
-                                    modal.style.display = 'none';
-                                });
-                                
-                                window.addEventListener('click', function(e) {
-                                    if (e.target === modal) {
-                                        modal.style.display = 'none';
-                                    }
-                                });
-                                
-                                console.log("Modal close handlers set up");
-                            }
-                            
-                            // Set interval for statistics updates
-                            updateInterval = setInterval(updateStatistics, UPDATE_INTERVAL);
-                            
-                            // Finally, after all initializations, test the function
-                            setTimeout(function() {
-                                try {
-                                    console.log("Testing direct modal function call");
-                                    showTestDetails('simple-select');
-                                    setTimeout(() => {
-                                        if (modal) modal.style.display = 'none';
-                                    }, 500);
-                                } catch (err) {
-                                    console.error("Test failed:", err);
-                                }
-                            }, 1000);
-                            
-                        } catch (error) {
-                            console.error("Error during initialization:", error);
-                        }
-                    });
-                    
-                    // Clear interval when page is closed
-                    window.addEventListener('beforeunload', function() {
-                        if (updateInterval) {
-                            clearInterval(updateInterval);
-                        }
-                    });
-            </script>
-        </div>
-    </body>
-    </html>
-    
+        </body>
+        </html>
+        

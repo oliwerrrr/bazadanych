@@ -5,8 +5,10 @@ import csv
 import json
 import signal
 import sys
-from datetime import datetime
+import numpy as np
+from datetime import datetime, timedelta
 from tqdm import tqdm
+from scipy.stats import truncnorm
 
 # Get absolute paths
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -147,29 +149,159 @@ def verify_foreign_keys(filename, foreign_key_col, reference_file, reference_col
         debug_print(f"ERROR: Failed to verify foreign keys in {filename}: {str(e)}")
         return False
 
-# Date format: YYYY-MM-DD
-def random_date(start_date, end_date):
-    try:
-        start_year = int(start_date.split('-')[0])
-        end_year = int(end_date.split('-')[0])
-        
-        year = random.randint(start_year, end_year)
-        month = random.randint(1, 12)
-        
-        if month in [4, 6, 9, 11]:
-            day = random.randint(1, 30)
-        elif month == 2:
-            if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
-                day = random.randint(1, 29)
-            else:
-                day = random.randint(1, 28)
+# Helper functions for number to words conversion
+def number_to_words(n):
+    """Convert a number to words (simple implementation for 0-10)"""
+    words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+    if 0 <= n <= 10:
+        return words[n]
+    return str(n)
+
+# Helper function for truncated normal distribution
+def get_truncated_normal(mean=0, sd=1, low=0, upp=10):
+    """Return a truncated normal distribution"""
+    return truncnorm((low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd)
+
+# Helper functions for points generation
+def days():
+    """Return a varied time description or empty string"""
+    if random.random() > 0.3:
+        n = random.randint(-3, 7)
+        if n <= 0:
+            return "Today "
+        if n == 1:
+            return "Yesterday "
+        if n == 7:
+            return "A week ago "
+        return f"{number_to_words(n).capitalize()} days ago "
+    return ""
+
+# Vocabulary lists for generating varied descriptions
+verbsShowed = ['demonstrated', 'showed', 'gave a demonstration of', 'expressed', 'answered the question']
+verbsExplained = ['explained', 'discussed', 'illustrated', 'presented']
+nounsTopic = ['topic', 'subject', 'problem', 'subject matter', 'concept', 'spell']
+adjectives = ['','','','great', 'exceptional', 'extraordinary', 'prominent', 'appreciable', 'notable', 'noteworthy', 'outstanding']
+nouns = ['knowledge', 'skills', 'passion', 'understanding', 'comprehension', 'mastery', 'capability', 'awareness', 'intuition']
+
+verbsWas = ['was', 'proved to be', 'happened to be', 'remained', 'continued to be', 'started being']
+adverbsNegative = ['','','','','', 'highly', 'very', 'slightly', 'surprisingly', "completely", "totally", "utterly", "highly", "entirely",
+    "extremely", "remarkably", "particularly", "exceptionally",
+    "incredibly", "overly", "excessively", "notoriously",
+    "horribly", "ridiculously", "shockingly", "unbelievably",
+    "wildly", "absurdly", "insanely"]
+adjectivesNegative = [
+    "impatient", "harsh", "rude", "dismissive", "condescending",
+    "unfair", "inconsiderate", "insensitive", "arrogant",
+    "strict", "cold", "indifferent", "apathetic", "unsupportive",
+    "intolerant", "disrespectful", "critical", "demeaning",
+    "hostile", "aggressive", "patronizing", "inflexible",
+    "unapproachable", "manipulative", "negligent", "unhelpful"
+]
+adverbsPositive = [
+    "very", "extremely", "incredibly", "exceptionally", "remarkably",
+    "highly", "truly", "deeply", "especially", "hugely",
+    "amazingly", "immensely", "profoundly", "outstandingly",
+    "extraordinarily", "tremendously", "wonderfully", "notably",
+    "genuinely", "wholeheartedly", "sincerely", "thoughtfully"
+]
+adjectivesPositive = [
+    "patient", "kind", "understanding", "supportive", "encouraging",
+    "respectful", "compassionate", "considerate", "fair", "attentive",
+    "nurturing", "dedicated", "motivating", "thoughtful",
+    "approachable", "friendly", "caring", "empathetic",
+    "generous", "tolerant", "uplifting", "trustworthy", "inspiring",
+    "helpful", "gentle", "wise"
+]
+
+# More specific negative actions from original code
+negativeActions = [
+    "was caught running in the corridors",
+    "arrived late to class",
+    "failed to complete homework assignment",
+    "disrupted class with inappropriate joke",
+    "was found wandering after curfew",
+    "used magic in the corridors between classes",
+    "spoke disrespectfully to a professor",
+    "skipped class without permission",
+    "caused a cauldron to explode in Potions",
+    "released a Dungbomb in the Great Hall",
+    "was caught in a restricted section without permission",
+    "used a forbidden spell",
+    "sent a cursed note to another student",
+    "attempted to enter the Forbidden Forest",
+    "threw food during mealtime"
+]
+
+def positiveDesc():
+    """Return a varied positive point description"""
+    result = ""
+    if random.random() > 0.35:
+        if random.random() > 0.5:
+            result = f" {random.choice(verbsShowed)} {random.choice(adjectives)} {random.choice(nouns)}"
+            if random.random() > 0.5:
+                result += f" of the {random.choice(nounsTopic)}"
         else:
-            day = random.randint(1, 31)
+            result = f" {random.choice(verbsExplained)} the {random.choice(nounsTopic)}"
+            if random.random() > 0.5:
+                result += f" with {random.choice(adjectives)} {random.choice(nouns)}"
+    else:
+        result = f" {random.choice(verbsWas)} {random.choice(adverbsPositive)} {random.choice(adjectivesPositive)}"
+    return result + "."
+
+def negativeDesc():
+    """Return a varied negative point description"""
+    if random.random() > 0.6:
+        # Use specific negative actions
+        return f" {random.choice(negativeActions)}."
+    else:
+        # Use general negative descriptions
+        return f" {random.choice(verbsWas)} {random.choice(adverbsNegative)} {random.choice(adjectivesNegative)}."
+
+# Modified date generation that's more versatile
+def random_date(start_date, end_date):
+    """Generate random date between start_date and end_date using direct date calculation."""
+    try:
+        # Parsuj daty wejściowe
+        start_year, start_month, start_day = map(int, start_date.split('-'))
+        end_year, end_month, end_day = map(int, end_date.split('-'))
         
+        # Prostsze podejście: najpierw wybierz losowy rok
+        year = random.randint(start_year, end_year)
+        
+        # Wybierz losowy miesiąc - jeśli to pierwszy lub ostatni rok, weź pod uwagę ograniczenia
+        if year == start_year and year == end_year:
+            month = random.randint(start_month, end_month)
+        elif year == start_year:
+            month = random.randint(start_month, 12)
+        elif year == end_year:
+            month = random.randint(1, end_month)
+        else:
+            month = random.randint(1, 12)
+            
+        # Wybierz losowy dzień - weź pod uwagę liczbę dni w miesiącu
+        if month in [4, 6, 9, 11]:
+            max_day = 30
+        elif month == 2:
+            if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+                max_day = 29  # rok przestępny
+            else:
+                max_day = 28
+        else:
+            max_day = 31
+            
+        if year == start_year and month == start_month and year == end_year and month == end_month:
+            day = random.randint(start_day, min(end_day, max_day))
+        elif year == start_year and month == start_month:
+            day = random.randint(start_day, max_day)
+        elif year == end_year and month == end_month:
+            day = random.randint(1, min(end_day, max_day))
+        else:
+            day = random.randint(1, max_day)
+            
         return f"{year:04d}-{month:02d}-{day:02d}"
     except Exception as e:
         debug_print(f"ERROR: Failed to generate random date: {str(e)}")
-        return f"{start_year:04d}-01-01"  # Return a safe default date
+        return "2000-01-01"  # Bezpieczna wartość domyślna
 
 def main():
     global stop_process
@@ -401,17 +533,40 @@ def main():
         with open(os.path.join(DATA_DIR, "students.csv"), "r", newline='', encoding='utf-8') as students_file:
             reader = csv.DictReader(students_file, delimiter=';')
             for row in reader:
-                students_data[int(row['id'])] = int(row['year'])
+                students_data[int(row['id'])] = {
+                    'year': int(row['year']),
+                    'house_id': int(row['house_id']),
+                    'gender': row['gender']
+                }
 
         with open(os.path.join(DATA_DIR, "subjects.csv"), "r", newline='', encoding='utf-8') as subjects_file:
             reader = csv.DictReader(subjects_file, delimiter=';')
             for row in reader:
                 subjects_data[int(row['id'])] = {
                     'year': int(row['year']),
-                    'name': row['name']
+                    'name': row['name'],
+                    'teacher_id': int(row['teacher_id'])
                 }
 
         debug_print(f"Loaded data for {len(students_data)} students and {len(subjects_data)} subjects")
+
+        # Określ które przedmioty są obowiązkowe w zależności od roku nauki
+        core_subjects_by_year = {
+            1: ["Transfiguration", "Charms", "Potions", "History of Magic", "Defence Against the Dark Arts", "Astronomy", "Herbology", "Flying"],
+            2: ["Transfiguration", "Charms", "Potions", "History of Magic", "Defence Against the Dark Arts", "Astronomy", "Herbology"],
+            3: ["Transfiguration", "Charms", "Potions", "History of Magic", "Defence Against the Dark Arts"],
+            4: ["Transfiguration", "Charms", "Potions", "History of Magic", "Defence Against the Dark Arts"],
+            5: ["Transfiguration", "Charms", "Potions", "Defence Against the Dark Arts"],
+            6: ["Defence Against the Dark Arts"],
+            7: ["Defence Against the Dark Arts"]
+        }
+        
+        # Klasyfikacja przedmiotów na obowiązkowe i opcjonalne dla danego roku
+        def is_core_subject(subject_name, year):
+            for core in core_subjects_by_year.get(year, []):
+                if core in subject_name:
+                    return True
+            return False
 
         student_subject_pairs = set()
         with open(os.path.join(DATA_DIR, "students_subjects.csv"), "w", newline='', encoding='utf-8') as students_subjects_file:
@@ -423,16 +578,80 @@ def main():
                 if i % 1000 == 0:  # Show progress every 1000 students
                     debug_print(f"Processed {i}/{total_students} students")
                 
-                year = students_data[student_id]
+                student_year = students_data[student_id]['year']
+                student_house = students_data[student_id]['house_id']
+                student_gender = students_data[student_id]['gender']
                 
-                # Assign subjects for the given year
+                # Generuj cechy osobowości i preferencje studenta
+                academic_preference = random.random()  # 0-1, gdzie wyższa wartość oznacza większe zainteresowanie nauką
+                attendance_rate = random.random() * 0.5 + 0.5  # 0.5-1.0, im wyższa tym lepiej student uczęszcza na zajęcia
+                practical_vs_theory = random.random()  # 0-1, gdzie wyższa wartość oznacza preferencję dla zajęć praktycznych
+                
+                # Wygeneruj listę przedmiotów, które student szczególnie lubi i których nie lubi
+                all_subjects = list(subjects_data.keys())
+                favorite_subjects = random.sample(all_subjects, min(3, len(all_subjects)))
+                disliked_subjects = random.sample([s for s in all_subjects if s not in favorite_subjects], min(3, len(all_subjects)))
+                
+                # Przedmioty dla danego roku
                 for subject_id, subject_info in subjects_data.items():
-                    if subject_info['year'] == year:
-                        if year >= 3 and "Year" not in subject_info['name']:
-                            if random.random() > 0.7:
-                                continue
-                        student_subject_pairs.add((student_id, subject_id))
-                        writer.writerow([student_id, subject_id])
+                    if subject_info['year'] == student_year:
+                        is_core = is_core_subject(subject_info['name'], student_year)
+                        is_favorite = subject_id in favorite_subjects
+                        is_disliked = subject_id in disliked_subjects
+                        
+                        # Bazowe prawdopodobieństwo wyboru przedmiotu
+                        base_probability = 0.0
+                        
+                        # Modyfikatory prawdopodobieństwa
+                        if is_core:
+                            if student_year <= 3:
+                                # W początkowych latach przedmioty obowiązkowe mają wysokie bazowe prawdopodobieństwo
+                                base_probability = 0.80 + (attendance_rate * 0.15)
+                            else:
+                                # W późniejszych latach mniejsze, ale wciąż znaczące prawdopodobieństwo
+                                base_probability = 0.65 + (attendance_rate * 0.15)
+                        else:
+                            # Przedmioty nieobowiązkowe mają niskie bazowe prawdopodobieństwo
+                            base_probability = 0.25 + (academic_preference * 0.25)
+                        
+                        # Modyfikatory za ulubione i nielubiane przedmioty
+                        if is_favorite:
+                            base_probability += 0.35  # Duży wzrost za ulubiony przedmiot
+                        if is_disliked:
+                            base_probability -= 0.30  # Duży spadek za nielubiany przedmiot
+                        
+                        # Modyfikatory za praktyczne vs teoretyczne przedmioty
+                        is_practical = any(practical in subject_info['name'].lower() for practical in ["defence", "charms", "transfiguration", "potions", "flying", "creatures", "herbology"])
+                        if is_practical and practical_vs_theory > 0.6:
+                            base_probability += 0.15  # Bonus dla uczniów preferujących praktykę
+                        elif not is_practical and practical_vs_theory < 0.4:
+                            base_probability += 0.15  # Bonus dla uczniów preferujących teorię
+                        
+                        # Modyfikatory specjalne dla domów
+                        if "Divination" in subject_info['name']:
+                            if student_house == 2:  # Ravenclaw
+                                base_probability -= 0.10  # Krukoni są sceptyczni wobec wróżbiarstwa
+                        elif "History of Magic" in subject_info['name']:
+                            if student_house == 0:  # Gryffindor
+                                base_probability -= 0.15  # Gryfoni mniej interesują się historią
+                        elif "Potions" in subject_info['name']:
+                            if student_house == 3:  # Slytherin
+                                base_probability += 0.15  # Ślizgoni preferują eliksiry
+                        elif "Care of Magical Creatures" in subject_info['name']:
+                            if student_house == 1:  # Hufflepuff
+                                base_probability += 0.20  # Puchoni preferują opiekę nad magicznymi stworzeniami
+                        
+                        # Wprowadź element kompletnej losowości
+                        random_factor = random.random() * 0.30 - 0.15  # -0.15 do +0.15 losowej zmiany
+                        final_probability = base_probability + random_factor
+                        
+                        # Ogranicz prawdopodobieństwo do zakresu 0.0-1.0
+                        final_probability = max(0.0, min(1.0, final_probability))
+                        
+                        # Ostateczna decyzja
+                        if random.random() < final_probability:
+                            student_subject_pairs.add((student_id, subject_id))
+                            writer.writerow([student_id, subject_id])
 
         debug_print(f"Generated {count_rows_in_file('students_subjects.csv')} subject assignments")
         verify_foreign_keys('students_subjects.csv', 'student_id', 'students.csv', 'id')
@@ -453,13 +672,34 @@ def main():
 
         debug_print(f"Loaded teacher data for {len(subject_teachers)} subjects")
 
-        # Generate grades
+        # Przygotuj mapowanie ocen na wartości numeryczne (dla rozkładu normalnego)
+        # O = Outstanding (najlepsza) -> odpowiada 5
+        # E = Exceeds Expectations -> odpowiada 4
+        # A = Acceptable -> odpowiada 3
+        # P = Poor -> odpowiada 2
+        # D = Dreadful -> odpowiada 1
+        # T = Troll (najgorsza) -> odpowiada 0
+        grade_to_numeric = {
+            'O': 5,
+            'E': 4,
+            'A': 3,
+            'P': 2,
+            'D': 1,
+            'T': 0
+        }
+        numeric_to_grade = {v: k for k, v in grade_to_numeric.items()}
+        
+        # Generuj oceny
         with open(os.path.join(DATA_DIR, "grades.csv"), "w", newline='', encoding='utf-8') as grades_file:
             writer = csv.writer(grades_file, delimiter=';')
             writer.writerow(["id", "value", "award_date", "student_id", "subject_id", "teacher_id"])
             
             grade_id = 0
             total_pairs = len(student_subject_pairs)
+            
+            # Utwórz rozkład normalny z średnią 3 (odpowiada ocenie 'A') i odchyleniem 1
+            # Obetnij do zakresu 0-5 (odpowiada T-O)
+            grade_distribution = get_truncated_normal(mean=3, sd=1, low=0, upp=5)
             
             for i, (student_id, subject_id) in enumerate(student_subject_pairs, 1):
                 if i % 10000 == 0:  # Show progress every 10000 pairs
@@ -469,7 +709,11 @@ def main():
                 teacher_id = subject_teachers[subject_id]
                 
                 for _ in range(num_grades):
-                    value = random.choice(CONFIG['grade_values'])
+                    # Generuj wartość numeryczną z rozkładu normalnego i zaokrąglij do najbliższej liczby całkowitej
+                    numeric_value = round(grade_distribution.rvs())
+                    # Mapuj wartość numeryczną na symbol oceny
+                    value = numeric_to_grade[numeric_value]
+                    
                     award_date = random_date("2023-09-01", "2024-06-30")
                     writer.writerow([grade_id, value, award_date, student_id, subject_id, teacher_id])
                     grade_id += 1
@@ -482,38 +726,105 @@ def main():
         # 8. Points
         check_stop()
         debug_print("Generating points...")
+        
+        # First, load student names and house information for more descriptive point reasons
+        student_data = {}
+        with open(os.path.join(DATA_DIR, "students.csv"), "r", newline='', encoding='utf-8') as students_file:
+            reader = csv.DictReader(students_file, delimiter=';')
+            for row in reader:
+                student_data[int(row['id'])] = {
+                    'name': f"{row['name']} {row['surname']}",
+                    'house_id': int(row['house_id'])
+                }
+        
+        # Przypisz specjalne cechy do domów, które wpłyną na rozkład punktów
+        house_point_bias = {
+            0: {'positive_chance': 0.45, 'positive_mean': 10, 'positive_sd': 6, 'negative_mean': -8, 'negative_sd': 5},  # Gryffindor - ekstremalne wartości, więcej negatywnych
+            1: {'positive_chance': 0.70, 'positive_mean': 3, 'positive_sd': 2, 'negative_mean': -3, 'negative_sd': 1},  # Hufflepuff - małe wartości
+            2: {'positive_chance': 0.75, 'positive_mean': 5, 'positive_sd': 3, 'negative_mean': -3, 'negative_sd': 2},  # Ravenclaw - umiarkowane wartości
+            3: {'positive_chance': 0.35, 'positive_mean': 8, 'positive_sd': 5, 'negative_mean': -7, 'negative_sd': 4}   # Slytherin - dużo negatywnych punktów
+        }
+        
         with open(os.path.join(DATA_DIR, "points.csv"), "w", newline='', encoding='utf-8') as points_file:
             writer = csv.writer(points_file, delimiter=';')
             writer.writerow(["id", "value", "description", "award_date", "student_id", "teacher_id"])
             
+            # Generuj proporcjonalnie więcej lub mniej punktów dla różnych domów
+            house_points_count = {
+                0: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 1.3),    # Gryffindor - dużo więcej punktów
+                1: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 0.7),    # Hufflepuff - mniej punktów
+                2: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 0.8),    # Ravenclaw - mniej punktów
+                3: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 1.5)     # Slytherin - najwięcej punktów
+            }
+            
+            # Stwórz rozkłady normalne dla każdego domu
+            dist_by_house = {}
+            for house_id, bias in house_point_bias.items():
+                dist_by_house[house_id] = {
+                    'positive': get_truncated_normal(
+                        mean=bias['positive_mean'], 
+                        sd=bias['positive_sd'], 
+                        low=1, 
+                        upp=CONFIG['max_points']
+                    ),
+                    'negative': get_truncated_normal(
+                        mean=bias['negative_mean'], 
+                        sd=bias['negative_sd'], 
+                        low=CONFIG['min_points'], 
+                        upp=-1
+                    )
+                }
+            
+            # Generuj punkty dla każdego domu
             points_id = 0
-            for _ in range(CONFIG['nStudents'] * CONFIG['pointsPerStudent']):
-                student_id = random.choice(student_ids)
-                teacher_id = random.choice(teacher_ids)
-                value = random.randint(CONFIG['min_points'], CONFIG['max_points'])
+            total_points = sum(house_points_count.values())
+            progress_bar = tqdm(total=total_points, desc="Generating points", file=sys.stdout)
+            
+            for house_id, n_points in house_points_count.items():
+                # Znajdź wszystkich studentów z tego domu
+                students_in_house = [
+                    student_id for student_id, data in student_data.items() 
+                    if data['house_id'] == house_id
+                ]
                 
-                if value > 0:
-                    descriptions = [
-                        "Excellent classwork", 
-                        "Helping another student", 
-                        "Answering correctly in class",
-                        "Outstanding spell performance",
-                        "Bravery in difficult situation"
-                    ]
-                else:
-                    descriptions = [
-                        "Breaking school rules",
-                        "Being late to class",
-                        "Disrespecting a teacher",
-                        "Being out after curfew",
-                        "Using magic in corridors"
-                    ]
+                if not students_in_house:
+                    debug_print(f"WARNING: No students found for house {house_id}")
+                    continue
                 
-                description = random.choice(descriptions)
-                award_date = random_date("2023-09-01", "2024-06-30")
+                # Generuj punkty dla tego domu
+                house_bias = house_point_bias[house_id]
+                house_dists = dist_by_house[house_id]
                 
-                writer.writerow([points_id, value, description, award_date, student_id, teacher_id])
-                points_id += 1
+                for i in range(n_points):
+                    if stop_process:
+                        return
+                    
+                    # Określ czy przyznać punkty pozytywne czy negatywne na podstawie domu
+                    is_positive = random.random() < house_bias['positive_chance']
+                    
+                    if is_positive:
+                        v = round(house_dists['positive'].rvs())
+                    else:
+                        v = round(house_dists['negative'].rvs())
+                    
+                    student_id = random.choice(students_in_house)
+                    teacher_id = random.choice(teacher_ids)
+                    award_date = random_date("2023-09-01", "2024-06-30")
+                    
+                    # Generate descriptive reason
+                    student_name = student_data[student_id]['name']
+                    description = days() + student_name
+                    
+                    if v > 0:
+                        description += positiveDesc()
+                    else:
+                        description += negativeDesc()
+                    
+                    writer.writerow([points_id, v, description, award_date, student_id, teacher_id])
+                    points_id += 1
+                    progress_bar.update(1)
+            
+            progress_bar.close()
 
         debug_print(f"Generated {count_rows_in_file('points.csv')} points")
         verify_foreign_keys('points.csv', 'student_id', 'students.csv', 'id')

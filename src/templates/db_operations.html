@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Database Operations{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Database Operations</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h2 class="h5 mb-0">Statystyki operacji bazodanowych</h2>
+        </div>
+        <div class="card-body">
+            <p>Poniżej znajdują się czasy wykonania poszczególnych operacji na bazie danych:</p>
+            
+            <div class="mb-4">
+                <h5>Dostępne operacje:</h5>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <button id="generateBtn" class="btn btn-primary">Generuj dane</button>
+                    <button id="clearBtn" class="btn btn-danger">Wyczyść bazę</button>
+                    <button id="loadBtn" class="btn btn-success">Załaduj dane</button>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <h5>Statystyki czasowe:</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Operacja</th>
+                                <th>Czas wykonania (sekundy)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Generowanie danych</td>
+                                <td id="generate-time">{{ stats.generate_time if stats.generate_time is not none else "-" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Czyszczenie bazy</td>
+                                <td id="clear-time">{{ stats.clear_time if stats.clear_time is not none else "-" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Ładowanie danych</td>
+                                <td id="load-time">{{ stats.load_time if stats.load_time is not none else "-" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-muted" id="last-updated">
+                    {% if stats.last_updated %}
+                        Ostatnia aktualizacja: {{ stats.last_updated }}
+                    {% endif %}
+                </p>
+            </div>
+            
+            <div id="operation-output" class="border rounded p-3 mb-3 bg-light" style="max-height: 300px; overflow-y: auto; display: none;">
+                <pre id="output-content"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="stats-data" type="application/json">
+    {{ stats|tojson }}
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const loadBtn = document.getElementById('loadBtn');
+        
+        const outputDiv = document.getElementById('operation-output');
+        const outputContent = document.getElementById('output-content');
+        
+        function updateStats(stats) {
+            if (stats.generate_time !== null) {
+                document.getElementById('generate-time').textContent = stats.generate_time + ' s';
+            }
+            if (stats.clear_time !== null) {
+                document.getElementById('clear-time').textContent = stats.clear_time + ' s';
+            }
+            if (stats.load_time !== null) {
+                document.getElementById('load-time').textContent = stats.load_time + ' s';
+            }
+            if (stats.last_updated !== null) {
+                document.getElementById('last-updated').textContent = 'Ostatnia aktualizacja: ' + stats.last_updated;
+            }
+        }
+        
+        function runOperation(operation, btnElement) {
+            // Disable button and show loading
+            btnElement.disabled = true;
+            btnElement.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Przetwarzanie...';
+            
+            outputDiv.style.display = 'block';
+            outputContent.textContent = 'Uruchamianie operacji...';
+            
+            // Send the request
+            const formData = new FormData();
+            formData.append('operation', operation);
+            
+            fetch('/db_operations', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update button state
+                btnElement.disabled = false;
+                btnElement.textContent = btnElement.textContent.replace('Przetwarzanie...', operation === 'generate' ? 'Generuj dane' : (operation === 'clear' ? 'Wyczyść bazę' : 'Załaduj dane'));
+                
+                // Update stats and output
+                if (data.success) {
+                    updateStats(data.stats);
+                    outputContent.textContent = data.output || 'Operacja zakończona pomyślnie';
+                } else {
+                    outputContent.textContent = 'Błąd: ' + data.message;
+                }
+            })
+            .catch(error => {
+                // Handle errors
+                btnElement.disabled = false;
+                btnElement.textContent = btnElement.textContent.replace('Przetwarzanie...', operation === 'generate' ? 'Generuj dane' : (operation === 'clear' ? 'Wyczyść bazę' : 'Załaduj dane'));
+                outputContent.textContent = 'Błąd wykonania operacji: ' + error.message;
+                console.error('Error:', error);
+            });
+        }
+        
+        // Event listeners for buttons
+        generateBtn.addEventListener('click', function() {
+            runOperation('generate', this);
+        });
+        
+        clearBtn.addEventListener('click', function() {
+            runOperation('clear', this);
+        });
+        
+        loadBtn.addEventListener('click', function() {
+            runOperation('load', this);
+        });
+    });
+</script>
+{% endblock %} 

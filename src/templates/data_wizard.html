@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}Data Wizard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Data Wizard</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h5 mb-0">Configuration Generator</h2>
+        </div>
+        <div class="card-body">
+            <p>Generate configuration for Hogwarts database setup:</p>
+            <form action="/generate_config" method="post" class="mb-3">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="form-group">
+                            <label for="nTeachers">Number of Teachers:</label>
+                            <input type="number" class="form-control" id="nTeachers" name="nTeachers" value="100" min="10" max="1000">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-group">
+                            <label for="nStudents">Number of Students:</label>
+                            <input type="number" class="form-control" id="nStudents" name="nStudents" value="10000" min="100" max="100000">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-group">
+                            <label for="female_percentage">Female Percentage:</label>
+                            <input type="number" class="form-control" id="female_percentage" name="female_percentage" value="50" min="0" max="100">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-group">
+                            <label for="pointsPerStudent">Points Per Student:</label>
+                            <input type="number" class="form-control" id="pointsPerStudent" name="pointsPerStudent" value="3" min="1" max="20">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Configuration</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h2 class="h5 mb-0">Generated Data</h2>
+        </div>
+        <div class="card-body">
+            <p>Generate sample data for Hogwarts database:</p>
+            <form action="/generate_data" method="post" class="mb-3">
+                <button type="submit" class="btn btn-success">Generate Data</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h2 class="h5 mb-0">Import Data</h2>
+        </div>
+        <div class="card-body">
+            <p>Import generated data into Oracle database:</p>
+            <form action="/import_data" method="post" class="mb-3">
+                <button type="submit" class="btn btn-info">Import Data</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <h2 class="h5 mb-0">Clear Database</h2>
+        </div>
+        <div class="card-body">
+            <p>Clear all data from Hogwarts database:</p>
+            <form action="/clear_data" method="post" class="mb-3">
+                <button type="submit" class="btn btn-danger">Clear Database</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Nowa sekcja do mierzenia czasu operacji -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h2 class="h5 mb-0">Statystyki operacji bazodanowych</h2>
+        </div>
+        <div class="card-body">
+            <p>Wykonaj i zmierz czas podstawowych operacji na bazie danych:</p>
+            
+            <div class="mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Dostępne operacje:</h5>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <button id="generateBtn" class="btn btn-primary">
+                                <i class="bi bi-file-earmark-plus"></i> Generuj dane
+                            </button>
+                            <button id="clearBtn" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Wyczyść bazę
+                            </button>
+                            <button id="loadBtn" class="btn btn-success">
+                                <i class="bi bi-cloud-upload"></i> Załaduj dane
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>Liczba rekordów w bazie:</h5>
+                        <div id="db-stats" class="small text-muted">
+                            <div>Ładowanie statystyk bazy danych...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <h5>Statystyki czasowe:</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Operacja</th>
+                                <th>Czas wykonania (sekundy)</th>
+                                <th>Opis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Generowanie danych</strong></td>
+                                <td id="generate-time">-</td>
+                                <td>Czas potrzebny na wygenerowanie plików CSV z przykładowymi danymi</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Czyszczenie bazy</strong></td>
+                                <td id="clear-time">-</td>
+                                <td>Czas potrzebny na usunięcie wszystkich rekordów z bazy danych</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ładowanie danych</strong></td>
+                                <td id="load-time">-</td>
+                                <td>Czas potrzebny na import danych z plików CSV do bazy danych</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Generowanie wizualizacji</strong></td>
+                                <td id="visualize-time">-</td>
+                                <td>Czas potrzebny na wygenerowanie wykresów na podstawie danych w bazie</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-muted" id="last-updated"></p>
+            </div>
+            
+            <div id="operation-output" class="border rounded p-3 mb-3 bg-light" style="max-height: 300px; overflow-y: auto; display: none;">
+                <h6 class="mb-3">Wynik operacji:</h6>
+                <pre id="output-content" class="mb-0"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Obsługa przycisków i aktualizacji statystyk
+    document.addEventListener('DOMContentLoaded', function() {
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const loadBtn = document.getElementById('loadBtn');
+        
+        const outputDiv = document.getElementById('operation-output');
+        const outputContent = document.getElementById('output-content');
+        const dbStatsDiv = document.getElementById('db-stats');
+        
+        function updateStats(stats) {
+            if (stats.generate_time !== null) {
+                document.getElementById('generate-time').textContent = stats.generate_time + ' s';
+            }
+            if (stats.clear_time !== null) {
+                document.getElementById('clear-time').textContent = stats.clear_time + ' s';
+            }
+            if (stats.load_time !== null) {
+                document.getElementById('load-time').textContent = stats.load_time + ' s';
+            }
+            if (stats.visualize_time !== null) {
+                document.getElementById('visualize-time').textContent = stats.visualize_time + ' s';
+            }
+            if (stats.last_updated !== null) {
+                document.getElementById('last-updated').textContent = 'Ostatnia aktualizacja: ' + stats.last_updated;
+            }
+        }
+        
+        // Pobierz początkowe statystyki
+        fetch('/db_operations')
+            .then(response => response.json())
+            .then(stats => {
+                updateStats(stats);
+            })
+            .catch(err => console.error('Failed to fetch stats:', err));
+        
+        // Pobierz statystyki bazy danych
+        function updateDbStats() {
+            fetch('/api/db_stats')
+                .then(response => response.json())
+                .then(stats => {
+                    let html = '';
+                    if (stats && typeof stats === 'object') {
+                        html += '<table class="table table-sm">';
+                        html += '<tbody>';
+                        for (let table in stats) {
+                            if (stats.hasOwnProperty(table)) {
+                                html += `<tr><td>${table}</td><td>${stats[table]} rekordów</td></tr>`;
+                            }
+                        }
+                        html += '</tbody></table>';
+                    } else {
+                        html = '<div>Brak danych statystycznych</div>';
+                    }
+                    dbStatsDiv.innerHTML = html;
+                })
+                .catch(err => {
+                    dbStatsDiv.innerHTML = '<div class="text-danger">Błąd pobierania statystyk: ' + err.message + '</div>';
+                    console.error('Failed to fetch DB stats:', err);
+                });
+        }
+        
+        // Pobierz statystyki przy ładowaniu strony
+        updateDbStats();
+        
+        function runOperation(operation, btnElement) {
+            // Disable button and show loading
+            btnElement.disabled = true;
+            btnElement.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Przetwarzanie...';
+            
+            outputDiv.style.display = 'block';
+            outputContent.textContent = 'Uruchamianie operacji...';
+            
+            // Send the request
+            const formData = new FormData();
+            formData.append('operation', operation);
+            
+            fetch('/db_operations', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update button state
+                btnElement.disabled = false;
+                btnElement.textContent = operation === 'generate' ? 'Generuj dane' : (operation === 'clear' ? 'Wyczyść bazę' : 'Załaduj dane');
+                
+                // Update stats and output
+                if (data.success) {
+                    updateStats(data.stats);
+                    outputContent.textContent = data.output || 'Operacja zakończona pomyślnie';
+                    
+                    // Aktualizuj statystyki bazy danych
+                    updateDbStats();
+                } else {
+                    outputContent.textContent = 'Błąd: ' + data.message;
+                }
+            })
+            .catch(error => {
+                // Handle errors
+                btnElement.disabled = false;
+                btnElement.textContent = operation === 'generate' ? 'Generuj dane' : (operation === 'clear' ? 'Wyczyść bazę' : 'Załaduj dane');
+                outputContent.textContent = 'Błąd wykonania operacji: ' + error.message;
+                console.error('Error:', error);
+            });
+        }
+        
+        // Event listeners for buttons
+        generateBtn.addEventListener('click', function() {
+            runOperation('generate', this);
+        });
+        
+        clearBtn.addEventListener('click', function() {
+            runOperation('clear', this);
+        });
+        
+        loadBtn.addEventListener('click', function() {
+            runOperation('load', this);
+        });
+    });
+</script>
+{% endblock %} 

@@ -1,38 +1,39 @@
-# System Zarządzania Hogwartem
+# Hogwarts Database Management System
 
-Ten projekt zawiera system zarządzania danymi Hogwartu, w tym informacje o uczniach, nauczycielach, ocenach i innych aspektach szkoły.
+This project contains a comprehensive database management system for Hogwarts School of Witchcraft and Wizardry, including information about students, teachers, grades, and other aspects of the magical school.
 
-## Wymagania
+## Requirements
 
-- Python 3.8 lub nowszy
-- Oracle Database (XE lub nowsza wersja)
-- Pakiety Python:
+- Python 3.8 or newer
+- Oracle Database (XE or newer)
+- Python packages:
   - oracledb
   - pandas
   - matplotlib
   - seaborn
+  - tqdm
 
-## Instalacja
+## Installation
 
-1. Zainstaluj wymagane pakiety Python:
+1. Install required Python packages:
 ```bash
-pip install oracledb pandas matplotlib seaborn
+pip install oracledb pandas matplotlib seaborn tqdm
 ```
 
-2. Upewnij się, że masz skonfigurowaną bazę danych Oracle z następującymi danymi:
+2. Make sure your Oracle database is configured with:
    - Username: SYSTEM
    - Password: admin
    - Host: localhost
    - Port: 1521
    - Service: XE
 
-## Struktura projektu
+## Project Structure
 
-- `generate_hogwarts_data.py` - skrypt generujący przykładowe dane
-- `import_data.py` - skrypt importujący dane do bazy
-- `visualize_data.py` - skrypt wizualizujący dane
-- `clear_tables.sql` - skrypt SQL do czyszczenia tabel
-- `hogwarts_data/` - katalog z plikami CSV
+- `generate_hogwarts_data.py` - script for generating sample data
+- `import_data.py` - script for importing data into the database
+- `visualize_data.py` - script for data visualization
+- `clear_tables.sql` - SQL script for clearing tables
+- `hogwarts_data/` - directory containing CSV files
   - teachers.csv
   - houses.csv
   - dormitories.csv
@@ -43,26 +44,26 @@ pip install oracledb pandas matplotlib seaborn
   - points.csv
   - quidditch_team_members.csv
 
-## Użycie
+## Usage
 
-1. Generowanie danych:
+1. Generate data:
 ```bash
 python generate_hogwarts_data.py
 ```
 
-2. Import danych do bazy:
+2. Import data into the database:
 ```bash
 python import_data.py
 ```
 
-3. Wizualizacja danych:
+3. Visualize the data:
 ```bash
 python visualize_data.py
 ```
 
-## Struktura bazy danych
+## Database Structure
 
-### Tabele
+### Tables
 
 1. **teachers**
    - id (PK)
@@ -128,14 +129,39 @@ python visualize_data.py
    - is_captain
    - student_id (FK -> students)
 
-## Rozwiązywanie problemów
+## Data Generation Order
+The system generates data in this specific order to maintain data integrity:
+1. teachers.csv
+2. houses.csv
+3. dormitories.csv
+4. subjects.csv
+5. students.csv
+6. students_subjects.csv
+7. grades.csv
+8. points.csv
+9. quidditch_team_members.csv
 
-1. Jeśli występuje błąd połączenia z bazą danych:
-   - Sprawdź, czy serwer Oracle jest uruchomiony
-   - Upewnij się, że dane logowania są poprawne
-   - Sprawdź, czy port 1521 jest dostępny
+## Troubleshooting
 
-2. Jeśli występują błędy podczas importu:
-   - Sprawdź, czy wszystkie pliki CSV są w katalogu hogwarts_data
-   - Upewnij się, że format danych w plikach CSV jest poprawny
-   - Sprawdź, czy tabele w bazie danych zostały utworzone poprawnie 
+1. If you encounter database connection errors:
+   - Check if the Oracle server is running
+   - Verify login credentials
+   - Ensure port 1521 is available
+
+2. If you encounter import errors:
+   - Check if all CSV files exist in the hogwarts_data directory
+   - Verify CSV file formats
+   - Ensure database tables are properly created
+
+3. If you encounter data generation problems:
+   - Check if all required name files exist (feminineNames.csv, masculineNames.csv, surnames.csv)
+   - Verify hogwarts_config.json exists and is properly formatted
+   - Ensure you have sufficient disk space
+
+## Additional Notes
+- You can stop any process at any time using Ctrl+C
+- The system will safely clean up and save progress before stopping
+- All data is generated in English
+- The system maintains referential integrity between all tables
+- Progress bars show real-time status of operations
+- The system provides detailed logging of all operations 

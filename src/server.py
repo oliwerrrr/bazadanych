@@ -31,6 +31,12 @@ performance_stats = {
     "last_updated": None
 }
 
+# Przechowaj ostatnie wyniki testów
+last_test_results = {
+    "stats": {},
+    "performance": {}
+}
+
 def ensure_directories():
     """Create necessary directories if they don't exist"""
     os.makedirs(DOCS_DIR, exist_ok=True)
@@ -122,15 +128,20 @@ def emit_progress(message, data=None):
         'type': 'progress'  # Add type to distinguish progress messages
     })
 
-@app.route('/run_tests')
+@app.route('/run_tests', methods=['GET', 'POST'])
 def run_tests():
     try:
+        global last_test_results
+        
         # Utwórz pusty obiekt dla wyników
         results = {
             'status': 'success',
             'stats': {},
             'performance': {}
         }
+        
+        # Emit progress using WebSocket
+        emit_progress("Uruchamiam testy wydajnościowe...")
         
         # Load database statistics
         with get_db_connection() as conn:
@@ -140,6 +151,7 @@ def run_tests():
                     cursor.execute(f"SELECT COUNT(*) FROM {table}")
                     count = cursor.fetchone()[0]
                     results['stats'][table] = count
+                    emit_progress(f"Pobrano statystyki dla tabeli {table}: {count} rekordów")
                     print(f"Got stats for table {table}: {count}")
                 except Exception as e:
                     print(f"Error getting stats for {table}: {str(e)}")
@@ -147,6 +159,7 @@ def run_tests():
 
         # Run performance analysis
         print("Running performance analysis...")
+        emit_progress("Uruchamiam testy wydajnościowe SQL...")
         # Uruchom testy wydajnościowe i od razu zapisz wyniki
         results['performance'] = run_performance_analysis()
         
@@ -157,8 +170,21 @@ def run_tests():
                 results['performance'][key] = 0
                 results['performance'][f'{key}_rows'] = 0
         
+        # Zaktualizuj raport HTML z najnowszymi wynikami
+        try:
+            generate_html_report(results['stats'], results['performance'])
+            emit_progress("Raport HTML został zaktualizowany z najnowszymi wynikami")
+        except Exception as e:
+            print(f"Error generating HTML report: {str(e)}")
+            emit_progress(f"Ostrzeżenie: Nie udało się zaktualizować raportu HTML: {str(e)}")
+        
+        # Zapisz wyniki do zmiennej globalnej aby były dostępne przez API
+        last_test_results = results
+        
+        emit_progress("Testy zakończone pomyślnie!")
         return jsonify(results)
     except Exception as e:
+        emit_progress(f"Błąd podczas wykonywania testów: {str(e)}", {"error": True})
         print(f"Error in run_tests: {str(e)}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
@@ -449,163 +475,156 @@ def try_cleanup_table(conn, table_name):
     except:
         pass
 
-@app.route('/generate_config', methods=['POST'])
+@app.route('/generate_config', methods=['GET', 'POST'])
 def generate_config():
     try:
-        ensure_directories()
-        script_path = os.path.join(BASE_DIR, 'src', 'data_generation', 'config_generator.py')
-        if not os.path.exists(script_path):
-            raise Exception(f"Script not found: {script_path}")
-            
-        emit_progress("Generating configuration...")
-            
-        result = subprocess.run(
-            [sys.executable, script_path],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=BASE_DIR,
-            env={**os.environ, 'PYTHONPATH': BASE_DIR}
-        )
+        emit_progress(get_loading_message())
+        emit_progress("Generuję plik konfiguracyjny...")
         
-        print(f"Config generation output: {result.stdout}")
-        if result.stderr:
-            print(f"Config generation errors: {result.stderr}")
-            
-        emit_progress("Configuration generated successfully")
+        # Get current timestamp for performance measurement
+        start_time = time.time()
         
-        return jsonify({
-            "status": "success", 
-            "message": "Configuration generated successfully",
-            "loading_message": get_loading_message()
-        })
-    except subprocess.CalledProcessError as e:
-        print(f"Error in generate_config: {str(e)}")
-        print(f"Process output: {e.output}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        # Run script to generate config
+        script_path = os.path.join(BASE_DIR, 'src', 'configuration', 'config_generator.py')
+        result = run_command(['python', script_path])
+        
+        # Update performance stats
+        performance_stats["generate_time"] = time.time() - start_time
+        performance_stats["last_updated"] = datetime.now().isoformat()
+        
+        if result['returncode'] == 0:
+            emit_progress("Konfiguracja została wygenerowana pomyślnie!")
+            return jsonify({
+                'status': 'success',
+                'message': 'Configuration generated successfully',
+                'output': result['output']
+            })
+        else:
+            emit_progress(f"Błąd generowania konfiguracji: {result['error']}", {"error": True})
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to generate configuration',
+                'output': result['output'],
+                'error': result['error']
+            }), 500
     except Exception as e:
+        emit_progress(f"Błąd: {str(e)}", {"error": True})
         print(f"Error in generate_config: {str(e)}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
-@app.route('/generate_data')
+@app.route('/generate_data', methods=['GET', 'POST'])
 def generate_data():
     try:
-        script_path = os.path.join(DATABASE_DIR, 'generate_data.py')
-        if not os.path.exists(script_path):
-            raise Exception(f"Script not found: {script_path}")
-            
-        emit_progress("Generating data...")
-            
-        result = subprocess.run(
-            [sys.executable, script_path],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=BASE_DIR,
-            env={**os.environ, 'PYTHONPATH': BASE_DIR}
-        )
+        emit_progress(get_loading_message())
+        emit_progress("Generuję dane testowe...")
         
-        print(f"Data generation output: {result.stdout}")
-        if result.stderr:
-            print(f"Data generation errors: {result.stderr}")
-            
-        emit_progress("Data generated successfully")
-            
-        return jsonify({
-            "status": "success", 
-            "message": "Data generated successfully",
-            "loading_message": get_loading_message()
-        })
-    except subprocess.CalledProcessError as e:
-        print(f"Error in generate_data: {str(e)}")
-        print(f"Process output: {e.output}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        # Get current timestamp for performance measurement
+        start_time = time.time()
+        
+        # Run script to generate data
+        script_path = os.path.join(BASE_DIR, 'src', 'data_generation', 'generate_hogwarts_data.py')
+        result = run_command(['python', script_path])
+        
+        # Update performance stats
+        performance_stats["generate_time"] = time.time() - start_time
+        performance_stats["last_updated"] = datetime.now().isoformat()
+        
+        if result['returncode'] == 0:
+            emit_progress("Dane zostały wygenerowane pomyślnie!")
+            return jsonify({
+                'status': 'success',
+                'message': 'Data generated successfully',
+                'output': result['output'],
+                'time_taken': performance_stats["generate_time"]
+            })
+        else:
+            emit_progress(f"Błąd generowania danych: {result['error']}", {"error": True})
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to generate data',
+                'output': result['output'],
+                'error': result['error']
+            }), 500
     except Exception as e:
+        emit_progress(f"Błąd: {str(e)}", {"error": True})
         print(f"Error in generate_data: {str(e)}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
-@app.route('/import_data')
+@app.route('/import_data', methods=['GET', 'POST'])
 def import_data():
     try:
-        script_path = os.path.join(DATABASE_DIR, 'import_data.py')
-        if not os.path.exists(script_path):
-            raise Exception(f"Script not found: {script_path}")
-            
-        emit_progress("Importing data...")
-            
-        result = subprocess.run(
-            [sys.executable, script_path],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=BASE_DIR,
-            env={**os.environ, 'PYTHONPATH': BASE_DIR}
-        )
+        emit_progress(get_loading_message())
+        emit_progress("Importuję dane do bazy...")
         
-        print(f"Import output: {result.stdout}")
-        if result.stderr:
-            print(f"Import errors: {result.stderr}")
-            
-        emit_progress("Data imported successfully")
-            
-        return jsonify({
-            "status": "success", 
-            "message": "Data imported successfully",
-            "loading_message": get_loading_message()
-        })
-    except subprocess.CalledProcessError as e:
-        print(f"Error in import_data: {str(e)}")
-        print(f"Process output: {e.output}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        # Get current timestamp for performance measurement
+        start_time = time.time()
+        
+        # Run script to import data
+        script_path = os.path.join(BASE_DIR, 'src', 'database', 'import_data.py')
+        result = run_command(['python', script_path])
+        
+        # Update performance stats
+        performance_stats["load_time"] = time.time() - start_time
+        performance_stats["last_updated"] = datetime.now().isoformat()
+        
+        if result['returncode'] == 0:
+            emit_progress("Dane zostały zaimportowane pomyślnie!")
+            return jsonify({
+                'status': 'success',
+                'message': 'Data imported successfully',
+                'output': result['output'],
+                'time_taken': performance_stats["load_time"]
+            })
+        else:
+            emit_progress(f"Błąd importowania danych: {result['error']}", {"error": True})
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to import data',
+                'output': result['output'],
+                'error': result['error']
+            }), 500
     except Exception as e:
+        emit_progress(f"Błąd: {str(e)}", {"error": True})
         print(f"Error in import_data: {str(e)}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
-@app.route('/clear_database', methods=['POST'])
+@app.route('/clear_database', methods=['GET', 'POST'])
 def clear_database():
     try:
-        ensure_directories()
-        script_path = os.path.join(BASE_DIR, 'src', 'database', 'clear_database.py')
-        if not os.path.exists(script_path):
-            raise Exception(f"Script not found: {script_path}")
-            
-        emit_progress("Clearing database...")
-            
-        result = subprocess.run(
-            [sys.executable, script_path],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=BASE_DIR,
-            env={**os.environ, 'PYTHONPATH': BASE_DIR}
-        )
+        emit_progress(get_loading_message())
+        emit_progress("Czyszczę bazę danych...")
         
-        print(f"Clear database output: {result.stdout}")
-        if result.stderr:
-            print(f"Clear database errors: {result.stderr}")
-            
-        emit_progress("Database cleared successfully")
+        # Get current timestamp for performance measurement
+        start_time = time.time()
         
-        return jsonify({
-            "status": "success", 
-            "message": "Database cleared successfully",
-            "loading_message": get_loading_message()
-        })
-    except subprocess.CalledProcessError as e:
-        print(f"Error in clear_database: {str(e)}")
-        print(f"Process output: {e.output}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        # Run script to clear the database
+        script_path = os.path.join(BASE_DIR, 'src', 'database', 'clear_data.py')
+        result = run_command(['python', script_path])
+        
+        # Update performance stats
+        performance_stats["clear_time"] = time.time() - start_time
+        performance_stats["last_updated"] = datetime.now().isoformat()
+        
+        if result['returncode'] == 0:
+            emit_progress("Baza danych została wyczyszczona pomyślnie!")
+            return jsonify({
+                'status': 'success',
+                'message': 'Database cleared successfully',
+                'output': result['output'],
+                'time_taken': performance_stats["clear_time"]
+            })
+        else:
+            emit_progress(f"Błąd czyszczenia bazy danych: {result['error']}", {"error": True})
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to clear database',
+                'output': result['output'],
+                'error': result['error']
+            }), 500
     except Exception as e:
+        emit_progress(f"Błąd: {str(e)}", {"error": True})
         print(f"Error in clear_database: {str(e)}")
-        emit_progress(f"Error: {str(e)}", {'error': True})
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/docs/<path:filename>')
 def serve_docs(filename):
@@ -778,29 +797,43 @@ def db_stats():
     Endpoint to retrieve database statistics showing number of records in each table
     """
     try:
-        from src.database import oracle_connection
-        conn = oracle_connection.get_connection()
-        cursor = conn.cursor()
-        
-        tables = ['TEACHERS', 'HOUSES', 'DORMITORIES', 'STUDENTS', 
-                 'SUBJECTS', 'GRADES', 'POINTS', 'QUIDDITCH_TEAM_MEMBERS']
-        
-        results = {}
-        
-        for table in tables:
-            try:
-                cursor.execute(f"SELECT COUNT(*) FROM {table}")
-                count = cursor.fetchone()[0]
-                results[table.lower()] = count
-            except Exception as e:
-                print(f"Error getting count for table {table}: {str(e)}")
-                results[table.lower()] = 0
-        
-        conn.close()
-        return jsonify(results)
+        # Use a fresh connection to get the most recent data
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            
+            tables = ['TEACHERS', 'HOUSES', 'DORMITORIES', 'STUDENTS', 
+                      'SUBJECTS', 'GRADES', 'POINTS', 'QUIDDITCH_TEAM_MEMBERS']
+            
+            results = {}
+            
+            for table in tables:
+                try:
+                    cursor.execute(f"SELECT COUNT(*) FROM {table}")
+                    count = cursor.fetchone()[0]
+                    results[table.lower()] = count
+                    print(f"API: Got count for table {table}: {count}")
+                except Exception as e:
+                    print(f"API: Error getting count for table {table}: {str(e)}")
+                    results[table.lower()] = 0
+            
+            print("API: Returning fresh database statistics")
+            return jsonify(results)
     except Exception as e:
-        print(f"Error retrieving database stats: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        print(f"API: Error retrieving database stats: {str(e)}")
+        return jsonify({"error": str(e), "status": "error"}), 500
+
+@app.route('/api/performance_results')
+def get_performance_results():
+    """
+    Endpoint to retrieve the latest performance test results
+    """
+    try:
+        global last_test_results
+        print("API: Returning performance results")
+        return jsonify(last_test_results)
+    except Exception as e:
+        print(f"API: Error retrieving performance results: {str(e)}")
+        return jsonify({"error": str(e), "status": "error"}), 500
 
 if __name__ == '__main__':
     ensure_directories()

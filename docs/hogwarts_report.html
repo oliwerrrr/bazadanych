@@ -1,4 +1,3 @@
-
         <!DOCTYPE html>
         <html lang="pl">
         <head>
@@ -122,54 +121,14 @@
                 <h1>Hogwarts Database Report</h1>
                 
                 <!-- Database Statistics -->
-                <button type="button" class="collapsible">Database Statistics</button>
+                <button type="button" class="collapsible" id="stats-section">Database Statistics</button>
                 <div class="content">
-                    <table>
+                    <table id="stats-table">
                         <tr>
                             <th>Table</th>
                             <th>Row Count</th>
                         </tr>
-        
-                        <tr>
-                            <td>teachers</td>
-                            <td>111</td>
-                        </tr>
-        
-                        <tr>
-                            <td>houses</td>
-                            <td>4</td>
-                        </tr>
-        
-                        <tr>
-                            <td>dormitories</td>
-                            <td>111</td>
-                        </tr>
-        
-                        <tr>
-                            <td>students</td>
-                            <td>1000</td>
-                        </tr>
-        
-                        <tr>
-                            <td>subjects</td>
-                            <td>78</td>
-                        </tr>
-        
-                        <tr>
-                            <td>grades</td>
-                            <td>7270</td>
-                        </tr>
-        
-                        <tr>
-                            <td>points</td>
-                            <td>12900</td>
-                        </tr>
-        
-                        <tr>
-                            <td>quidditch</td>
-                            <td>39</td>
-                        </tr>
-        
+                        <tr><td colspan="2">Ładowanie statystyk...</td></tr>
                     </table>
                 </div>
 
@@ -200,72 +159,16 @@
                 </div>
 
                 <!-- Performance Analysis -->
-                <button type="button" class="collapsible">Performance Analysis</button>
+                <button type="button" class="collapsible" id="performance-section">Performance Analysis</button>
                 <div class="content">
-                    <table>
+                    <table id="performance-table">
                         <tr>
                             <th>Query Type</th>
                             <th>Description</th>
                             <th>Execution Time</th>
                             <th>Rows Processed</th>
                         </tr>
-        
-                        <tr class="success">
-                            <td>Simple SELECT</td>
-                            <td>Basic select query on students table</td>
-                            <td>0.0032 seconds</td>
-                            <td>1000</td>
-                        </tr>
-        
-                        <tr class="success">
-                            <td>Complex JOIN</td>
-                            <td>Complex join between students, grades, and subjects</td>
-                            <td>0.0058 seconds</td>
-                            <td>1000</td>
-                        </tr>
-        
-                        <tr class="success">
-                            <td>Aggregation</td>
-                            <td>Complex aggregation with grouping and having</td>
-                            <td>0.0011 seconds</td>
-                            <td>4</td>
-                        </tr>
-        
-                        <tr class="success">
-                            <td>Nested Subquery</td>
-                            <td>Complex nested subquery with multiple conditions</td>
-                            <td>0.0046 seconds</td>
-                            <td>36</td>
-                        </tr>
-        
-                        <tr class="success">
-                            <td>Transaction - Batch Insert</td>
-                            <td>Insert multiple grades with transaction control</td>
-                            <td>0.0274 seconds</td>
-                            <td>100</td>
-                        </tr>
-        
-                        <tr class="success">
-                            <td>Transaction - Batch Update</td>
-                            <td>Update multiple grades with transaction control</td>
-                            <td>0.0087 seconds</td>
-                            <td>1000</td>
-                        </tr>
-        
-                        <tr class="success">
-                            <td>Transaction - Complex Delete</td>
-                            <td>Delete with complex conditions and restore data</td>
-                            <td>0.2075 seconds</td>
-                            <td>1000</td>
-                        </tr>
-        
-                        <tr class="success">
-                            <td>Full Table Scan Analysis</td>
-                            <td>Analyze grade distribution with full table scan</td>
-                            <td>0.0052 seconds</td>
-                            <td>6</td>
-                        </tr>
-        
+                        <tr><td colspan="4">Najpierw uruchom testy wydajnościowe, aby zobaczyć wyniki...</td></tr>
                     </table>
                 </div>
 
@@ -283,6 +186,142 @@
                 </div>
 
                 <script>
+                    // Load database statistics dynamically
+                    async function loadDatabaseStats() {
+                        try {
+                            const response = await fetch('/api/db_stats', {
+                                method: 'GET',
+                                headers: {'Content-Type': 'application/json'}
+                            });
+                            
+                            if (!response.ok) {
+                                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                            }
+                            
+                            const data = await response.json();
+                            
+                            // Update the table with fresh data
+                            const table = document.getElementById('stats-table');
+                            
+                            // Clear existing rows except header
+                            while (table.rows.length > 1) {
+                                table.deleteRow(1);
+                            }
+                            
+                            // Add table rows
+                            const tables = {
+                                'teachers': 'teachers',
+                                'houses': 'houses',
+                                'dormitories': 'dormitories',
+                                'students': 'students',
+                                'subjects': 'subjects',
+                                'grades': 'grades',
+                                'points': 'points',
+                                'quidditch_team_members': 'quidditch'
+                            };
+                            
+                            for (const [apiKey, displayName] of Object.entries(tables)) {
+                                const row = table.insertRow();
+                                const cell1 = row.insertCell(0);
+                                const cell2 = row.insertCell(1);
+                                cell1.textContent = displayName;
+                                cell2.textContent = data[apiKey] || 0;
+                            }
+                            
+                        } catch (error) {
+                            console.error("Error loading database stats:", error);
+                            const table = document.getElementById('stats-table');
+                            if (table.rows.length > 1) {
+                                table.deleteRow(1);
+                            }
+                            const row = table.insertRow();
+                            const cell = row.insertCell(0);
+                            cell.colSpan = 2;
+                            cell.className = "error";
+                            cell.textContent = `Error loading statistics: ${error.message}`;
+                        }
+                    }
+
+                    // Load performance test results
+                    async function loadPerformanceResults() {
+                        try {
+                            const response = await fetch('/api/performance_results', {
+                                method: 'GET',
+                                headers: {'Content-Type': 'application/json'}
+                            });
+                            
+                            if (!response.ok) {
+                                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                            }
+                            
+                            const data = await response.json();
+                            
+                            // Update the table with fresh data
+                            const table = document.getElementById('performance-table');
+                            
+                            // Clear existing rows except header
+                            while (table.rows.length > 1) {
+                                table.deleteRow(1);
+                            }
+                            
+                            // If no performance results yet
+                            if (!data || !data.performance || Object.keys(data.performance).length === 0) {
+                                const row = table.insertRow();
+                                const cell = row.insertCell(0);
+                                cell.colSpan = 4;
+                                cell.textContent = "Najpierw uruchom testy wydajnościowe, aby zobaczyć wyniki...";
+                                return;
+                            }
+                            
+                            // Add performance results rows
+                            const testData = [
+                                {key: 'simple_select', name: 'Simple SELECT', description: 'Basic select query on students table'},
+                                {key: 'complex_join', name: 'Complex JOIN', description: 'Complex join between students, grades, and subjects'},
+                                {key: 'aggregation', name: 'Aggregation', description: 'Complex aggregation with grouping and having'},
+                                {key: 'nested_subquery', name: 'Nested Subquery', description: 'Complex nested subquery with multiple conditions'},
+                                {key: 'batch_insert', name: 'Transaction - Batch Insert', description: 'Insert multiple grades with transaction control'},
+                                {key: 'batch_update', name: 'Transaction - Batch Update', description: 'Update multiple grades with transaction control'},
+                                {key: 'complex_delete', name: 'Transaction - Complex Delete', description: 'Delete with complex conditions and restore data'},
+                                {key: 'full_table_scan', name: 'Full Table Scan Analysis', description: 'Analyze grade distribution with full table scan'}
+                            ];
+                            
+                            testData.forEach(test => {
+                                if (data.performance[test.key] !== undefined) {
+                                    const row = table.insertRow();
+                                    row.className = "success";
+                                    
+                                    const cell1 = row.insertCell(0);
+                                    const cell2 = row.insertCell(1);
+                                    const cell3 = row.insertCell(2);
+                                    const cell4 = row.insertCell(3);
+                                    
+                                    cell1.textContent = test.name;
+                                    cell2.textContent = test.description;
+                                    
+                                    const time = typeof data.performance[test.key] === 'number' 
+                                        ? data.performance[test.key].toFixed(4) + ' seconds'
+                                        : data.performance[test.key];
+                                    cell3.textContent = time;
+                                    
+                                    const rows = data.performance[test.key + '_rows'] || 0;
+                                    cell4.textContent = rows;
+                                }
+                            });
+                            
+                        } catch (error) {
+                            console.error("Error loading performance results:", error);
+                            const table = document.getElementById('performance-table');
+                            if (table.rows.length > 1) {
+                                table.deleteRow(1);
+                            }
+                            const row = table.insertRow();
+                            const cell = row.insertCell(0);
+                            cell.colSpan = 4;
+                            cell.className = "error";
+                            cell.textContent = `Error loading performance results: ${error.message}`;
+                        }
+                    }
+
                     // Collapsible sections
                     var coll = document.getElementsByClassName("collapsible");
                     for (var i = 0; i < coll.length; i++) {
@@ -293,6 +332,16 @@
                                 content.style.display = "none";
                             } else {
                                 content.style.display = "block";
+                                
+                                // If this is the statistics section, load fresh data
+                                if (this.id === "stats-section") {
+                                    loadDatabaseStats();
+                                }
+                                
+                                // If this is the performance section, load fresh data
+                                if (this.id === "performance-section") {
+                                    loadPerformanceResults();
+                                }
                             }
                         });
                     }
@@ -305,45 +354,65 @@
 
                     async function makeRequest(endpoint, message) {
                         try {
+                            showStatus(`🪄 ${message}...`);
                             const response = await fetch(endpoint, {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({})
                             });
+                            
+                            if (!response.ok) {
+                                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                            }
+                            
                             const data = await response.json();
                             
                             if (data.status === 'success') {
-                                showStatus(data.loading_message || message);
+                                showStatus(data.message || message);
+                                console.log("Operacja zakończona pomyślnie:", data);
+                                
+                                // After successful operation, refresh the stats
+                                loadDatabaseStats();
+                                
                                 if (endpoint === '/run_tests') {
-                                    setTimeout(() => window.location.reload(), 2000);
+                                    // Load performance results
+                                    loadPerformanceResults();
+                                    // Open the performance section automatically
+                                    const performanceSection = document.getElementById('performance-section');
+                                    if (performanceSection && performanceSection.nextElementSibling.style.display !== 'block') {
+                                        performanceSection.click();
+                                    }
                                 }
                             } else {
-                                showStatus(data.message || 'An error occurred', true);
+                                showStatus(data.message || 'Wystąpił błąd', true);
+                                console.error("Błąd:", data);
                             }
                         } catch (error) {
-                            showStatus(`Error: ${error.message}`, true);
+                            showStatus(`Błąd: ${error.message}`, true);
+                            console.error("Wyjątek:", error);
                         }
                     }
 
                     async function generateConfig() {
-                        await makeRequest('/generate_config', '🧙‍♂️ Configuration generated successfully!');
+                        await makeRequest('/generate_config', '🧙‍♂️ Generowanie konfiguracji');
                     }
 
                     async function generateData() {
-                        await makeRequest('/generate_data', '🎲 Test data generated successfully!');
+                        await makeRequest('/generate_data', '🎲 Generowanie danych testowych');
                     }
 
                     async function importData() {
-                        await makeRequest('/import_data', '📥 Data imported successfully!');
+                        await makeRequest('/import_data', '📥 Importowanie danych do bazy');
                     }
 
                     async function clearDatabase() {
-                        if (confirm('Are you sure you want to clear the database? This action cannot be undone!')) {
-                            await makeRequest('/clear_database', '🧹 Database cleared successfully!');
+                        if (confirm('Czy na pewno chcesz wyczyścić bazę danych? Ta operacja nie może być cofnięta!')) {
+                            await makeRequest('/clear_database', '🧹 Czyszczenie bazy danych');
                         }
                     }
 
                     async function runTests() {
-                        await makeRequest('/run_tests', '⚡ Running performance tests...');
+                        await makeRequest('/run_tests', '⚡ Uruchamianie testów wydajnościowych');
                     }
 
                     // Open first section by default

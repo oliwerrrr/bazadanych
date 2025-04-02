@@ -535,7 +535,8 @@ def main():
             for row in reader:
                 students_data[int(row['id'])] = {
                     'year': int(row['year']),
-                    'house_id': int(row['house_id'])
+                    'house_id': int(row['house_id']),
+                    'gender': row['gender']
                 }
 
         with open(os.path.join(DATA_DIR, "subjects.csv"), "r", newline='', encoding='utf-8') as subjects_file:
@@ -543,21 +544,26 @@ def main():
             for row in reader:
                 subjects_data[int(row['id'])] = {
                     'year': int(row['year']),
-                    'name': row['name']
+                    'name': row['name'],
+                    'teacher_id': int(row['teacher_id'])
                 }
 
         debug_print(f"Loaded data for {len(students_data)} students and {len(subjects_data)} subjects")
 
-        # Określ które przedmioty są obowiązkowe
-        core_subjects = [
-            "Transfiguration", "Charms", "Potions", 
-            "History of Magic", "Defence Against the Dark Arts", 
-            "Astronomy", "Herbology"
-        ]
+        # Określ które przedmioty są obowiązkowe w zależności od roku nauki
+        core_subjects_by_year = {
+            1: ["Transfiguration", "Charms", "Potions", "History of Magic", "Defence Against the Dark Arts", "Astronomy", "Herbology", "Flying"],
+            2: ["Transfiguration", "Charms", "Potions", "History of Magic", "Defence Against the Dark Arts", "Astronomy", "Herbology"],
+            3: ["Transfiguration", "Charms", "Potions", "History of Magic", "Defence Against the Dark Arts"],
+            4: ["Transfiguration", "Charms", "Potions", "History of Magic", "Defence Against the Dark Arts"],
+            5: ["Transfiguration", "Charms", "Potions", "Defence Against the Dark Arts"],
+            6: ["Defence Against the Dark Arts"],
+            7: ["Defence Against the Dark Arts"]
+        }
         
-        # Klasyfikacja przedmiotów na obowiązkowe i opcjonalne
-        def is_core_subject(subject_name):
-            for core in core_subjects:
+        # Klasyfikacja przedmiotów na obowiązkowe i opcjonalne dla danego roku
+        def is_core_subject(subject_name, year):
+            for core in core_subjects_by_year.get(year, []):
                 if core in subject_name:
                     return True
             return False
@@ -574,60 +580,76 @@ def main():
                 
                 student_year = students_data[student_id]['year']
                 student_house = students_data[student_id]['house_id']
+                student_gender = students_data[student_id]['gender']
                 
-                # Generuj "preferencje akademickie" studenta - determinuje skłonność do wybierania przedmiotów
+                # Generuj cechy osobowości i preferencje studenta
                 academic_preference = random.random()  # 0-1, gdzie wyższa wartość oznacza większe zainteresowanie nauką
+                attendance_rate = random.random() * 0.5 + 0.5  # 0.5-1.0, im wyższa tym lepiej student uczęszcza na zajęcia
+                practical_vs_theory = random.random()  # 0-1, gdzie wyższa wartość oznacza preferencję dla zajęć praktycznych
+                
+                # Wygeneruj listę przedmiotów, które student szczególnie lubi i których nie lubi
+                all_subjects = list(subjects_data.keys())
+                favorite_subjects = random.sample(all_subjects, min(3, len(all_subjects)))
+                disliked_subjects = random.sample([s for s in all_subjects if s not in favorite_subjects], min(3, len(all_subjects)))
                 
                 # Przedmioty dla danego roku
                 for subject_id, subject_info in subjects_data.items():
                     if subject_info['year'] == student_year:
-                        is_core = is_core_subject(subject_info['name'])
+                        is_core = is_core_subject(subject_info['name'], student_year)
+                        is_favorite = subject_id in favorite_subjects
+                        is_disliked = subject_id in disliked_subjects
                         
-                        # Logika przydzielania przedmiotów
-                        should_assign = False
+                        # Bazowe prawdopodobieństwo wyboru przedmiotu
+                        base_probability = 0.0
                         
-                        # Rok 1-2: niektóre przedmioty obowiązkowe, ale może być lekka losowość
-                        if student_year <= 2:
-                            if is_core:
-                                # Przedmioty obowiązkowe mają wysokie prawdopodobieństwo przypisania
-                                should_assign = random.random() < 0.95
+                        # Modyfikatory prawdopodobieństwa
+                        if is_core:
+                            if student_year <= 3:
+                                # W początkowych latach przedmioty obowiązkowe mają wysokie bazowe prawdopodobieństwo
+                                base_probability = 0.80 + (attendance_rate * 0.15)
                             else:
-                                # Pozostałe przedmioty zależą od preferencji
-                                should_assign = random.random() < (0.7 + academic_preference * 0.3)
-                        
-                        # Rok 3-5: więcej przedmiotów opcjonalnych
-                        elif 3 <= student_year <= 5:
-                            if is_core:
-                                # Obowiązkowe przedmioty wciąż mają wysokie prawdopodobieństwo
-                                should_assign = random.random() < 0.9
-                            elif "Year" in subject_info['name']:
-                                # Przedmioty kontynuacyjne dość prawdopodobne
-                                should_assign = random.random() < (0.6 + academic_preference * 0.3)
-                            else:
-                                # Przedmioty opcjonalne zależą mocno od preferencji studenta
-                                # Niektórzy studenci wybiorą więcej, inni mniej
-                                should_assign = random.random() < (0.3 + academic_preference * 0.5)
-                                
-                                # Dodaj wpływ domu na wybór przedmiotów
-                                if "Divination" in subject_info['name'] and student_house == 2:  # Ravenclaw
-                                    should_assign = should_assign or random.random() < 0.4
-                                elif "Ancient Runes" in subject_info['name'] and student_house == 2:  # Ravenclaw
-                                    should_assign = should_assign or random.random() < 0.5
-                                elif "Care of Magical Creatures" in subject_info['name'] and student_house == 1:  # Hufflepuff
-                                    should_assign = should_assign or random.random() < 0.5
-                        
-                        # Rok 6-7: bardzo indywidualne podejście
+                                # W późniejszych latach mniejsze, ale wciąż znaczące prawdopodobieństwo
+                                base_probability = 0.65 + (attendance_rate * 0.15)
                         else:
-                            # Studenci wybierają już tylko przedmioty które ich interesują
-                            if is_core:
-                                # Nawet obowiązkowe przedmioty są wybierane z mniejszym prawdopodobieństwem
-                                should_assign = random.random() < (0.6 + academic_preference * 0.3)
-                            else:
-                                # Dużo mniejsze prawdopodobieństwo wybrania przedmiotów opcjonalnych
-                                should_assign = random.random() < (0.2 + academic_preference * 0.4)
+                            # Przedmioty nieobowiązkowe mają niskie bazowe prawdopodobieństwo
+                            base_probability = 0.25 + (academic_preference * 0.25)
                         
-                        # Dodaj do pary jeśli przedmiot został przydzielony
-                        if should_assign:
+                        # Modyfikatory za ulubione i nielubiane przedmioty
+                        if is_favorite:
+                            base_probability += 0.35  # Duży wzrost za ulubiony przedmiot
+                        if is_disliked:
+                            base_probability -= 0.30  # Duży spadek za nielubiany przedmiot
+                        
+                        # Modyfikatory za praktyczne vs teoretyczne przedmioty
+                        is_practical = any(practical in subject_info['name'].lower() for practical in ["defence", "charms", "transfiguration", "potions", "flying", "creatures", "herbology"])
+                        if is_practical and practical_vs_theory > 0.6:
+                            base_probability += 0.15  # Bonus dla uczniów preferujących praktykę
+                        elif not is_practical and practical_vs_theory < 0.4:
+                            base_probability += 0.15  # Bonus dla uczniów preferujących teorię
+                        
+                        # Modyfikatory specjalne dla domów
+                        if "Divination" in subject_info['name']:
+                            if student_house == 2:  # Ravenclaw
+                                base_probability -= 0.10  # Krukoni są sceptyczni wobec wróżbiarstwa
+                        elif "History of Magic" in subject_info['name']:
+                            if student_house == 0:  # Gryffindor
+                                base_probability -= 0.15  # Gryfoni mniej interesują się historią
+                        elif "Potions" in subject_info['name']:
+                            if student_house == 3:  # Slytherin
+                                base_probability += 0.15  # Ślizgoni preferują eliksiry
+                        elif "Care of Magical Creatures" in subject_info['name']:
+                            if student_house == 1:  # Hufflepuff
+                                base_probability += 0.20  # Puchoni preferują opiekę nad magicznymi stworzeniami
+                        
+                        # Wprowadź element kompletnej losowości
+                        random_factor = random.random() * 0.30 - 0.15  # -0.15 do +0.15 losowej zmiany
+                        final_probability = base_probability + random_factor
+                        
+                        # Ogranicz prawdopodobieństwo do zakresu 0.0-1.0
+                        final_probability = max(0.0, min(1.0, final_probability))
+                        
+                        # Ostateczna decyzja
+                        if random.random() < final_probability:
                             student_subject_pairs.add((student_id, subject_id))
                             writer.writerow([student_id, subject_id])
 
@@ -705,55 +727,102 @@ def main():
         check_stop()
         debug_print("Generating points...")
         
-        # First, load student names for more descriptive point reasons
-        student_names = {}
+        # First, load student names and house information for more descriptive point reasons
+        student_data = {}
         with open(os.path.join(DATA_DIR, "students.csv"), "r", newline='', encoding='utf-8') as students_file:
             reader = csv.DictReader(students_file, delimiter=';')
             for row in reader:
-                student_names[int(row['id'])] = f"{row['name']} {row['surname']}"
+                student_data[int(row['id'])] = {
+                    'name': f"{row['name']} {row['surname']}",
+                    'house_id': int(row['house_id'])
+                }
+        
+        # Przypisz specjalne cechy do domów, które wpłyną na rozkład punktów
+        house_point_bias = {
+            0: {'positive_chance': 0.65, 'positive_mean': 7, 'positive_sd': 4, 'negative_mean': -5, 'negative_sd': 3},  # Gryffindor - bardziej ekstremalne wartości
+            1: {'positive_chance': 0.80, 'positive_mean': 3, 'positive_sd': 2, 'negative_mean': -2, 'negative_sd': 1},  # Hufflepuff - więcej małych pozytywnych punktów
+            2: {'positive_chance': 0.85, 'positive_mean': 4, 'positive_sd': 2, 'negative_mean': -2, 'negative_sd': 1},  # Ravenclaw - bardzo mało negatywnych punktów
+            3: {'positive_chance': 0.50, 'positive_mean': 6, 'positive_sd': 3, 'negative_mean': -4, 'negative_sd': 2}   # Slytherin - zrównoważone, ale bardziej ekstremalne
+        }
         
         with open(os.path.join(DATA_DIR, "points.csv"), "w", newline='', encoding='utf-8') as points_file:
             writer = csv.writer(points_file, delimiter=';')
             writer.writerow(["id", "value", "description", "award_date", "student_id", "teacher_id"])
             
-            # Generate points using truncated normal distribution
-            nPoints = CONFIG['nStudents'] * CONFIG['pointsPerStudent']
+            # Generuj proporcjonalnie więcej lub mniej punktów dla różnych domów
+            house_points_count = {
+                0: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 1.1),    # Gryffindor - więcej punktów (zarówno + jak i -)
+                1: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 0.8),    # Hufflepuff - mniej punktów ogólnie
+                2: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 0.9),    # Ravenclaw - standardowa ilość
+                3: int(CONFIG['nStudents'] * CONFIG['pointsPerStudent'] * 1.2)     # Slytherin - najwięcej punktów (zarówno + jak i -)
+            }
             
-            # Generate values with a truncated normal distribution
-            mu, sigma = 0, 5  # mean and standard deviation
-            dist = get_truncated_normal(mean=mu, sd=sigma, low=CONFIG['min_points'], upp=CONFIG['max_points'])
-            values = dist.rvs(nPoints * 2)  # Generate extra values to account for skipping zeros
+            # Stwórz rozkłady normalne dla każdego domu
+            dist_by_house = {}
+            for house_id, bias in house_point_bias.items():
+                dist_by_house[house_id] = {
+                    'positive': get_truncated_normal(
+                        mean=bias['positive_mean'], 
+                        sd=bias['positive_sd'], 
+                        low=1, 
+                        upp=CONFIG['max_points']
+                    ),
+                    'negative': get_truncated_normal(
+                        mean=bias['negative_mean'], 
+                        sd=bias['negative_sd'], 
+                        low=CONFIG['min_points'], 
+                        upp=-1
+                    )
+                }
             
+            # Generuj punkty dla każdego domu
             points_id = 0
-            progress_bar = tqdm(total=nPoints, desc="Generating points", file=sys.stdout)
+            total_points = sum(house_points_count.values())
+            progress_bar = tqdm(total=total_points, desc="Generating points", file=sys.stdout)
             
-            for i in range(nPoints * 2):
-                if points_id >= nPoints:
-                    break
-                    
-                if stop_process:
-                    return
+            for house_id, n_points in house_points_count.items():
+                # Znajdź wszystkich studentów z tego domu
+                students_in_house = [
+                    student_id for student_id, data in student_data.items() 
+                    if data['house_id'] == house_id
+                ]
                 
-                v = round(values[i])
-                if v == 0:
+                if not students_in_house:
+                    debug_print(f"WARNING: No students found for house {house_id}")
                     continue
                 
-                student_id = random.choice(student_ids)
-                teacher_id = random.choice(teacher_ids)
-                award_date = random_date("2023-09-01", "2024-06-30")
+                # Generuj punkty dla tego domu
+                house_bias = house_point_bias[house_id]
+                house_dists = dist_by_house[house_id]
                 
-                # Generate descriptive reason including time indicator, student name, and action
-                student_name = student_names.get(student_id, "A student")
-                description = days() + student_name
-                
-                if v > 0:
-                    description += positiveDesc()
-                else:
-                    description += negativeDesc()
-                
-                writer.writerow([points_id, v, description, award_date, student_id, teacher_id])
-                points_id += 1
-                progress_bar.update(1)
+                for i in range(n_points):
+                    if stop_process:
+                        return
+                    
+                    # Określ czy przyznać punkty pozytywne czy negatywne na podstawie domu
+                    is_positive = random.random() < house_bias['positive_chance']
+                    
+                    if is_positive:
+                        v = round(house_dists['positive'].rvs())
+                    else:
+                        v = round(house_dists['negative'].rvs())
+                    
+                    student_id = random.choice(students_in_house)
+                    teacher_id = random.choice(teacher_ids)
+                    award_date = random_date("2023-09-01", "2024-06-30")
+                    
+                    # Generate descriptive reason
+                    student_name = student_data[student_id]['name']
+                    description = days() + student_name
+                    
+                    if v > 0:
+                        description += positiveDesc()
+                    else:
+                        description += negativeDesc()
+                    
+                    writer.writerow([points_id, v, description, award_date, student_id, teacher_id])
+                    points_id += 1
+                    progress_bar.update(1)
             
             progress_bar.close()
 

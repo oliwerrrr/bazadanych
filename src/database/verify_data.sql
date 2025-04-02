@@ -68,4 +68,21 @@ SELECT 'teachers', MIN(id), MAX(id) FROM teachers
 UNION ALL
 SELECT 'students_subjects', MIN(student_id), MAX(student_id) FROM students_subjects
 UNION ALL
-SELECT 'grades', MIN(id), MAX(id) FROM grades; 
+SELECT 'grades', MIN(id), MAX(id) FROM grades;
+
+SELECT table_name, COUNT(*) as row_count
+FROM (
+    SELECT 'Students' as table_name FROM Students
+    UNION ALL
+    SELECT 'Teachers' FROM Teachers
+    UNION ALL
+    SELECT 'Houses' FROM Houses
+    UNION ALL
+    SELECT 'Dormitories' FROM Dormitories
+    UNION ALL
+    SELECT 'Subjects' FROM Subjects
+    UNION ALL
+    SELECT 'Grades' FROM Grades
+)
+GROUP BY table_name
+ORDER BY table_name; 

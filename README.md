@@ -12,7 +12,9 @@ hogwarts-db/
 │   │   └── config_generator.py
 │   ├── database/           # Database operations
 │   │   ├── import_data.py
+│   │   ├── run_workload.py
 │   │   └── clear_tables.sql
+│   ├── server.py           # Web server for the application
 │   └── visualization/      # Data visualization scripts
 │       └── visualize_data.py
 ├── config/                 # Configuration files
@@ -32,7 +34,14 @@ hogwarts-db/
 │       ├── grades.csv
 │       ├── points.csv
 │       └── quidditch_team_members.csv
-└── docs/                  # Documentation
+└── docs/                  # Documentation and web files
+    ├── hogwarts_report.html
+    ├── HogwartRelations.png
+    ├── schema.png
+    ├── visualizations/
+    │   ├── students_by_house.png
+    │   ├── grades_distribution.png
+    │   └── [...other visualization files]
     └── README.md
 ```
 
@@ -46,12 +55,14 @@ hogwarts-db/
   - matplotlib
   - seaborn
   - tqdm
+  - flask
+  - flask-socketio
 
 ## Installation
 
 1. Install required Python packages:
 ```bash
-pip install oracledb pandas matplotlib seaborn tqdm
+pip install oracledb pandas matplotlib seaborn tqdm flask flask-socketio
 ```
 
 2. Make sure your Oracle database is configured with:
@@ -62,6 +73,10 @@ pip install oracledb pandas matplotlib seaborn tqdm
    - Service: XE
 
 ## Usage
+
+### Manual Scripts Execution
+
+You can execute individual scripts manually for specific tasks:
 
 1. Generate data:
 ```bash
@@ -77,6 +92,135 @@ python src/database/import_data.py
 ```bash
 python src/visualization/visualize_data.py
 ```
+
+### Running the Web Server
+
+The project includes a web server that provides a user-friendly interface for database management, visualization, and performance testing:
+
+1. Start the web server:
+```bash
+python src/server.py
+```
+
+2. Open your browser and navigate to:
+```
+http://localhost:5000
+```
+
+3. The web interface allows you to:
+   - Generate configuration and sample data
+   - Import data to the database
+   - Clear the database
+   - Run performance tests
+   - View database statistics and visualizations
+   - Analyze SQL query performance
+
+### Visualization and Performance Testing
+
+The web interface provides comprehensive visualization and performance testing capabilities:
+
+1. **Accessing Visualizations**:
+   - Ensure all visualization files are in the `docs/visualizations/` directory
+   - From the web interface, click on the "Visualizations" collapsible section
+   - Click on any visualization image to view it in full size
+   - The system includes visualizations for student distributions, grade statistics, and more
+
+2. **Running Performance Tests**:
+   - From the web interface, click on the "Performance Analysis" collapsible section
+   - Click the "Run Performance Tests" button in the Data Wizard section
+   - The system will execute a series of SQL performance tests using 10-30% of your database data
+   - Results will be displayed in the table showing execution time and rows processed
+   - Click on "View details" for any test to see the SQL query, explanation, and performance metrics
+
+3. **Database Schema Visualization**:
+   - The system automatically loads schema diagrams from the `docs` directory
+   - Click on the "Database Schema" collapsible section to view entity-relationship diagrams
+   - Click on any schema image to view it in full size
+
+4. **Generating New Visualizations**:
+   - To update or regenerate visualizations, run:
+   ```bash
+   python src/visualization/visualize_data.py
+   ```
+   - This will create new visualization images in the `docs/visualizations/` directory
+   - The web interface will automatically display the updated visualizations
+
+5. **Advanced Server Options**:
+   - By default, the server runs in debug mode on port 5000
+   - To use a different port:
+   ```bash
+   python src/server.py --port 8080
+   ```
+   - To disable debug mode:
+   ```bash
+   python src/server.py --no-debug
+   ```
+   - To specify a different database connection:
+   ```bash
+   python src/server.py --db-user SYSTEM --db-password admin --db-host localhost --db-port 1521 --db-service XE
+   ```
+
+## Deployment Guide
+
+If you want to deploy this system on another machine or server, follow these steps:
+
+### Prerequisites
+
+1. Install Python 3.8 or newer
+2. Install Oracle Database XE (or a compatible version)
+3. Clone or download this repository
+
+### Setup Process
+
+1. Create and configure your Oracle database:
+   - Create a new user 'SYSTEM' with password 'admin' (or modify src/server.py to use different credentials)
+   - Ensure the database is running on localhost:1521
+   - Make sure the service name is set to 'XE'
+
+2. Install required Python dependencies:
+```bash
+pip install oracledb pandas matplotlib seaborn tqdm flask flask-socketio
+```
+
+3. Generate initial configuration:
+```bash
+python src/data_generation/config_generator.py
+```
+
+4. Generate sample data:
+```bash
+python src/data_generation/generate_hogwarts_data.py
+```
+
+5. Import data into the database:
+```bash
+python src/database/import_data.py
+```
+
+6. Start the web server:
+```bash
+python src/server.py
+```
+
+7. Access the web interface at http://localhost:5000
+
+### System Maintenance
+
+- To backup your data, export the database tables to CSV files
+- To update visualizations, run `python src/visualization/visualize_data.py`
+- To clear all data and start fresh, use the "Clear Database" option in the web interface or run:
+```bash
+python src/database/import_data.py --clear
+```
+
+### Production Deployment Notes
+
+For production environments:
+- Use a production WSGI server like Gunicorn or uWSGI instead of Flask's development server
+- Consider setting up proper authentication for the database and web interface
+- Configure firewall rules to restrict access to the database port (1521)
+- Set up regular database backups
+- Consider using environment variables for sensitive information like database credentials
 
 ## Database Structure
 
@@ -158,6 +302,21 @@ The system generates data in this specific order to maintain data integrity:
 8. points.csv
 9. quidditch_team_members.csv
 
+## Performance Tests
+
+The system includes several performance tests that can be run from the web interface:
+
+1. **Simple SELECT** - Basic select query on the students table
+2. **Complex JOIN** - Complex join between students, grades, and subjects tables
+3. **Aggregation** - Complex aggregation with grouping and having
+4. **Nested Subquery** - Complex nested subquery with multiple conditions
+5. **Transaction - Batch Insert** - Insert multiple grades with transaction control
+6. **Transaction - Batch Update** - Update multiple grades with transaction control
+7. **Transaction - Complex Delete** - Delete with complex conditions and restore data
+8. **Full Table Scan Analysis** - Analyze grade distribution with full table scan
+
+These tests help evaluate database performance and demonstrate various SQL operations.
+
 ## Troubleshooting
 
 1. If you encounter database connection errors:
@@ -175,6 +334,17 @@ The system generates data in this specific order to maintain data integrity:
    - Verify config/hogwarts_config.json exists and is properly formatted
    - Ensure you have sufficient disk space
 
+4. If the web server fails to start:
+   - Check if port 5000 is already in use (try a different port with `python src/server.py --port 8080`)
+   - Verify all dependencies are installed
+   - Check if the database connection parameters are correct
+   - Look for error messages in the console output
+
+5. If performance tests fail:
+   - Ensure the database contains sufficient data
+   - Check that you have proper table indexes
+   - Verify Oracle database resource limits (memory, connections)
+
 ## Additional Notes
 - You can stop any process at any time using Ctrl+C
 - The system will safely clean up and save progress before stopping
@@ -182,3 +352,5 @@ The system generates data in this specific order to maintain data integrity:
 - The system maintains referential integrity between all tables
 - Progress bars show real-time status of operations
 - The system provides detailed logging of all operations 
+- The web interface provides a real-time update of database statistics
+- Performance tests run on 10-30% of the available data for accurate metrics 

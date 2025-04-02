@@ -1,0 +1,1 @@
+SELECT id, name FROM Houses ORDER BY id; 

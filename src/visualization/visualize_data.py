@@ -7,6 +7,17 @@ import os
 import json
 import time
 import shutil
+import traceback
+
+# Get absolute paths
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+DOCS_DIR = os.path.join(BASE_DIR, 'docs')
+VISUALIZATIONS_DIR = os.path.join(DOCS_DIR, 'visualizations')
+
+def ensure_directories():
+    """Create necessary directories if they don't exist"""
+    os.makedirs(DOCS_DIR, exist_ok=True)
+    os.makedirs(VISUALIZATIONS_DIR, exist_ok=True)
 
 def datetime_handler(obj):
     if isinstance(obj, datetime):
@@ -19,136 +30,188 @@ def debug_print(message, data=None):
     if data is not None:
         print(f"Data: {data}")
 
+def get_database_connection():
+    """Get database connection with proper error handling"""
+    try:
+        connection = oracledb.connect("SYSTEM/admin@localhost:1521/XE")
+        debug_print("Successfully connected to database")
+        return connection
+    except oracledb.Error as e:
+        debug_print(f"Error connecting to database: {str(e)}")
+        raise
+
 def get_table_stats(cursor, table_name):
-    cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
-    count = cursor.fetchone()[0]
-    return count
+    try:
+        cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+        count = cursor.fetchone()[0]
+        debug_print(f"Got stats for table {table_name}: {count}")
+        return count
+    except oracledb.Error as e:
+        debug_print(f"Error getting stats for table {table_name}: {str(e)}")
+        return 0
 
 def execute_query_to_df(cursor, query):
-    cursor.execute(query)
-    columns = [desc[0].lower() for desc in cursor.description]
-    data = cursor.fetchall()
-    return pd.DataFrame(data, columns=columns)
+    try:
+        cursor.execute(query)
+        columns = [desc[0].lower() for desc in cursor.description]
+        data = cursor.fetchall()
+        df = pd.DataFrame(data, columns=columns)
+        debug_print(f"Executed query successfully, got {len(df)} rows")
+        return df
+    except oracledb.Error as e:
+        debug_print(f"Error executing query: {str(e)}")
+        debug_print(f"Query: {query}")
+        return pd.DataFrame()
 
 def plot_students_by_house(cursor):
-    query = """
-    SELECT h.name as house_name, COUNT(s.id) as student_count
-    FROM houses h
-    LEFT JOIN students s ON h.id = s.house_id
-    GROUP BY h.name
-    """
-    df = execute_query_to_df(cursor, query)
-    
-    plt.figure(figsize=(8, 4))
-    sns.barplot(data=df, x='house_name', y='student_count')
-    plt.title('Number of Students per House')
-    plt.xlabel('House')
-    plt.ylabel('Number of Students')
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.savefig('docs/visualizations/students_by_house.png')
-    plt.close()
+    try:
+        query = """
+        SELECT h.name as house_name, COUNT(s.id) as student_count
+        FROM houses h
+        LEFT JOIN students s ON h.id = s.house_id
+        GROUP BY h.name
+        """
+        df = execute_query_to_df(cursor, query)
+        
+        if not df.empty:
+            plt.figure(figsize=(10, 6))
+            sns.barplot(data=df, x='house_name', y='student_count')
+            plt.title('Number of Students per House')
+            plt.xlabel('House')
+            plt.ylabel('Number of Students')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(VISUALIZATIONS_DIR, 'students_by_house.png'))
+            plt.close()
+            debug_print("Generated students by house plot")
+    except Exception as e:
+        debug_print(f"Error plotting students by house: {str(e)}")
 
 def plot_grades_distribution(cursor):
-    query = """
-    SELECT g.value as grade_value, COUNT(*) as count
-    FROM grades g
-    GROUP BY g.value
-    ORDER BY 
-        CASE g.value
-            WHEN 'O' THEN 1
-            WHEN 'E' THEN 2
-            WHEN 'A' THEN 3
-            WHEN 'P' THEN 4
-            WHEN 'D' THEN 5
-            WHEN 'T' THEN 6
-        END
-    """
-    df = execute_query_to_df(cursor, query)
-    
-    plt.figure(figsize=(8, 4))
-    sns.barplot(data=df, x='grade_value', y='count')
-    plt.title('Grade Distribution')
-    plt.xlabel('Grade')
-    plt.ylabel('Number of Grades')
-    plt.tight_layout()
-    plt.savefig('docs/visualizations/grades_distribution.png')
-    plt.close()
+    try:
+        query = """
+        SELECT g.value as grade_value, COUNT(*) as count
+        FROM grades g
+        GROUP BY g.value
+        ORDER BY 
+            CASE g.value
+                WHEN 'O' THEN 1
+                WHEN 'E' THEN 2
+                WHEN 'A' THEN 3
+                WHEN 'P' THEN 4
+                WHEN 'D' THEN 5
+                WHEN 'T' THEN 6
+            END
+        """
+        df = execute_query_to_df(cursor, query)
+        
+        if not df.empty:
+            plt.figure(figsize=(10, 6))
+            sns.barplot(data=df, x='grade_value', y='count')
+            plt.title('Grade Distribution')
+            plt.xlabel('Grade')
+            plt.ylabel('Number of Grades')
+            plt.tight_layout()
+            plt.savefig(os.path.join(VISUALIZATIONS_DIR, 'grades_distribution.png'))
+            plt.close()
+            debug_print("Generated grades distribution plot")
+    except Exception as e:
+        debug_print(f"Error plotting grades distribution: {str(e)}")
 
 def plot_points_by_house(cursor):
-    query = """
-    SELECT h.name as house_name, SUM(p.value) as total_points
-    FROM houses h
-    JOIN students s ON h.id = s.house_id
-    JOIN points p ON s.id = p.student_id
-    GROUP BY h.name
-    """
-    df = execute_query_to_df(cursor, query)
-    
-    plt.figure(figsize=(8, 4))
-    sns.barplot(data=df, x='house_name', y='total_points')
-    plt.title('Total Points per House')
-    plt.xlabel('House')
-    plt.ylabel('Total Points')
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.savefig('docs/visualizations/points_by_house.png')
-    plt.close()
+    try:
+        query = """
+        SELECT h.name as house_name, SUM(p.value) as total_points
+        FROM houses h
+        JOIN students s ON h.id = s.house_id
+        JOIN points p ON s.id = p.student_id
+        GROUP BY h.name
+        """
+        df = execute_query_to_df(cursor, query)
+        
+        if not df.empty:
+            plt.figure(figsize=(10, 6))
+            sns.barplot(data=df, x='house_name', y='total_points')
+            plt.title('Total Points per House')
+            plt.xlabel('House')
+            plt.ylabel('Total Points')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(VISUALIZATIONS_DIR, 'points_by_house.png'))
+            plt.close()
+            debug_print("Generated points by house plot")
+    except Exception as e:
+        debug_print(f"Error plotting points by house: {str(e)}")
 
 def plot_subjects_popularity(cursor):
-    query = """
-    SELECT s.name as subject_name, COUNT(ss.student_id) as student_count
-    FROM subjects s
-    JOIN students_subjects ss ON s.id = ss.subject_id
-    GROUP BY s.name
-    ORDER BY COUNT(ss.student_id) DESC
-    FETCH FIRST 10 ROWS ONLY
-    """
-    df = execute_query_to_df(cursor, query)
-    
-    plt.figure(figsize=(8, 4))
-    sns.barplot(data=df, x='student_count', y='subject_name')
-    plt.title('Top 10 Most Popular Subjects')
-    plt.xlabel('Number of Students')
-    plt.ylabel('Subject')
-    plt.tight_layout()
-    plt.savefig('docs/visualizations/subjects_popularity.png')
-    plt.close()
+    try:
+        query = """
+        SELECT s.name as subject_name, COUNT(ss.student_id) as student_count
+        FROM subjects s
+        JOIN students_subjects ss ON s.id = ss.subject_id
+        GROUP BY s.name
+        ORDER BY COUNT(ss.student_id) DESC
+        FETCH FIRST 10 ROWS ONLY
+        """
+        df = execute_query_to_df(cursor, query)
+        
+        if not df.empty:
+            plt.figure(figsize=(10, 6))
+            sns.barplot(data=df, x='student_count', y='subject_name')
+            plt.title('Top 10 Most Popular Subjects')
+            plt.xlabel('Number of Students')
+            plt.ylabel('Subject')
+            plt.tight_layout()
+            plt.savefig(os.path.join(VISUALIZATIONS_DIR, 'subjects_popularity.png'))
+            plt.close()
+            debug_print("Generated subjects popularity plot")
+    except Exception as e:
+        debug_print(f"Error plotting subjects popularity: {str(e)}")
 
 def plot_gender_distribution(cursor):
-    query = """
-    SELECT gender, COUNT(*) as count
-    FROM students
-    GROUP BY gender
-    """
-    df = execute_query_to_df(cursor, query)
-    
-    plt.figure(figsize=(6, 6))
-    plt.pie(df['count'], labels=df['gender'], autopct='%1.1f%%')
-    plt.title('Gender Distribution Among Students')
-    plt.tight_layout()
-    plt.savefig('docs/visualizations/gender_distribution.png')
-    plt.close()
+    try:
+        query = """
+        SELECT gender, COUNT(*) as count
+        FROM students
+        GROUP BY gender
+        """
+        df = execute_query_to_df(cursor, query)
+        
+        if not df.empty:
+            plt.figure(figsize=(8, 8))
+            plt.pie(df['count'], labels=df['gender'], autopct='%1.1f%%')
+            plt.title('Gender Distribution Among Students')
+            plt.tight_layout()
+            plt.savefig(os.path.join(VISUALIZATIONS_DIR, 'gender_distribution.png'))
+            plt.close()
+            debug_print("Generated gender distribution plot")
+    except Exception as e:
+        debug_print(f"Error plotting gender distribution: {str(e)}")
 
 def plot_quidditch_teams(cursor):
-    query = """
-    SELECT h.name as house_name, COUNT(qtm.id) as team_size
-    FROM houses h
-    LEFT JOIN students s ON h.id = s.house_id
-    LEFT JOIN quidditch_team_members qtm ON s.id = qtm.student_id
-    GROUP BY h.name
-    """
-    df = execute_query_to_df(cursor, query)
-    
-    plt.figure(figsize=(8, 4))
-    sns.barplot(data=df, x='house_name', y='team_size')
-    plt.title('Quidditch Team Size by House')
-    plt.xlabel('House')
-    plt.ylabel('Team Size')
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.savefig('docs/visualizations/quidditch_teams.png')
-    plt.close()
+    try:
+        query = """
+        SELECT h.name as house_name, COUNT(qtm.id) as team_size
+        FROM houses h
+        LEFT JOIN students s ON h.id = s.house_id
+        LEFT JOIN quidditch_team_members qtm ON s.id = qtm.student_id
+        GROUP BY h.name
+        """
+        df = execute_query_to_df(cursor, query)
+        
+        if not df.empty:
+            plt.figure(figsize=(10, 6))
+            sns.barplot(data=df, x='house_name', y='team_size')
+            plt.title('Quidditch Team Size by House')
+            plt.xlabel('House')
+            plt.ylabel('Team Size')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(VISUALIZATIONS_DIR, 'quidditch_teams.png'))
+            plt.close()
+            debug_print("Generated quidditch teams plot")
+    except Exception as e:
+        debug_print(f"Error plotting quidditch teams: {str(e)}")
 
 def run_performance_analysis(cursor, config=None):
     print("Running performance analysis...")
@@ -433,340 +496,349 @@ def generate_performance_summary(performance_results):
     """ for result in performance_results)
 
 def generate_html_report(stats, performance_results):
-    # Create HTML content
-    html_content = """
-    <!DOCTYPE html>
-    <html lang="pl">
-    <head>
-        <meta charset="UTF-8">
-        <title>Hogwarts Database Report</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 20px;
-                background-color: #f5f5f5;
-            }
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                background-color: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            }
-            h1, h2 {
-                color: #1a237e;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 20px 0;
-            }
-            th, td {
-                padding: 12px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
-            th {
-                background-color: #1a237e;
-                color: white;
-            }
-            tr:nth-child(even) {
-                background-color: #f8f9fa;
-            }
-            .section {
-                margin: 30px 0;
-                padding: 20px;
-                background-color: white;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            }
-            .collapsible {
-                background-color: #1a237e;
-                color: white;
-                cursor: pointer;
-                padding: 18px;
-                width: 100%;
-                border: none;
-                text-align: left;
-                outline: none;
-                font-size: 15px;
-                border-radius: 5px;
-                margin: 10px 0;
-            }
-            .active, .collapsible:hover {
-                background-color: #0d47a1;
-            }
-            .content {
-                padding: 0 18px;
-                display: none;
-                overflow: hidden;
-                background-color: #f1f1f1;
-                border-radius: 0 0 5px 5px;
-            }
-            .schema-img {
-                max-width: 100%;
-                height: auto;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-            }
-            .schema-img:hover {
-                transform: scale(1.05);
-            }
-            .visualization-img {
-                max-width: 100%;
-                height: auto;
-                margin: 10px 0;
-            }
-            .wizard-section {
-                background-color: #e3f2fd;
-                padding: 20px;
-                border-radius: 5px;
-                margin: 20px 0;
-            }
-            .wizard-button {
-                background-color: #1a237e;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                margin: 5px;
-                font-size: 14px;
-            }
-            .wizard-button:hover {
-                background-color: #0d47a1;
-            }
-            .error {
-                color: #d32f2f;
-                background-color: #ffebee;
-                padding: 10px;
-                border-radius: 5px;
-                margin: 5px 0;
-            }
-            .success {
-                color: #1b5e20;
-                background-color: #e8f5e9;
-                padding: 10px;
-                border-radius: 5px;
-                margin: 5px 0;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Hogwarts Database Report</h1>
-            
-            <!-- Database Statistics -->
-            <button type="button" class="collapsible">Database Statistics</button>
-            <div class="content">
-                <table>
-                    <tr>
-                        <th>Table</th>
-                        <th>Row Count</th>
-                    </tr>
-    """
-
-    # Add statistics rows
-    for table, count in stats.items():
-        html_content += f"""
-                    <tr>
-                        <td>{table}</td>
-                        <td>{count}</td>
-                    </tr>
+    try:
+        ensure_directories()
+        
+        # Create HTML content
+        html_content = """
+        <!DOCTYPE html>
+        <html lang="pl">
+        <head>
+            <meta charset="UTF-8">
+            <title>Hogwarts Database Report</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                    background-color: #f5f5f5;
+                }
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    background-color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                }
+                h1, h2 {
+                    color: #1a237e;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 20px 0;
+                }
+                th, td {
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+                th {
+                    background-color: #1a237e;
+                    color: white;
+                }
+                tr:nth-child(even) {
+                    background-color: #f8f9fa;
+                }
+                .section {
+                    margin: 30px 0;
+                    padding: 20px;
+                    background-color: white;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                }
+                .collapsible {
+                    background-color: #1a237e;
+                    color: white;
+                    cursor: pointer;
+                    padding: 18px;
+                    width: 100%;
+                    border: none;
+                    text-align: left;
+                    outline: none;
+                    font-size: 15px;
+                    border-radius: 5px;
+                    margin: 10px 0;
+                }
+                .active, .collapsible:hover {
+                    background-color: #0d47a1;
+                }
+                .content {
+                    padding: 0 18px;
+                    display: none;
+                    overflow: hidden;
+                    background-color: #f1f1f1;
+                    border-radius: 0 0 5px 5px;
+                }
+                .schema-img {
+                    max-width: 100%;
+                    height: auto;
+                    cursor: pointer;
+                    transition: transform 0.3s ease;
+                }
+                .schema-img:hover {
+                    transform: scale(1.05);
+                }
+                .visualization-img {
+                    max-width: 100%;
+                    height: auto;
+                    margin: 10px 0;
+                }
+                .wizard-section {
+                    background-color: #e3f2fd;
+                    padding: 20px;
+                    border-radius: 5px;
+                    margin: 20px 0;
+                }
+                .wizard-button {
+                    background-color: #1a237e;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    margin: 5px;
+                    font-size: 14px;
+                }
+                .wizard-button:hover {
+                    background-color: #0d47a1;
+                }
+                .error {
+                    color: #d32f2f;
+                    background-color: #ffebee;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin: 5px 0;
+                }
+                .success {
+                    color: #1b5e20;
+                    background-color: #e8f5e9;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin: 5px 0;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Hogwarts Database Report</h1>
+                
+                <!-- Database Statistics -->
+                <button type="button" class="collapsible">Database Statistics</button>
+                <div class="content">
+                    <table>
+                        <tr>
+                            <th>Table</th>
+                            <th>Row Count</th>
+                        </tr>
         """
 
-    html_content += """
-                </table>
-            </div>
-
-            <!-- Database Schema -->
-            <button type="button" class="collapsible">Database Schema</button>
-            <div class="content">
-                <h3>Entity Relationship Diagram</h3>
-                <img src="HogwartRelations.png" alt="Database Relations" class="schema-img" onclick="window.open(this.src)">
-                <h3>Database Schema</h3>
-                <img src="schema.png" alt="Database Schema" class="schema-img" onclick="window.open(this.src)">
-            </div>
-
-            <!-- Visualizations -->
-            <button type="button" class="collapsible">Visualizations</button>
-            <div class="content">
-                <h3>Students by House</h3>
-                <img src="visualizations/students_by_house.png" alt="Students by House" class="visualization-img">
-                <h3>Grades Distribution</h3>
-                <img src="visualizations/grades_distribution.png" alt="Grades Distribution" class="visualization-img">
-                <h3>Subjects Popularity</h3>
-                <img src="visualizations/subjects_popularity.png" alt="Subjects Popularity" class="visualization-img">
-                <h3>Points by House</h3>
-                <img src="visualizations/points_by_house.png" alt="Points by House" class="visualization-img">
-                <h3>Gender Distribution</h3>
-                <img src="visualizations/gender_distribution.png" alt="Gender Distribution" class="visualization-img">
-                <h3>Quidditch Teams</h3>
-                <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams" class="visualization-img">
-            </div>
-
-            <!-- Performance Analysis -->
-            <button type="button" class="collapsible">Performance Analysis</button>
-            <div class="content">
-                <table>
-                    <tr>
-                        <th>Query Type</th>
-                        <th>Description</th>
-                        <th>Execution Time</th>
-                        <th>Rows Processed</th>
-                    </tr>
-    """
-
-    # Add performance results
-    for result in performance_results:
-        execution_time = f"{result['execution_time']:.4f} seconds" if result['execution_time'] is not None else "Error"
-        status_class = "error" if result.get('error') else "success"
-        html_content += f"""
-                    <tr class="{status_class}">
-                        <td>{result['name']}</td>
-                        <td>{result['description']}</td>
-                        <td>{execution_time}</td>
-                        <td>{result['rows']}</td>
-                    </tr>
+        # Add statistics rows
+        for table, count in stats.items():
+            html_content += f"""
+                        <tr>
+                            <td>{table}</td>
+                            <td>{count}</td>
+                        </tr>
         """
 
-    html_content += """
-                </table>
-            </div>
+        html_content += """
+                    </table>
+                </div>
 
-            <!-- Data Wizard -->
-            <button type="button" class="collapsible">Data Wizard 🧙‍♂️</button>
-            <div class="content wizard-section">
-                <h3>Generate and Manage Data</h3>
-                <p>Use these magical buttons to manage your Hogwarts database:</p>
-                <button onclick="generateConfig()" class="wizard-button">Generate Configuration 📝</button>
-                <button onclick="generateData()" class="wizard-button">Generate Test Data 🎲</button>
-                <button onclick="importData()" class="wizard-button">Import Data to Database 📥</button>
-                <button onclick="clearDatabase()" class="wizard-button">Clear Database 🧹</button>
-                <button onclick="runTests()" class="wizard-button">Run Performance Tests ⚡</button>
-                <div id="wizardStatus"></div>
-            </div>
+                <!-- Database Schema -->
+                <button type="button" class="collapsible">Database Schema</button>
+                <div class="content">
+                    <h3>Entity Relationship Diagram</h3>
+                    <img src="HogwartRelations.png" alt="Database Relations" class="schema-img" onclick="window.open(this.src)">
+                    <h3>Database Schema</h3>
+                    <img src="schema.png" alt="Database Schema" class="schema-img" onclick="window.open(this.src)">
+                </div>
 
-            <script>
-                // Collapsible sections
-                var coll = document.getElementsByClassName("collapsible");
-                for (var i = 0; i < coll.length; i++) {
-                    coll[i].addEventListener("click", function() {
-                        this.classList.toggle("active");
-                        var content = this.nextElementSibling;
-                        if (content.style.display === "block") {
-                            content.style.display = "none";
-                        } else {
-                            content.style.display = "block";
-                        }
-                    });
-                }
+                <!-- Visualizations -->
+                <button type="button" class="collapsible">Visualizations</button>
+                <div class="content">
+                    <h3>Students by House</h3>
+                    <img src="visualizations/students_by_house.png" alt="Students by House" class="visualization-img">
+                    <h3>Grades Distribution</h3>
+                    <img src="visualizations/grades_distribution.png" alt="Grades Distribution" class="visualization-img">
+                    <h3>Subjects Popularity</h3>
+                    <img src="visualizations/subjects_popularity.png" alt="Subjects Popularity" class="visualization-img">
+                    <h3>Points by House</h3>
+                    <img src="visualizations/points_by_house.png" alt="Points by House" class="visualization-img">
+                    <h3>Gender Distribution</h3>
+                    <img src="visualizations/gender_distribution.png" alt="Gender Distribution" class="visualization-img">
+                    <h3>Quidditch Teams</h3>
+                    <img src="visualizations/quidditch_teams.png" alt="Quidditch Teams" class="visualization-img">
+                </div>
 
-                // Wizard functions
-                async function showStatus(message, isError = false) {
-                    const statusDiv = document.getElementById('wizardStatus');
-                    statusDiv.innerHTML = `<div class="${isError ? 'error' : 'success'}">${message}</div>`;
-                }
+                <!-- Performance Analysis -->
+                <button type="button" class="collapsible">Performance Analysis</button>
+                <div class="content">
+                    <table>
+                        <tr>
+                            <th>Query Type</th>
+                            <th>Description</th>
+                            <th>Execution Time</th>
+                            <th>Rows Processed</th>
+                        </tr>
+        """
 
-                async function makeRequest(endpoint, message) {
-                    try {
-                        const response = await fetch(endpoint, {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                        });
-                        const data = await response.json();
-                        
-                        if (data.status === 'success') {
-                            showStatus(data.loading_message || message);
-                            if (endpoint === '/run_tests') {
-                                setTimeout(() => window.location.reload(), 2000);
+        # Add performance results
+        for result in performance_results:
+            execution_time = f"{result['execution_time']:.4f} seconds" if result['execution_time'] is not None else "Error"
+            status_class = "error" if result.get('error') else "success"
+            html_content += f"""
+                        <tr class="{status_class}">
+                            <td>{result['name']}</td>
+                            <td>{result['description']}</td>
+                            <td>{execution_time}</td>
+                            <td>{result['rows']}</td>
+                        </tr>
+        """
+
+        html_content += """
+                    </table>
+                </div>
+
+                <!-- Data Wizard -->
+                <button type="button" class="collapsible">Data Wizard 🧙‍♂️</button>
+                <div class="content wizard-section">
+                    <h3>Generate and Manage Data</h3>
+                    <p>Use these magical buttons to manage your Hogwarts database:</p>
+                    <button onclick="generateConfig()" class="wizard-button">Generate Configuration 📝</button>
+                    <button onclick="generateData()" class="wizard-button">Generate Test Data 🎲</button>
+                    <button onclick="importData()" class="wizard-button">Import Data to Database 📥</button>
+                    <button onclick="clearDatabase()" class="wizard-button">Clear Database 🧹</button>
+                    <button onclick="runTests()" class="wizard-button">Run Performance Tests ⚡</button>
+                    <div id="wizardStatus"></div>
+                </div>
+
+                <script>
+                    // Collapsible sections
+                    var coll = document.getElementsByClassName("collapsible");
+                    for (var i = 0; i < coll.length; i++) {
+                        coll[i].addEventListener("click", function() {
+                            this.classList.toggle("active");
+                            var content = this.nextElementSibling;
+                            if (content.style.display === "block") {
+                                content.style.display = "none";
+                            } else {
+                                content.style.display = "block";
                             }
-                        } else {
-                            showStatus(data.message || 'An error occurred', true);
+                        });
+                    }
+
+                    // Wizard functions
+                    async function showStatus(message, isError = false) {
+                        const statusDiv = document.getElementById('wizardStatus');
+                        statusDiv.innerHTML = `<div class="${isError ? 'error' : 'success'}">${message}</div>`;
+                    }
+
+                    async function makeRequest(endpoint, message) {
+                        try {
+                            const response = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                            });
+                            const data = await response.json();
+                            
+                            if (data.status === 'success') {
+                                showStatus(data.loading_message || message);
+                                if (endpoint === '/run_tests') {
+                                    setTimeout(() => window.location.reload(), 2000);
+                                }
+                            } else {
+                                showStatus(data.message || 'An error occurred', true);
+                            }
+                        } catch (error) {
+                            showStatus(`Error: ${error.message}`, true);
                         }
-                    } catch (error) {
-                        showStatus(`Error: ${error.message}`, true);
                     }
-                }
 
-                async function generateConfig() {
-                    await makeRequest('/generate_config', '🧙‍♂️ Configuration generated successfully!');
-                }
-
-                async function generateData() {
-                    await makeRequest('/generate_data', '🎲 Test data generated successfully!');
-                }
-
-                async function importData() {
-                    await makeRequest('/import_data', '📥 Data imported successfully!');
-                }
-
-                async function clearDatabase() {
-                    if (confirm('Are you sure you want to clear the database? This action cannot be undone!')) {
-                        await makeRequest('/clear_database', '🧹 Database cleared successfully!');
+                    async function generateConfig() {
+                        await makeRequest('/generate_config', '🧙‍♂️ Configuration generated successfully!');
                     }
-                }
 
-                async function runTests() {
-                    await makeRequest('/run_tests', '⚡ Running performance tests...');
-                }
+                    async function generateData() {
+                        await makeRequest('/generate_data', '🎲 Test data generated successfully!');
+                    }
 
-                // Open first section by default
-                document.getElementsByClassName("collapsible")[0].click();
-            </script>
-        </div>
-    </body>
-    </html>
-    """
+                    async function importData() {
+                        await makeRequest('/import_data', '📥 Data imported successfully!');
+                    }
 
-    # Save the report
-    with open("docs/hogwarts_report.html", "w", encoding="utf-8") as f:
-        f.write(html_content)
+                    async function clearDatabase() {
+                        if (confirm('Are you sure you want to clear the database? This action cannot be undone!')) {
+                            await makeRequest('/clear_database', '🧹 Database cleared successfully!');
+                        }
+                    }
+
+                    async function runTests() {
+                        await makeRequest('/run_tests', '⚡ Running performance tests...');
+                    }
+
+                    // Open first section by default
+                    document.getElementsByClassName("collapsible")[0].click();
+                </script>
+            </div>
+        </body>
+        </html>
+        """
+
+        # Save the report
+        report_path = os.path.join(DOCS_DIR, 'hogwarts_report.html')
+        with open(report_path, "w", encoding="utf-8") as f:
+            f.write(html_content)
+            
+        debug_print(f"Report saved to {report_path}")
+    except Exception as e:
+        debug_print(f"Error generating HTML report: {str(e)}")
 
 def generate_placeholder_images():
     """Generate placeholder schema images if they don't exist"""
-    import matplotlib.pyplot as plt
-    
-    # Create schema.png
-    plt.figure(figsize=(10, 6))
-    plt.text(0.5, 0.5, 'Database Schema', ha='center', va='center', fontsize=20)
-    plt.axis('off')
-    plt.savefig('schema.png')
-    plt.close()
-    
-    # Create HogwartRelations.png
-    plt.figure(figsize=(10, 6))
-    plt.text(0.5, 0.5, 'Hogwarts Relations', ha='center', va='center', fontsize=20)
-    plt.axis('off')
-    plt.savefig('HogwartRelations.png')
-    plt.close()
+    try:
+        import matplotlib.pyplot as plt
+        
+        # Create schema.png
+        plt.figure(figsize=(10, 6))
+        plt.text(0.5, 0.5, 'Database Schema', ha='center', va='center', fontsize=20)
+        plt.axis('off')
+        plt.savefig(os.path.join(DOCS_DIR, 'schema.png'))
+        plt.close()
+        
+        # Create HogwartRelations.png
+        plt.figure(figsize=(10, 6))
+        plt.text(0.5, 0.5, 'Hogwarts Relations', ha='center', va='center', fontsize=20)
+        plt.axis('off')
+        plt.savefig(os.path.join(DOCS_DIR, 'HogwartRelations.png'))
+        plt.close()
+        
+        debug_print("Generated placeholder schema images")
+    except Exception as e:
+        debug_print(f"Error generating placeholder images: {str(e)}")
 
 def copy_schema_images():
     """Copy schema images to docs directory"""
-    # Generate placeholder images if they don't exist
-    if not os.path.exists('schema.png') or not os.path.exists('HogwartRelations.png'):
-        generate_placeholder_images()
-    
-    # Copy images to docs directory
-    shutil.copy2('schema.png', 'docs/schema.png')
-    shutil.copy2('HogwartRelations.png', 'docs/HogwartRelations.png')
+    try:
+        ensure_directories()
+        
+        # Generate placeholder images if they don't exist
+        if not os.path.exists(os.path.join(DOCS_DIR, 'schema.png')) or not os.path.exists(os.path.join(DOCS_DIR, 'HogwartRelations.png')):
+            generate_placeholder_images()
+        
+        debug_print("Schema images are in place")
+    except Exception as e:
+        debug_print(f"Error copying schema images: {str(e)}")
 
 def main():
-    # Database connection configuration
-    connection_string = "SYSTEM/admin@localhost:1521/XE"
-    
     try:
+        # Create necessary directories
+        ensure_directories()
+        
         # Connect to database
-        connection = oracledb.connect(connection_string)
+        connection = get_database_connection()
         cursor = connection.cursor()
-        debug_print("Connected to database")
-        
-        # Create visualizations directory
-        os.makedirs('docs/visualizations', exist_ok=True)
-        
-        # Copy schema images
-        copy_schema_images()
         
         # Get statistics
         debug_print("Getting statistics...")
@@ -791,6 +863,7 @@ def main():
         plot_quidditch_teams(cursor)
         
         # Run performance analysis
+        debug_print("Running performance analysis...")
         performance_results = run_performance_analysis(cursor)
         
         # Generate HTML report
@@ -805,6 +878,7 @@ def main():
         
     except Exception as e:
         debug_print(f"ERROR: {str(e)}")
+        traceback.print_exc()
     finally:
         if 'cursor' in locals():
             cursor.close()

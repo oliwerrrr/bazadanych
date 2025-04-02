@@ -115,6 +115,51 @@ http://localhost:5000
    - View database statistics and visualizations
    - Analyze SQL query performance
 
+### Visualization and Performance Testing
+
+The web interface provides comprehensive visualization and performance testing capabilities:
+
+1. **Accessing Visualizations**:
+   - Ensure all visualization files are in the `docs/visualizations/` directory
+   - From the web interface, click on the "Visualizations" collapsible section
+   - Click on any visualization image to view it in full size
+   - The system includes visualizations for student distributions, grade statistics, and more
+
+2. **Running Performance Tests**:
+   - From the web interface, click on the "Performance Analysis" collapsible section
+   - Click the "Run Performance Tests" button in the Data Wizard section
+   - The system will execute a series of SQL performance tests using 10-30% of your database data
+   - Results will be displayed in the table showing execution time and rows processed
+   - Click on "View details" for any test to see the SQL query, explanation, and performance metrics
+
+3. **Database Schema Visualization**:
+   - The system automatically loads schema diagrams from the `docs` directory
+   - Click on the "Database Schema" collapsible section to view entity-relationship diagrams
+   - Click on any schema image to view it in full size
+
+4. **Generating New Visualizations**:
+   - To update or regenerate visualizations, run:
+   ```bash
+   python src/visualization/visualize_data.py
+   ```
+   - This will create new visualization images in the `docs/visualizations/` directory
+   - The web interface will automatically display the updated visualizations
+
+5. **Advanced Server Options**:
+   - By default, the server runs in debug mode on port 5000
+   - To use a different port:
+   ```bash
+   python src/server.py --port 8080
+   ```
+   - To disable debug mode:
+   ```bash
+   python src/server.py --no-debug
+   ```
+   - To specify a different database connection:
+   ```bash
+   python src/server.py --db-user SYSTEM --db-password admin --db-host localhost --db-port 1521 --db-service XE
+   ```
+
 ## Deployment Guide
 
 If you want to deploy this system on another machine or server, follow these steps:

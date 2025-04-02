@@ -2,6 +2,11 @@ import os
 import json
 import subprocess
 from datetime import datetime
+import sys
+
+# Get absolute paths
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+CONFIG_FILE = os.path.join(BASE_DIR, 'hogwarts_config.json')
 
 def debug_print(message, data=None):
     timestamp = datetime.now().strftime("%H:%M:%S")
@@ -81,7 +86,7 @@ def create_config():
     # Grades configuration
     print("\nGrades Configuration:")
     grades_per_subject = get_range_input("Number of grades per subject", 3, 5)
-    grade_values = [1, 2, 3, 4, 5, 6]  # Standard Hogwarts grades
+    grade_values = ["O", "E", "A", "P", "D", "T"]  # Standard Hogwarts grades
     
     # Points configuration
     print("\nPoints Configuration:")
@@ -125,7 +130,7 @@ def create_config():
     }
     
     # Save configuration
-    with open('hogwarts_config.json', 'w', encoding='utf-8') as f:
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
         json.dump(config, f, indent=4)
     
     debug_print("Configuration saved to hogwarts_config.json")
@@ -134,7 +139,14 @@ def create_config():
 def run_script(script_name, description):
     debug_print(f"Running {description}...")
     try:
-        result = subprocess.run(['python', script_name], capture_output=True, text=True)
+        script_path = os.path.join(BASE_DIR, script_name)
+        result = subprocess.run(
+            [sys.executable, script_path],
+            capture_output=True,
+            text=True,
+            cwd=BASE_DIR,
+            env={**os.environ, 'PYTHONPATH': BASE_DIR}
+        )
         if result.returncode == 0:
             debug_print(f"{description} completed successfully")
             print(result.stdout)

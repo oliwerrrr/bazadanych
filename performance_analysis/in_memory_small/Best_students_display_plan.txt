@@ -1,0 +1,59 @@
+================Best students display================
+Plan hash value: 3211729349
+ 
+---------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                  | Name                       | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+---------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                           |                            |    10 |  1570 |       | 44600  (29)| 00:00:02 |
+|   1 |  SORT ORDER BY                             |                            |    10 |  1570 |       | 44600  (29)| 00:00:02 |
+|*  2 |   VIEW                                     |                            |    10 |  1570 |       | 44599  (29)| 00:00:02 |
+|   3 |    TEMP TABLE TRANSFORMATION               |                            |       |       |       |            |          |
+|   4 |     LOAD AS SELECT (CURSOR DURATION MEMORY)| SYS_TEMP_0FD9D6611_1836B28 |       |       |       |            |          |
+|   5 |      HASH GROUP BY                         |                            |  5310 |   819K|       |     6  (34)| 00:00:01 |
+|   6 |       KEY VECTOR CREATE BUFFERED           | :KV0000                    |  5310 |   819K|       |     4   (0)| 00:00:01 |
+|*  7 |        HASH JOIN                           |                            |  5310 |   798K|       |     4   (0)| 00:00:01 |
+|   8 |         TABLE ACCESS FULL                  | HOUSES                     |   409 | 19223 |       |     3   (0)| 00:00:01 |
+|   9 |         TABLE ACCESS INMEMORY FULL         | STUDENTS                   |  5310 |   554K|       |     1   (0)| 00:00:01 |
+|* 10 |     WINDOW SORT PUSHED RANK                |                            |   319K|    57M|    64M| 44594  (29)| 00:00:02 |
+|  11 |      HASH GROUP BY                         |                            |   319K|    57M|    64M| 44594  (29)| 00:00:02 |
+|* 12 |       HASH JOIN                            |                            |   319K|    57M|       | 18223  (69)| 00:00:01 |
+|  13 |        VIEW                                | VW_VT_9E908A56             |  6019 |   358K|       | 18188  (69)| 00:00:01 |
+|  14 |         VECTOR GROUP BY                    |                            |  6019 |   346K|       | 18188  (69)| 00:00:01 |
+|  15 |          HASH GROUP BY                     |                            |  6019 |   346K|       | 18188  (69)| 00:00:01 |
+|  16 |           KEY VECTOR USE                   | :KV0000                    |  6018 |   346K|       | 18186  (69)| 00:00:01 |
+|  17 |            MERGE JOIN                      |                            |  6019 |   323K|       |  5924   (4)| 00:00:01 |
+|  18 |             SORT JOIN                      |                            |  1655K|    31M|       |   236  (59)| 00:00:01 |
+|  19 |              VIEW                          |                            |  1655K|    31M|       |   236  (59)| 00:00:01 |
+|  20 |               HASH GROUP BY                |                            |  1655K|    61M|       |   236  (59)| 00:00:01 |
+|* 21 |                HASH JOIN                   |                            |  1655K|    61M|       |   133  (27)| 00:00:01 |
+|  22 |                 TABLE ACCESS FULL          | GRADES_ENUM                |     6 |    90 |       |     3   (0)| 00:00:01 |
+|* 23 |                 TABLE ACCESS INMEMORY FULL | GRADES                     |  1655K|    37M|       |   119  (21)| 00:00:01 |
+|* 24 |             SORT JOIN                      |                            |  6019 |   205K|       |  5688   (2)| 00:00:01 |
+|* 25 |              TABLE ACCESS INMEMORY FULL    | POINTS                     |  6019 |   205K|       |  5687   (2)| 00:00:01 |
+|  26 |        TABLE ACCESS FULL                   | SYS_TEMP_0FD9D6611_1836B28 |  5310 |   663K|       |    33   (0)| 00:00:01 |
+---------------------------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter("RANK"<=10)
+   7 - access("S"."HOUSE_ID"="H"."ID")
+  10 - filter(ROW_NUMBER() OVER ( ORDER BY ROUND(DECODE(NVL(SUM("ITEM_5"),0),0,TO_NUMBER(NULL),SUM("ITEM_4")/NVL(SUM("ITE
+              M_5"),0)),2) DESC ,NVL(SUM("ITEM_3"),0) DESC )<=10)
+  12 - access("ITEM_11"=INTERNAL_FUNCTION("C0"))
+  21 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  23 - inmemory("GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "GRADES"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+       filter("GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "GRADES"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  24 - access("P"."STUDENT_ID"="MA"."STUDENT_ID")
+       filter("P"."STUDENT_ID"="MA"."STUDENT_ID")
+  25 - inmemory("P"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "P"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+       filter("P"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "P"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - vector transformation used for this statement

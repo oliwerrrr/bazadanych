@@ -1,0 +1,23 @@
+Clean DB Performance Results:
+- Grades analysis: Cost - 6552K, Avg Time - 561.6
+- Points summary: Cost - 161K, Avg Time - 590.5
+- Best students display: Cost - 23M, Avg Time - 233.1
+- Raise grades: Cost - 25097, Avg Time - 1954.6
+- Assign subjects: Cost - 9363, Avg Time - 51422.5
+- Remove points: Cost - 11670, Avg Time - 414.8
+
+In-Memory (Small) Performance Results:
+- Grades analysis: Cost - 2446K, Avg Time - 778.6
+- Points summary: Cost - 18E, Avg Time - 1019.2
+- Best students display: Cost - 44600, Avg Time - 497.8
+- Raise grades: Cost - 498K, Avg Time - 2306.6
+- Assign subjects: Cost - 2604, Avg Time - 3125.6
+- Remove points: Cost - 6479, Avg Time - 4046.1
+
+In-Memory (Large) Performance Results:
+- Grades analysis: Cost - 3347K, Avg Time - 1194.8
+- Points summary: Cost - 18E, Avg Time - 1448.1
+- Best students display: Cost - 42704, Avg Time - 672.9
+- Raise grades: Cost - 746K, Avg Time - 4162.9
+- Assign subjects: Cost - 2604, Avg Time - 3566.3
+- Remove points: Cost - 559, Avg Time - 6399.2 

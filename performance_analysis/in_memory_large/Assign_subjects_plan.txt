@@ -1,0 +1,71 @@
+================Assign subjects================
+Plan hash value: 3030971351
+ 
+----------------------------------------------------------------------------------------------------------------
+| Id  | Operation                             | Name                   | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT                      |                        | 99611 |  8858K|  2604  (12)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL              | STUDENTS_SUBJECTS      |       |       |            |          |
+|   2 |   HASH UNIQUE                         |                        | 99611 |  8858K|  2604  (12)| 00:00:01 |
+|   3 |    UNION-ALL                          |                        |       |       |            |          |
+|   4 |     NESTED LOOPS ANTI                 |                        | 99528 |  8844K|   259  (61)| 00:00:01 |
+|*  5 |      HASH JOIN                        |                        | 99528 |  6317K|   246  (59)| 00:00:01 |
+|*  6 |       TABLE ACCESS INMEMORY FULL      | SUBJECTS               |    76 |  1976 |     3   (0)| 00:00:01 |
+|*  7 |       HASH JOIN ANTI                  |                        |  9167 |   349K|   243  (60)| 00:00:01 |
+|   8 |        JOIN FILTER CREATE             | :BF0000                |  9167 |   232K|     1   (0)| 00:00:01 |
+|*  9 |         TABLE ACCESS INMEMORY FULL    | STUDENTS               |  9167 |   232K|     1   (0)| 00:00:01 |
+|  10 |        VIEW                           | VW_NSO_1               |  1666K|    20M|   230  (58)| 00:00:01 |
+|* 11 |         FILTER                        |                        |       |       |            |          |
+|  12 |          SORT GROUP BY                |                        |  1666K|    68M|   230  (58)| 00:00:01 |
+|* 13 |           HASH JOIN                   |                        |  1666K|    68M|   126  (23)| 00:00:01 |
+|  14 |            TABLE ACCESS FULL          | GRADES_ENUM            |     6 |    90 |     3   (0)| 00:00:01 |
+|  15 |            JOIN FILTER USE            | :BF0000                |  1666K|    44M|   112  (16)| 00:00:01 |
+|* 16 |             TABLE ACCESS INMEMORY FULL| GRADES                 |  1666K|    44M|   112  (16)| 00:00:01 |
+|* 17 |      INDEX UNIQUE SCAN                | SYS_C009260            |     1 |    26 |     0   (0)| 00:00:01 |
+|* 18 |     HASH JOIN ANTI                    |                        |    83 | 14110 |   249  (58)| 00:00:01 |
+|  19 |      NESTED LOOPS ANTI                |                        |    83 | 13031 |     7   (0)| 00:00:01 |
+|* 20 |       HASH JOIN                       |                        |    83 | 10873 |     7   (0)| 00:00:01 |
+|  21 |        JOIN FILTER CREATE             | :BF0001                |    97 | 10185 |     6   (0)| 00:00:01 |
+|  22 |         MERGE JOIN CARTESIAN          |                        |    97 | 10185 |     6   (0)| 00:00:01 |
+|* 23 |          TABLE ACCESS INMEMORY FULL   | SUBJECTS               |     1 |    92 |     3   (0)| 00:00:01 |
+|  24 |          BUFFER SORT                  |                        |    97 |  1261 |     3   (0)| 00:00:01 |
+|  25 |           TABLE ACCESS FULL           | QUIDDITCH_TEAM_MEMBERS |    97 |  1261 |     3   (0)| 00:00:01 |
+|  26 |        JOIN FILTER USE                | :BF0001                |  9167 |   232K|     1   (0)| 00:00:01 |
+|* 27 |         TABLE ACCESS INMEMORY FULL    | STUDENTS               |  9167 |   232K|     1   (0)| 00:00:01 |
+|* 28 |       INDEX UNIQUE SCAN               | SYS_C009260            |     1 |    26 |     0   (0)| 00:00:01 |
+|  29 |      VIEW                             | VW_NSO_2               |  1666K|    20M|   230  (58)| 00:00:01 |
+|* 30 |       FILTER                          |                        |       |       |            |          |
+|  31 |        SORT GROUP BY                  |                        |  1666K|    68M|   230  (58)| 00:00:01 |
+|* 32 |         HASH JOIN                     |                        |  1666K|    68M|   126  (23)| 00:00:01 |
+|  33 |          TABLE ACCESS FULL            | GRADES_ENUM            |     6 |    90 |     3   (0)| 00:00:01 |
+|  34 |          TABLE ACCESS INMEMORY FULL   | GRADES                 |  1666K|    44M|   112  (16)| 00:00:01 |
+----------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   5 - access("S"."YEAR"="SUB"."YEAR")
+   6 - inmemory("SUB"."YEAR">=1 AND "SUB"."YEAR"<=7)
+       filter("SUB"."YEAR">=1 AND "SUB"."YEAR"<=7)
+   7 - access("S"."ID"="STUDENT_ID")
+   9 - inmemory("S"."YEAR">=1 AND "S"."YEAR"<=7)
+       filter("S"."YEAR">=1 AND "S"."YEAR"<=7)
+  11 - filter(SUM("GE"."VALUE")/COUNT("GE"."VALUE")<3.5)
+  13 - access("G"."VALUE"="GE"."SYMBOL")
+  16 - inmemory(SYS_OP_BLOOM_FILTER(:BF0000,"G"."STUDENT_ID"))
+       filter(SYS_OP_BLOOM_FILTER(:BF0000,"G"."STUDENT_ID"))
+  17 - access("SS"."STUDENT_ID"="S"."ID" AND "SS"."SUBJECT_ID"="SUB"."ID")
+  18 - access("S"."ID"="STUDENT_ID")
+  20 - access("S"."ID"="QTM"."STUDENT_ID")
+       filter("S"."YEAR"<>"SUB"."YEAR")
+  23 - inmemory("SUB"."NAME"='Flying')
+       filter("SUB"."NAME"='Flying')
+  27 - inmemory(SYS_OP_BLOOM_FILTER(:BF0001,"S"."ID"))
+       filter(SYS_OP_BLOOM_FILTER(:BF0001,"S"."ID"))
+  28 - access("SS"."STUDENT_ID"="S"."ID" AND "SS"."SUBJECT_ID"="SUB"."ID")
+  30 - filter(SUM("GE"."VALUE")/COUNT("GE"."VALUE")<3.5)
+  32 - access("G"."VALUE"="GE"."SYMBOL")
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)

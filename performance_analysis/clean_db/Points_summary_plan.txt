@@ -1,0 +1,68 @@
+================Points summary================
+Plan hash value: 288482621
+ 
+------------------------------------------------------------------------------------------------------------
+| Id  | Operation                            | Name        | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                     |             |  2986K|   541M|       |   161K  (1)| 00:00:07 |
+|   1 |  HASH GROUP BY                       |             |  2986K|   541M|   583M|   161K  (1)| 00:00:07 |
+|*  2 |   HASH JOIN                          |             |  2986K|   541M|       | 37500   (3)| 00:00:02 |
+|   3 |    TABLE ACCESS FULL                 | TEACHERS    |  1097 | 20843 |       |     5   (0)| 00:00:01 |
+|*  4 |    HASH JOIN                         |             |  2986K|   487M|       | 37475   (3)| 00:00:02 |
+|   5 |     TABLE ACCESS FULL                | TEACHERS    |  1097 | 20843 |       |     5   (0)| 00:00:01 |
+|*  6 |     HASH JOIN                        |             |  2986K|   432M|       | 37450   (3)| 00:00:02 |
+|   7 |      VIEW                            |             |     4 |    64 |       |  9404   (4)| 00:00:01 |
+|   8 |       SORT GROUP BY                  |             |     4 |   116 |       |  9404   (4)| 00:00:01 |
+|   9 |        VIEW                          |             |   858 | 24882 |       |  9404   (4)| 00:00:01 |
+|  10 |         HASH GROUP BY                |             |   858 | 21450 |       |  9404   (4)| 00:00:01 |
+|* 11 |          HASH JOIN                   |             |  2986K|    71M|       |  9211   (2)| 00:00:01 |
+|  12 |           TABLE ACCESS FULL          | STUDENTS    |  9346 | 74768 |       |    19   (0)| 00:00:01 |
+|* 13 |           TABLE ACCESS FULL          | POINTS      |  2986K|    48M|       |  9171   (1)| 00:00:01 |
+|* 14 |      HASH JOIN                       |             |  2986K|   387M|       | 28027   (3)| 00:00:02 |
+|  15 |       VIEW                           |             |     4 |   116 |       |  9408   (4)| 00:00:01 |
+|  16 |        SORT GROUP BY                 |             |     4 |   116 |       |  9408   (4)| 00:00:01 |
+|  17 |         VIEW                         |             |  3103 | 89987 |       |  9408   (4)| 00:00:01 |
+|  18 |          HASH GROUP BY               |             |  3103 | 89987 |       |  9408   (4)| 00:00:01 |
+|* 19 |           HASH JOIN                  |             |  2986K|    82M|       |  9214   (2)| 00:00:01 |
+|  20 |            TABLE ACCESS FULL         | STUDENTS    |  9346 | 74768 |       |    19   (0)| 00:00:01 |
+|* 21 |            TABLE ACCESS FULL         | POINTS      |  2986K|    59M|       |  9175   (1)| 00:00:01 |
+|* 22 |       HASH JOIN                      |             |  2986K|   304M|       | 18599   (3)| 00:00:01 |
+|  23 |        VIEW                          | VW_GBF_15   |  9346 |   821K|       |  9408   (3)| 00:00:01 |
+|* 24 |         HASH JOIN                    |             |  9346 |   940K|       |  9408   (3)| 00:00:01 |
+|  25 |          MERGE JOIN                  |             |     4 |   380 |       |  9388   (3)| 00:00:01 |
+|  26 |           TABLE ACCESS BY INDEX ROWID| HOUSES      |     4 |    56 |       |     2   (0)| 00:00:01 |
+|  27 |            INDEX FULL SCAN           | SYS_C008385 |     4 |       |       |     1   (0)| 00:00:01 |
+|* 28 |           SORT JOIN                  |             |     4 |   324 |       |  9386   (3)| 00:00:01 |
+|  29 |            VIEW                      |             |     4 |   324 |       |  9385   (3)| 00:00:01 |
+|  30 |             SORT GROUP BY            |             |     4 |   164 |       |  9385   (3)| 00:00:01 |
+|* 31 |              HASH JOIN               |             |  9346 |   374K|       |  9384   (3)| 00:00:01 |
+|  32 |               VIEW                   |             |  9346 |   164K|       |  9365   (3)| 00:00:01 |
+|  33 |                HASH GROUP BY         |             |  9346 |   155K|       |  9365   (3)| 00:00:01 |
+|* 34 |                 TABLE ACCESS FULL    | POINTS      |  2986K|    48M|       |  9171   (1)| 00:00:01 |
+|  35 |               TABLE ACCESS FULL      | STUDENTS    |  9346 |   209K|       |    19   (0)| 00:00:01 |
+|  36 |          TABLE ACCESS FULL           | STUDENTS    |  9346 | 74768 |       |    19   (0)| 00:00:01 |
+|* 37 |        TABLE ACCESS FULL             | POINTS      |  2986K|    48M|       |  9171   (1)| 00:00:01 |
+------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("T2"."ID"="T"."LEAST_FAVOURITE_TEACHER")
+   4 - access("T1"."ID"="T"."FAVOURITE_TEACHER")
+   6 - access("M"."HOUSE_ID"="ITEM_2")
+  11 - access("POINTS"."STUDENT_ID"="STUDENTS"."ID")
+  13 - filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  14 - access("T"."HOUSE_ID"="ITEM_2")
+  19 - access("STUDENTS"."ID"="POINTS"."STUDENT_ID")
+  21 - filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  22 - access("ITEM_1"="POINTS"."STUDENT_ID")
+  24 - access("HOUSES"."ID"="STUDENTS"."HOUSE_ID")
+  28 - access("S"."HOUSE_ID"="HOUSES"."ID")
+       filter("S"."HOUSE_ID"="HOUSES"."ID")
+  31 - access("STUDENTS"."ID"="Q"."STUDENT_ID")
+  34 - filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  37 - filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))

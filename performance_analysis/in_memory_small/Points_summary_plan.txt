@@ -1,0 +1,82 @@
+================Points summary================
+Plan hash value: 3407257357
+ 
+------------------------------------------------------------------------------------------------------------
+| Id  | Operation                               | Name     | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                        |          |    18E|    15E|       |    18E(100)|999:59:59 |
+|   1 |  HASH GROUP BY                          |          |    18E|    15E|       |    18E(100)|999:59:59 |
+|   2 |   MERGE JOIN                            |          |    18E|    15E|       |   919P(100)|999:59:59 |
+|   3 |    MERGE JOIN                           |          |   311P|    15E|       |  2071G(100)|999:59:59 |
+|   4 |     SORT JOIN                           |          |   728G|   204T|   434T|  3173M  (4)| 34:25:56 |
+|*  5 |      HASH JOIN                          |          |   728G|   204T|       |    14M(100)| 00:09:29 |
+|   6 |       TABLE ACCESS FULL                 | TEACHERS |  1097 | 88857 |       |     5   (0)| 00:00:01 |
+|*  7 |       HASH JOIN                         |          |   728G|   151T|       |  9710K(100)| 00:06:20 |
+|   8 |        TABLE ACCESS FULL                | TEACHERS |  1097 | 88857 |       |     5   (0)| 00:00:01 |
+|*  9 |        HASH JOIN                        |          |   728G|    97T|    82M|  4868K(100)| 00:03:11 |
+|  10 |         VIEW                            |          |  1706K|    63M|       |  6466   (3)| 00:00:01 |
+|  11 |          SORT GROUP BY                  |          |  1706K|    63M|       |  6466   (3)| 00:00:01 |
+|  12 |           VIEW                          |          |  1706K|    63M|       |  6466   (3)| 00:00:01 |
+|  13 |            HASH GROUP BY                |          |  1706K|   125M|       |  6466   (3)| 00:00:01 |
+|* 14 |             HASH JOIN                   |          |  1706K|   125M|       |  6359   (2)| 00:00:01 |
+|  15 |              VIEW                       | VW_GBF_6 |  9153 |   259K|       |     1   (0)| 00:00:01 |
+|  16 |               TABLE ACCESS INMEMORY FULL| STUDENTS |  9153 |   232K|       |     1   (0)| 00:00:01 |
+|* 17 |              TABLE ACCESS INMEMORY FULL | POINTS   |  1777K|    81M|       |  6346   (1)| 00:00:01 |
+|* 18 |         HASH JOIN                       |          |  1708K|   176M|       |  6355   (2)| 00:00:01 |
+|* 19 |          HASH JOIN                      |          |  9167 |   653K|       |     4   (0)| 00:00:01 |
+|  20 |           TABLE ACCESS FULL             | HOUSES   |     4 |   188 |       |     3   (0)| 00:00:01 |
+|  21 |           TABLE ACCESS INMEMORY FULL    | STUDENTS |  9167 |   232K|       |     1   (0)| 00:00:01 |
+|* 22 |          TABLE ACCESS INMEMORY FULL     | POINTS   |  1777K|    59M|       |  6339   (1)| 00:00:01 |
+|* 23 |     SORT JOIN                           |          |  1708K|    42M|   118M| 19159   (2)| 00:00:01 |
+|  24 |      VIEW                               |          |  1708K|    42M|       |  6459   (3)| 00:00:01 |
+|  25 |       SORT GROUP BY                     |          |  1708K|    63M|       |  6459   (3)| 00:00:01 |
+|  26 |        VIEW                             |          |  1708K|    63M|       |  6459   (3)| 00:00:01 |
+|  27 |         HASH GROUP BY                   |          |  1708K|    99M|       |  6459   (3)| 00:00:01 |
+|* 28 |          HASH JOIN                      |          |  1708K|    99M|       |  6352   (2)| 00:00:01 |
+|  29 |           TABLE ACCESS INMEMORY FULL    | STUDENTS |  9167 |   232K|       |     1   (0)| 00:00:01 |
+|* 30 |           TABLE ACCESS INMEMORY FULL    | POINTS   |  1777K|    59M|       |  6339   (1)| 00:00:01 |
+|* 31 |    SORT JOIN                            |          |  1777K|   137M|   315M| 40229   (1)| 00:00:02 |
+|  32 |     VIEW                                |          |  1777K|   137M|       |  6539   (4)| 00:00:01 |
+|  33 |      SORT GROUP BY                      |          |  1777K|   203M|       |  6539   (4)| 00:00:01 |
+|* 34 |       HASH JOIN                         |          |  1777K|   203M|       |  6428   (3)| 00:00:01 |
+|  35 |        TABLE ACCESS INMEMORY FULL       | STUDENTS |  9167 |   841K|       |     1   (0)| 00:00:01 |
+|  36 |        VIEW                             |          |  1777K|    44M|       |  6414   (3)| 00:00:01 |
+|  37 |         HASH GROUP BY                   |          |  1777K|    59M|       |  6414   (3)| 00:00:01 |
+|* 38 |          TABLE ACCESS INMEMORY FULL     | POINTS   |  1777K|    59M|       |  6339   (1)| 00:00:01 |
+------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   5 - access("T2"."ID"="T"."LEAST_FAVOURITE_TEACHER")
+   7 - access("T1"."ID"="T"."FAVOURITE_TEACHER")
+   9 - access("T"."HOUSE_ID"="HOUSES"."ID")
+  14 - access("ITEM_1"="POINTS"."STUDENT_ID")
+  17 - inmemory("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') 
+              AND "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+       filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  18 - access("STUDENTS"."ID"="POINTS"."STUDENT_ID")
+  19 - access("HOUSES"."ID"="STUDENTS"."HOUSE_ID")
+  22 - inmemory("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') 
+              AND "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+       filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  23 - access("M"."HOUSE_ID"="HOUSES"."ID")
+       filter("M"."HOUSE_ID"="HOUSES"."ID")
+  28 - access("POINTS"."STUDENT_ID"="STUDENTS"."ID")
+  30 - inmemory("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') 
+              AND "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+       filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  31 - access("S"."HOUSE_ID"="HOUSES"."ID")
+       filter("S"."HOUSE_ID"="HOUSES"."ID")
+  34 - access("STUDENTS"."ID"="Q"."STUDENT_ID")
+  38 - inmemory("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') 
+              AND "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+       filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)

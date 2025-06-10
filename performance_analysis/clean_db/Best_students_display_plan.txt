@@ -1,0 +1,39 @@
+================Best students display================
+Plan hash value: 3883687736
+ 
+--------------------------------------------------------------------------------------------------
+| Id  | Operation                  | Name        | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+--------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT           |             |    10 |  1330 |       |    23M  (1)| 00:15:20 |
+|   1 |  SORT ORDER BY             |             |    10 |  1330 |       |    23M  (1)| 00:15:20 |
+|*  2 |   VIEW                     |             |    10 |  1330 |       |    23M  (1)| 00:15:20 |
+|*  3 |    WINDOW SORT PUSHED RANK |             |   631M|    47G|    54G|    23M  (1)| 00:15:20 |
+|   4 |     HASH GROUP BY          |             |   631M|    47G|    54G|    23M  (1)| 00:15:20 |
+|*  5 |      HASH JOIN             |             |   631M|    47G|    82M| 39158  (12)| 00:00:02 |
+|*  6 |       TABLE ACCESS FULL    | POINTS      |  2986K|    48M|       |  9171   (1)| 00:00:01 |
+|*  7 |       HASH JOIN            |             |  1977K|   118M|       | 14639   (2)| 00:00:01 |
+|*  8 |        HASH JOIN           |             |  9346 |   365K|       |    22   (0)| 00:00:01 |
+|   9 |         TABLE ACCESS FULL  | HOUSES      |     4 |    56 |       |     3   (0)| 00:00:01 |
+|  10 |         TABLE ACCESS FULL  | STUDENTS    |  9346 |   237K|       |    19   (0)| 00:00:01 |
+|  11 |        VIEW                |             |  1977K|    43M|       | 14604   (2)| 00:00:01 |
+|  12 |         HASH GROUP BY      |             |  1977K|    37M|    60M| 14604   (2)| 00:00:01 |
+|* 13 |          HASH JOIN         |             |  1977K|    37M|       |  2521   (3)| 00:00:01 |
+|  14 |           TABLE ACCESS FULL| GRADES_ENUM |     6 |    30 |       |     3   (0)| 00:00:01 |
+|* 15 |           TABLE ACCESS FULL| GRADES      |  1977K|    28M|       |  2505   (2)| 00:00:01 |
+--------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter("RANK"<=10)
+   3 - filter(ROW_NUMBER() OVER ( ORDER BY ROUND(SUM("MA"."AVG_GRADE")/COUNT("MA"."AVG_GRA
+              DE"),2) DESC ,NVL(SUM("P"."VALUE"),0) DESC )<=10)
+   5 - access("S"."ID"="P"."STUDENT_ID")
+   6 - filter("P"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') 
+              AND "P"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+   7 - access("MA"."STUDENT_ID"="S"."ID")
+   8 - access("S"."HOUSE_ID"="H"."ID")
+  13 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  15 - filter("GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd 
+              hh24:mi:ss') AND "GRADES"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd 
+              hh24:mi:ss'))

@@ -1,0 +1,31 @@
+================Remove points================
+Plan hash value: 785292234
+ 
+-----------------------------------------------------------------------------------------
+| Id  | Operation                 | Name        | Rows  | Bytes | Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT          |             | 18383 |   574K| 11670   (2)| 00:00:01 |
+|   1 |  DELETE                   | POINTS      |       |       |            |          |
+|*  2 |   HASH JOIN RIGHT SEMI    |             | 18383 |   574K| 11670   (2)| 00:00:01 |
+|   3 |    VIEW                   | VW_NSO_1    |   115 |  1495 |  2503   (2)| 00:00:01 |
+|*  4 |     SORT GROUP BY         |             |   115 |  2070 |  2503   (2)| 00:00:01 |
+|   5 |      VIEW                 |             |  2291 | 41238 |  2503   (2)| 00:00:01 |
+|*  6 |       FILTER              |             |       |       |            |          |
+|   7 |        HASH GROUP BY      |             |  2291 | 54984 |  2503   (2)| 00:00:01 |
+|*  8 |         HASH JOIN         |             | 45810 |  1073K|  2499   (2)| 00:00:01 |
+|   9 |          TABLE ACCESS FULL| GRADES_ENUM |     6 |    30 |     3   (0)| 00:00:01 |
+|* 10 |          TABLE ACCESS FULL| GRADES      | 45810 |   849K|  2496   (2)| 00:00:01 |
+|* 11 |    TABLE ACCESS FULL      | POINTS      |  1494K|    27M|  9157   (1)| 00:00:01 |
+-----------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("POINTS"."STUDENT_ID"="STUDENT_ID")
+   4 - filter(COUNT("Q"."SUBJECT_ID")>=4)
+   6 - filter(SUM("GRADES_ENUM"."VALUE")/COUNT("GRADES_ENUM"."VALUE")<4)
+   8 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  10 - filter("GRADES"."AWARD_DATE"<=TO_DATE(' 2023-09-07 00:00:00', 
+              'syyyy-mm-dd hh24:mi:ss') AND "GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-01 
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  11 - filter("POINTS"."VALUE">0)

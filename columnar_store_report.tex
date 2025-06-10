@@ -1,0 +1,149 @@
+\section{Columnar store - implementation}
+
+\subsection{Implemented columnar storage}
+
+As declared before, we implemented Oracle In-Memory columnar storage for analytical tables. We configured In-Memory for key tables that are frequently accessed in our workload and benefit from columnar compression and parallel processing.
+
+\subsubsection{Table selection criteria}
+We selected tables for columnar storage based on three critical factors:
+\begin{itemize}
+    \item \textbf{GRADES and POINTS} (Critical Priority): Large fact tables with millions of records. Heavy analytical processing with aggregations, filtering, and joins. Core tables for most workload queries.
+    \item \textbf{STUDENTS} (High Priority): Central dimensional table frequently joined with fact tables. Medium size but high join frequency across all analytical queries.
+    \item \textbf{SUBJECTS and STUDENTS\_SUBJECTS} (High Priority): Key dimensional and junction tables essential for query performance. Moderate size but critical for join operations.
+\end{itemize}
+
+Small lookup tables (HOUSES, TEACHERS, GRADES\_ENUM) remained in traditional row storage due to their size and access patterns being more suitable for OLTP operations.
+
+\begin{lstlisting}
+-- Large analytical fact tables (critical priority)
+CREATE TABLE grades (
+    id NUMBER NOT NULL PRIMARY KEY,
+    value VARCHAR2(1) NOT NULL,
+    award_date DATE NOT NULL,
+    student_id NUMBER NOT NULL,
+    subject_id NUMBER NOT NULL,
+    teacher_id NUMBER NOT NULL
+) INMEMORY PRIORITY CRITICAL MEMCOMPRESS FOR QUERY LOW;
+
+CREATE TABLE points (
+    id NUMBER NOT NULL PRIMARY KEY,
+    value NUMBER NOT NULL,
+    description VARCHAR2(1024),
+    award_date DATE NOT NULL,
+    student_id NUMBER NOT NULL,
+    teacher_id NUMBER NOT NULL
+) INMEMORY PRIORITY CRITICAL MEMCOMPRESS FOR QUERY LOW;
+
+-- Large dimensional tables (high priority)
+CREATE TABLE students (
+    id NUMBER NOT NULL PRIMARY KEY,
+    name VARCHAR2(64) NOT NULL,
+    surname VARCHAR2(64) NOT NULL,
+    gender CHAR(1) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    year NUMBER NOT NULL,
+    hogsmeade_consent NUMBER(1) DEFAULT 0 NOT NULL,
+    house_id NUMBER NOT NULL,
+    dormitory_id NUMBER
+) INMEMORY PRIORITY HIGH MEMCOMPRESS FOR QUERY LOW;
+
+CREATE TABLE subjects (
+    id NUMBER NOT NULL PRIMARY KEY,
+    name VARCHAR2(128) NOT NULL,
+    classroom VARCHAR2(64) NOT NULL,
+    year NUMBER NOT NULL,
+    teacher_id NUMBER NOT NULL
+) INMEMORY PRIORITY HIGH MEMCOMPRESS FOR QUERY LOW;
+
+CREATE TABLE students_subjects (
+    student_id NUMBER NOT NULL,
+    subject_id NUMBER NOT NULL,
+    PRIMARY KEY (student_id, subject_id)
+) INMEMORY PRIORITY HIGH MEMCOMPRESS FOR QUERY LOW;
+\end{lstlisting}
+
+\subsection{Cost comparison}
+We ran the whole workload on the database with three different configurations: \textbf{clean database} (no in-memory), \textbf{250MB in-memory buffer}, and \textbf{1GB in-memory buffer}, measuring performance \textbf{5 times} in each case. Columnar storage significantly influenced query plans and costs for most analytical operations.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{|l||r|r|r||r|r|r||r|r|r||r|r|r|}
+        \hline
+        \multirow{2}{*}{\textbf{Procedure name}} & \multicolumn{3}{c||}{\textbf{Min execution time (ms)}} & \multicolumn{3}{c||}{\textbf{Max execution time (ms)}} & \multicolumn{3}{c||}{\textbf{Avg execution time (ms)}} & \multicolumn{3}{c|}{\textbf{Query plan cost}} \\
+         & Clean & 250MB & 1GB & Clean & 250MB & 1GB & Clean & 250MB & 1GB & Clean & 250MB & 1GB \\
+        \hline
+        Grades analysis & 498 & 723 & 664 & 647 & 868 & 1598 & 561.6 & 778.6 & 1194.8 & 6552K & 2446K & 3347K \\
+        Points summary  & 521 & 888 & 976 & 678 & 1269 & 1751 & 590.5 & 1019.2 & 1448.1 & 161K & 18E & 18E \\
+        Best students   & 198 & 438 & 487 & 289 & 548 & 836 & 233.1 & 497.8 & 672.9 & 23M & 44600 & 42704 \\
+        Raise grades    & 1734 & 2206 & 1469 & 2198 & 2442 & 5376 & 1954.6 & 2306.6 & 4162.9 & 25097 & 498K & 746K \\
+        Assign subjects & 47856 & 2860 & 3096 & 58974 & 3862 & 3991 & 51422.5 & 3125.6 & 3566.3 & 9363 & 2604 & 2604 \\
+        Remove points   & 356 & 3587 & 5414 & 487 & 5910 & 6985 & 414.8 & 4046.1 & 6399.2 & 11670 & 6479 & 559 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Query plans comparison}
+
+Implementing columnar storage dramatically changed query execution plans. The Oracle optimizer leveraged in-memory columnar operations, vector processing, and specialized algorithms for analytical workloads.
+
+\clearpage
+\begin{multicols}{2}
+
+    \subsubsection{Grades analysis - Clean database}
+    \verbfilenobox[{\fontsize{4pt}{5pt}\selectfont}]{performance_analysis/clean_db/Grades_analysis_plan.txt}
+    \vfill\null
+    \columnbreak
+
+    \subsubsection{Grades analysis - 250MB In-Memory}
+    \verbfilenobox[{\fontsize{4pt}{5pt}\selectfont}]{performance_analysis/in_memory_small/Grades_analysis_plan.txt}
+    \vfill\null
+\end{multicols}
+
+\clearpage
+\begin{multicols}{2}
+
+    \subsubsection{Grades analysis - 1GB In-Memory}
+    \verbfilenobox[{\fontsize{4pt}{5pt}\selectfont}]{performance_analysis/in_memory_large/Grades_analysis_plan.txt}
+    \vfill\null
+    \columnbreak
+
+    \subsubsection{Best students display - Clean database}
+    \verbfilenobox[{\fontsize{5pt}{6pt}\selectfont}]{performance_analysis/clean_db/Best_students_display_plan.txt}
+    \vfill\null
+\end{multicols}
+
+\clearpage
+\begin{multicols}{2}
+
+    \subsubsection{Best students display - 250MB In-Memory}
+    \verbfilenobox[{\fontsize{5pt}{6pt}\selectfont}]{performance_analysis/in_memory_small/Best_students_display_plan.txt}
+    \vfill\null
+    \columnbreak
+
+    \subsubsection{Best students display - 1GB In-Memory}
+    \verbfilenobox[{\fontsize{5pt}{6pt}\selectfont}]{performance_analysis/in_memory_large/Best_students_display_plan.txt}
+    \vfill\null
+\end{multicols}
+
+\subsection{Experiments}
+%%%%%%%%%%%%%%%%%%%%%%%%
+We conducted experiments comparing different in-memory buffer sizes (250MB vs 1GB) to understand the impact of available memory on columnar storage performance. The results show that larger memory allocation doesn't always guarantee better performance due to Oracle's memory management algorithms and workload characteristics.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{|l||r|r||r|r||r|r||r|r||r|r|}
+        \hline
+        \multirow{2}{*}{\textbf{Procedure name}} & \multicolumn{2}{c||}{\textbf{Min time (ms)}} & \multicolumn{2}{c||}{\textbf{Max time (ms)}} & \multicolumn{2}{c||}{\textbf{Avg time (ms)}} & \multicolumn{2}{c||}{\textbf{Time difference}} & \multicolumn{2}{c|}{\textbf{Cost comparison}} \\
+         & 250MB & 1GB & 250MB & 1GB & 250MB & 1GB & Diff. & Change & 250MB & 1GB \\
+        \hline
+        Grades analysis & 723 & 664 & 868 & 1598 & 778.6 & 1194.8 & +416.2 & +53.5\% & 2446K & 3347K \\
+        Points summary  & 888 & 976 & 1269 & 1751 & 1019.2 & 1448.1 & +428.9 & +42.1\% & 18E & 18E \\
+        Best students   & 438 & 487 & 548 & 836 & 497.8 & 672.9 & +175.1 & +35.2\% & 44600 & 42704 \\
+        Raise grades    & 2206 & 1469 & 2442 & 5376 & 2306.6 & 4162.9 & +1856.3 & +80.5\% & 498K & 746K \\
+        Assign subjects & 2860 & 3096 & 3862 & 3991 & 3125.6 & 3566.3 & +440.7 & +14.1\% & 2604 & 2604 \\
+        Remove points   & 3587 & 5414 & 5910 & 6985 & 4046.1 & 6399.2 & +2353.1 & +58.2\% & 6479 & 559 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+The experiments demonstrate that Oracle's in-memory optimization effectiveness depends on specific query patterns and data access characteristics. While query plan costs generally improved dramatically compared to traditional row storage, the optimal memory allocation varies by workload complexity. 

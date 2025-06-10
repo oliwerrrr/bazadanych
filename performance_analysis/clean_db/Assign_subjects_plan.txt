@@ -1,0 +1,56 @@
+================Assign subjects================
+Plan hash value: 1500324911
+ 
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                   | Name                   | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+--------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT            |                        |    14 |   527 |       |  9363   (4)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL    | STUDENTS_SUBJECTS      |       |       |       |            |          |
+|   2 |   HASH UNIQUE               |                        |    14 |   527 |       |  9363   (4)| 00:00:01 |
+|   3 |    UNION-ALL                |                        |       |       |       |            |          |
+|*  4 |     HASH JOIN ANTI          |                        |    13 |   481 |       |  6563   (3)| 00:00:01 |
+|*  5 |      HASH JOIN              |                        |  1016 | 28448 |       |  6425   (3)| 00:00:01 |
+|*  6 |       HASH JOIN ANTI        |                        |    93 |  1953 |       |  6422   (3)| 00:00:01 |
+|*  7 |        TABLE ACCESS FULL    | STUDENTS               |  9346 | 74768 |       |    19   (0)| 00:00:01 |
+|   8 |        VIEW                 | VW_NSO_1               | 25113 |   318K|       |  6402   (3)| 00:00:01 |
+|*  9 |         FILTER              |                        |       |       |       |            |          |
+|  10 |          SORT GROUP BY      |                        | 25113 |   392K|    53M|  6402   (3)| 00:00:01 |
+|* 11 |           HASH JOIN         |                        |  1977K|    30M|       |  2511   (2)| 00:00:01 |
+|  12 |            TABLE ACCESS FULL| GRADES_ENUM            |     6 |    30 |       |     3   (0)| 00:00:01 |
+|  13 |            TABLE ACCESS FULL| GRADES                 |  1977K|    20M|       |  2495   (2)| 00:00:01 |
+|* 14 |       TABLE ACCESS FULL     | SUBJECTS               |    76 |   532 |       |     3   (0)| 00:00:01 |
+|  15 |      TABLE ACCESS FULL      | STUDENTS_SUBJECTS      |   101K|   892K|       |   137   (1)| 00:00:01 |
+|* 16 |     FILTER                  |                        |       |       |       |            |          |
+|* 17 |      HASH JOIN ANTI         |                        |     1 |    46 |       |   163   (2)| 00:00:01 |
+|* 18 |       HASH JOIN RIGHT SEMI  |                        |    83 |  3071 |       |    25   (0)| 00:00:01 |
+|  19 |        TABLE ACCESS FULL    | QUIDDITCH_TEAM_MEMBERS |    97 |   485 |       |     3   (0)| 00:00:01 |
+|  20 |        NESTED LOOPS         |                        |  8009 |   250K|       |    22   (0)| 00:00:01 |
+|* 21 |         TABLE ACCESS FULL   | SUBJECTS               |     1 |    24 |       |     3   (0)| 00:00:01 |
+|* 22 |         TABLE ACCESS FULL   | STUDENTS               |  8009 | 64072 |       |    19   (0)| 00:00:01 |
+|  23 |       TABLE ACCESS FULL     | STUDENTS_SUBJECTS      |   101K|   892K|       |   137   (1)| 00:00:01 |
+|* 24 |      FILTER                 |                        |       |       |       |            |          |
+|  25 |       HASH GROUP BY         |                        |    54 |   864 |       |  2635   (7)| 00:00:01 |
+|* 26 |        HASH JOIN            |                        |  1977K|    30M|       |  2511   (2)| 00:00:01 |
+|  27 |         TABLE ACCESS FULL   | GRADES_ENUM            |     6 |    30 |       |     3   (0)| 00:00:01 |
+|  28 |         TABLE ACCESS FULL   | GRADES                 |  1977K|    20M|       |  2495   (2)| 00:00:01 |
+--------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   4 - access("SS"."STUDENT_ID"="S"."ID" AND "SS"."SUBJECT_ID"="SUB"."ID")
+   5 - access("S"."YEAR"="SUB"."YEAR")
+   6 - access("S"."ID"="STUDENT_ID")
+   7 - filter("S"."YEAR">=1 AND "S"."YEAR"<=7)
+   9 - filter(SUM("GE"."VALUE")/COUNT("GE"."VALUE")<3.5)
+  11 - access("G"."VALUE"="GE"."SYMBOL")
+  14 - filter("SUB"."YEAR">=1 AND "SUB"."YEAR"<=7)
+  16 - filter( NOT EXISTS (SELECT 0 FROM "GRADES_ENUM" "GE","GRADES" "G" WHERE 
+              "G"."VALUE"="GE"."SYMBOL" GROUP BY "G"."STUDENT_ID","G"."SUBJECT_ID" HAVING "G"."STUDENT_ID"=:B1 AND 
+              SUM("GE"."VALUE")/COUNT("GE"."VALUE")<3.5))
+  17 - access("SS"."STUDENT_ID"="S"."ID" AND "SS"."SUBJECT_ID"="SUB"."ID")
+  18 - access("S"."ID"="QTM"."STUDENT_ID")
+  21 - filter("SUB"."NAME"='Flying')
+  22 - filter("S"."YEAR"<>"SUB"."YEAR")
+  24 - filter("G"."STUDENT_ID"=:B1 AND SUM("GE"."VALUE")/COUNT("GE"."VALUE")<3.5)
+  26 - access("G"."VALUE"="GE"."SYMBOL")

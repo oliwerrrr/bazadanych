@@ -1,0 +1,59 @@
+================Raise grades================
+Plan hash value: 3321808300
+ 
+----------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                | Name        | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------------------------------
+|   0 | MERGE STATEMENT                          |             |   106 |   424 |       |   746K  (1)| 00:00:30 |
+|   1 |  MERGE                                   | GRADES      |       |       |       |            |          |
+|   2 |   VIEW                                   |             |       |       |       |            |          |
+|   3 |    NESTED LOOPS                          |             |   106 | 10918 |       |   746K  (1)| 00:00:30 |
+|   4 |     NESTED LOOPS                         |             |   106 | 10918 |       |   746K  (1)| 00:00:30 |
+|*  5 |      VIEW                                |             |   106 |  2968 |       |   746K  (1)| 00:00:30 |
+|*  6 |       WINDOW SORT PUSHED RANK            |             |    54M|  2898M|  3338M|   746K  (1)| 00:00:30 |
+|*  7 |        HASH JOIN                         |             |    54M|  2898M|    15M|  3698  (14)| 00:00:01 |
+|   8 |         VIEW                             |             |   653K|  8298K|       |   434  (23)| 00:00:01 |
+|*  9 |          FILTER                          |             |       |       |       |            |          |
+|  10 |           SORT GROUP BY                  |             |   653K|   104M|       |   434  (23)| 00:00:01 |
+|* 11 |            HASH JOIN OUTER               |             |   653K|   104M|       |   395  (15)| 00:00:01 |
+|  12 |             JOIN FILTER CREATE           | :BF0000     |  2292 |   315K|       |     4   (0)| 00:00:01 |
+|* 13 |              HASH JOIN                   |             |  2292 |   315K|       |     4   (0)| 00:00:01 |
+|  14 |               JOIN FILTER CREATE         | :BF0001     |     1 |    47 |       |     3   (0)| 00:00:01 |
+|* 15 |                TABLE ACCESS FULL         | HOUSES      |     1 |    47 |       |     3   (0)| 00:00:01 |
+|  16 |               JOIN FILTER USE            | :BF0001     |  9167 |   841K|       |     1   (0)| 00:00:01 |
+|* 17 |                TABLE ACCESS INMEMORY FULL| STUDENTS    |  9167 |   841K|       |     1   (0)| 00:00:01 |
+|  18 |             JOIN FILTER USE              | :BF0000     |  2614K|    64M|       |   373  (11)| 00:00:01 |
+|* 19 |              TABLE ACCESS INMEMORY FULL  | POINTS      |  2614K|    64M|       |   373  (11)| 00:00:01 |
+|* 20 |         HASH JOIN                        |             |   760K|    31M|       |   139  (30)| 00:00:01 |
+|  21 |          JOIN FILTER CREATE              | :BF0002     |     4 |    60 |       |     3   (0)| 00:00:01 |
+|* 22 |           TABLE ACCESS FULL              | GRADES_ENUM |     4 |    60 |       |     3   (0)| 00:00:01 |
+|  23 |          JOIN FILTER USE                 | :BF0002     |  1141K|    30M|       |   128  (26)| 00:00:01 |
+|* 24 |           TABLE ACCESS INMEMORY FULL     | GRADES      |  1141K|    30M|       |   128  (26)| 00:00:01 |
+|* 25 |      INDEX UNIQUE SCAN                   | SYS_C009269 |     1 |       |       |     0   (0)| 00:00:01 |
+|  26 |     TABLE ACCESS BY INDEX ROWID          | GRADES      |     1 |    75 |       |     1   (0)| 00:00:01 |
+----------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   5 - filter("GRADE_RANK"<=1)
+   6 - filter(ROW_NUMBER() OVER ( PARTITION BY "G"."STUDENT_ID" ORDER BY 
+              "GE"."VALUE","DBMS_RANDOM"."VALUE"())<=1)
+   7 - access("G"."STUDENT_ID"="ES"."STUDENT_ID")
+   9 - filter(NVL(SUM("P"."VALUE"),0)>=150)
+  11 - access("S"."ID"="P"."STUDENT_ID"(+))
+  13 - access("S"."HOUSE_ID"="H"."ID")
+  15 - filter(INSTR(',Ravenclaw,',','||"H"."NAME"||',')>0)
+  17 - inmemory(SYS_OP_BLOOM_FILTER(:BF0001,"S"."HOUSE_ID"))
+       filter(SYS_OP_BLOOM_FILTER(:BF0001,"S"."HOUSE_ID"))
+  19 - inmemory(SYS_OP_BLOOM_FILTER(:BF0000,"P"."STUDENT_ID"(+)))
+       filter(SYS_OP_BLOOM_FILTER(:BF0000,"P"."STUDENT_ID"(+)))
+  20 - access("G"."VALUE"="GE"."SYMBOL")
+  22 - filter("GE"."SYMBOL"<>'O' AND "GE"."SYMBOL"<>'E')
+  24 - inmemory("G"."VALUE"<>'O' AND "G"."VALUE"<>'E' AND SYS_OP_BLOOM_FILTER(:BF0002,"G"."VALUE"))
+       filter("G"."VALUE"<>'O' AND "G"."VALUE"<>'E' AND SYS_OP_BLOOM_FILTER(:BF0002,"G"."VALUE"))
+  25 - access("G"."ID"="GRADE_ID")
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)

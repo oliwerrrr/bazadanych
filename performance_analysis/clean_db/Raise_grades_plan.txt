@@ -1,0 +1,42 @@
+================Raise grades================
+Plan hash value: 3808460311
+ 
+-----------------------------------------------------------------------------------------------------
+| Id  | Operation                     | Name        | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------------------
+|   0 | MERGE STATEMENT               |             |  9346 | 37384 |       | 25097   (2)| 00:00:01 |
+|   1 |  MERGE                        | GRADES      |       |       |       |            |          |
+|   2 |   VIEW                        |             |       |       |       |            |          |
+|*  3 |    HASH JOIN                  |             |  9346 |   511K|       | 25097   (2)| 00:00:01 |
+|*  4 |     VIEW                      |             |  9346 |   255K|       | 22586   (2)| 00:00:01 |
+|*  5 |      WINDOW SORT PUSHED RANK  |             |  1579K|    34M|    48M| 22586   (2)| 00:00:01 |
+|*  6 |       HASH JOIN               |             |  1579K|    34M|       | 11739   (2)| 00:00:01 |
+|*  7 |        TABLE ACCESS FULL      | GRADES_ENUM |     6 |    30 |       |     3   (0)| 00:00:01 |
+|*  8 |        HASH JOIN              |             |  1579K|    27M|       | 11726   (2)| 00:00:01 |
+|   9 |         VIEW                  |             |  7467 | 37335 |       |  9202   (1)| 00:00:01 |
+|* 10 |          FILTER               |             |       |       |       |            |          |
+|  11 |           SORT GROUP BY       |             |  7467 |   335K|       |  9202   (1)| 00:00:01 |
+|* 12 |            HASH JOIN OUTER    |             |   149K|  6707K|       |  9194   (1)| 00:00:01 |
+|* 13 |             HASH JOIN         |             |   467 | 17279 |       |    22   (0)| 00:00:01 |
+|* 14 |              TABLE ACCESS FULL| HOUSES      |     1 |    14 |       |     3   (0)| 00:00:01 |
+|  15 |              TABLE ACCESS FULL| STUDENTS    |  9346 |   209K|       |    19   (0)| 00:00:01 |
+|  16 |             TABLE ACCESS FULL | POINTS      |  2986K|    25M|       |  9152   (1)| 00:00:01 |
+|* 17 |         TABLE ACCESS FULL     | GRADES      |  1977K|    24M|       |  2510   (2)| 00:00:01 |
+|  18 |     TABLE ACCESS FULL         | GRADES      |  1977K|    52M|       |  2497   (2)| 00:00:01 |
+-----------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   3 - access("G"."ID"="GRADE_ID")
+   4 - filter("GRADE_RANK"<=1)
+   5 - filter(ROW_NUMBER() OVER ( PARTITION BY "G"."STUDENT_ID" ORDER BY 
+              "GE"."VALUE","DBMS_RANDOM"."VALUE"())<=1)
+   6 - access("G"."VALUE"="GE"."SYMBOL")
+   7 - filter("GE"."SYMBOL"<>'O' AND "GE"."SYMBOL"<>'E')
+   8 - access("G"."STUDENT_ID"="ES"."STUDENT_ID")
+  10 - filter(NVL(SUM("P"."VALUE"),0)>=150)
+  12 - access("S"."ID"="P"."STUDENT_ID"(+))
+  13 - access("S"."HOUSE_ID"="H"."ID")
+  14 - filter(INSTR(',Ravenclaw,',','||"H"."NAME"||',')>0)
+  17 - filter("G"."VALUE"<>'O' AND "G"."VALUE"<>'E')

@@ -1,0 +1,319 @@
+================Assign subjects================
+Plan hash value: 3876303575
+ 
+---------------------------------------------------------------------------------------------------------------
+| Id  | Operation                    | Name                   | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+---------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT             |                        |    14 |   470 |       |  8817   (4)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL     | STUDENTS_SUBJECTS      |       |       |       |            |          |
+|   2 |   HASH UNIQUE                |                        |    14 |   470 |       |  8817   (4)| 00:00:01 |
+|   3 |    UNION-ALL                 |                        |       |       |       |            |          |
+|   4 |     NESTED LOOPS ANTI        |                        |    13 |   429 |       |  6155   (3)| 00:00:01 |
+|*  5 |      HASH JOIN               |                        |  1015 | 26390 |       |  6155   (3)| 00:00:01 |
+|*  6 |       HASH JOIN ANTI         |                        |    93 |  1860 |       |  6152   (3)| 00:00:01 |
+|   7 |        JOIN FILTER CREATE    | :BF0000                |  9346 | 65422 |       |    19   (0)| 00:00:01 |
+|*  8 |         TABLE ACCESS FULL    | STUDENTS               |  9346 | 65422 |       |    19   (0)| 00:00:01 |
+|   9 |        VIEW                  | VW_NSO_1               | 25113 |   318K|       |  6133   (3)| 00:00:01 |
+|* 10 |         FILTER               |                        |       |       |       |            |          |
+|  11 |          SORT GROUP BY       |                        | 25113 |   343K|    45M|  6133   (3)| 00:00:01 |
+|* 12 |           HASH JOIN          |                        |  1977K|    26M|       |  2511   (2)| 00:00:01 |
+|  13 |            TABLE ACCESS FULL | GRADES_ENUM            |     6 |    30 |       |     3   (0)| 00:00:01 |
+|  14 |            JOIN FILTER USE   | :BF0000                |  1977K|    16M|       |  2495   (2)| 00:00:01 |
+|* 15 |             TABLE ACCESS FULL| GRADES                 |  1977K|    16M|       |  2495   (2)| 00:00:01 |
+|* 16 |       TABLE ACCESS FULL      | SUBJECTS               |    76 |   456 |       |     3   (0)| 00:00:01 |
+|* 17 |      INDEX UNIQUE SCAN       | SYS_C008901            |   100K|   685K|       |     0   (0)| 00:00:01 |
+|* 18 |     FILTER                   |                        |       |       |       |            |          |
+|  19 |      NESTED LOOPS ANTI       |                        |     1 |    41 |       |    25   (0)| 00:00:01 |
+|* 20 |       HASH JOIN RIGHT SEMI   |                        |    83 |  2822 |       |    25   (0)| 00:00:01 |
+|  21 |        TABLE ACCESS FULL     | QUIDDITCH_TEAM_MEMBERS |    97 |   388 |       |     3   (0)| 00:00:01 |
+|  22 |        NESTED LOOPS          |                        |  8011 |   234K|       |    22   (0)| 00:00:01 |
+|* 23 |         TABLE ACCESS FULL    | SUBJECTS               |     1 |    23 |       |     3   (0)| 00:00:01 |
+|* 24 |         TABLE ACCESS FULL    | STUDENTS               |  8011 | 56077 |       |    19   (0)| 00:00:01 |
+|* 25 |       INDEX UNIQUE SCAN      | SYS_C008901            |   101K|   694K|       |     0   (0)| 00:00:01 |
+|* 26 |      FILTER                  |                        |       |       |       |            |          |
+|  27 |       HASH GROUP BY          |                        |    54 |   756 |       |  2635   (7)| 00:00:01 |
+|* 28 |        HASH JOIN             |                        |  1977K|    26M|       |  2511   (2)| 00:00:01 |
+|  29 |         TABLE ACCESS FULL    | GRADES_ENUM            |     6 |    30 |       |     3   (0)| 00:00:01 |
+|  30 |         TABLE ACCESS FULL    | GRADES                 |  1977K|    16M|       |  2495   (2)| 00:00:01 |
+---------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   5 - access("S"."YEAR"="SUB"."YEAR")
+   6 - access("S"."ID"="STUDENT_ID")
+   8 - filter("S"."YEAR">=1 AND "S"."YEAR"<=7)
+  10 - filter(SUM("GE"."VALUE")/COUNT("GE"."VALUE")<3.5)
+  12 - access("G"."VALUE"="GE"."SYMBOL")
+  15 - filter(SYS_OP_BLOOM_FILTER(:BF0000,"G"."STUDENT_ID"))
+  16 - filter("SUB"."YEAR">=1 AND "SUB"."YEAR"<=7)
+  17 - access("SS"."STUDENT_ID"="S"."ID" AND "SS"."SUBJECT_ID"="SUB"."ID")
+  18 - filter( NOT EXISTS (SELECT 0 FROM "GRADES_ENUM" "GE","GRADES" "G" WHERE 
+              "G"."VALUE"="GE"."SYMBOL" GROUP BY "G"."STUDENT_ID","G"."SUBJECT_ID" HAVING "G"."STUDENT_ID"=:B1 AND 
+              SUM("GE"."VALUE")/COUNT("GE"."VALUE")<3.5))
+  20 - access("S"."ID"="QTM"."STUDENT_ID")
+  23 - filter("SUB"."NAME"='Flying')
+  24 - filter("S"."YEAR"<>"SUB"."YEAR")
+  25 - access("SS"."STUDENT_ID"="S"."ID" AND "SS"."SUBJECT_ID"="SUB"."ID")
+  26 - filter("G"."STUDENT_ID"=:B1 AND SUM("GE"."VALUE")/COUNT("GE"."VALUE")<3.5)
+  28 - access("G"."VALUE"="GE"."SYMBOL")
+
+================Remove points================
+Plan hash value: 785292234
+ 
+-----------------------------------------------------------------------------------------
+| Id  | Operation                 | Name        | Rows  | Bytes | Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT          |             | 19109 |   578K| 11358   (2)| 00:00:01 |
+|   1 |  DELETE                   | POINTS      |       |       |            |          |
+|*  2 |   HASH JOIN RIGHT SEMI    |             | 19109 |   578K| 11358   (2)| 00:00:01 |
+|   3 |    VIEW                   | VW_NSO_1    |   115 |  1495 |  2503   (2)| 00:00:01 |
+|*  4 |     SORT GROUP BY         |             |   115 |  1955 |  2503   (2)| 00:00:01 |
+|   5 |      VIEW                 |             |  2291 | 38947 |  2503   (2)| 00:00:01 |
+|*  6 |       FILTER              |             |       |       |            |          |
+|   7 |        HASH GROUP BY      |             |  2291 | 50402 |  2503   (2)| 00:00:01 |
+|*  8 |         HASH JOIN         |             | 45810 |   984K|  2499   (2)| 00:00:01 |
+|   9 |          TABLE ACCESS FULL| GRADES_ENUM |     6 |    30 |     3   (0)| 00:00:01 |
+|* 10 |          TABLE ACCESS FULL| GRADES      | 45810 |   760K|  2496   (2)| 00:00:01 |
+|* 11 |    TABLE ACCESS FULL      | POINTS      |  1552K|    26M|  8845   (1)| 00:00:01 |
+-----------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("POINTS"."STUDENT_ID"="STUDENT_ID")
+   4 - filter(COUNT("Q"."SUBJECT_ID")>=4)
+   6 - filter(SUM("GRADES_ENUM"."VALUE")/COUNT("GRADES_ENUM"."VALUE")<4)
+   8 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  10 - filter("GRADES"."AWARD_DATE"<=TO_DATE(' 2023-09-07 00:00:00', 
+              'syyyy-mm-dd hh24:mi:ss') AND "GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-01 
+              00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  11 - filter("POINTS"."VALUE">0)
+
+================Grades analysis================
+Plan hash value: 3354158773
+ 
+----------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                 | Name                   | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                          |                        |    84M|    17G|       |  6392K  (1)| 00:04:10 |
+|   1 |  SORT ORDER BY                            |                        |    84M|    17G|    18G|  6392K  (1)| 00:04:10 |
+|*  2 |   HASH JOIN                               |                        |    84M|    17G|       |  2384K  (1)| 00:01:34 |
+|   3 |    TABLE ACCESS FULL                      | SUBJECTS               |    76 |  1520 |       |     3   (0)| 00:00:01 |
+|*  4 |    HASH JOIN                              |                        |    84M|    15G|       |  2383K  (1)| 00:01:34 |
+|   5 |     MERGE JOIN CARTESIAN                  |                        |  2736 | 82080 |       |    64   (0)| 00:00:01 |
+|   6 |      MERGE JOIN CARTESIAN                 |                        |    36 |   360 |       |    13   (0)| 00:00:01 |
+|   7 |       TABLE ACCESS FULL                   | GRADES_ENUM            |     6 |    30 |       |     3   (0)| 00:00:01 |
+|   8 |       BUFFER SORT                         |                        |     6 |    30 |       |    10   (0)| 00:00:01 |
+|   9 |        TABLE ACCESS FULL                  | GRADES_ENUM            |     6 |    30 |       |     2   (0)| 00:00:01 |
+|  10 |      BUFFER SORT                          |                        |    76 |  1520 |       |    62   (0)| 00:00:01 |
+|  11 |       TABLE ACCESS FULL                   | SUBJECTS               |    76 |  1520 |       |     1   (0)| 00:00:01 |
+|  12 |     VIEW                                  |                        |    84M|    13G|       |  2382K  (1)| 00:01:34 |
+|  13 |      SORT GROUP BY                        |                        |    84M|     9G|    10G|  2382K  (1)| 00:01:34 |
+|* 14 |       HASH JOIN                           |                        |    84M|     9G|    30M| 26150   (4)| 00:00:02 |
+|  15 |        TABLE ACCESS FULL                  | GRADES                 |  1977K|  7723K|       |  2492   (2)| 00:00:01 |
+|* 16 |        HASH JOIN                          |                        |   397K|    45M|       | 19082   (2)| 00:00:01 |
+|* 17 |         HASH JOIN                         |                        |  1256 |   128K|       | 10204   (3)| 00:00:01 |
+|  18 |          JOIN FILTER CREATE               | :BF0000                |    23 |  1426 |       |  2548   (3)| 00:00:01 |
+|* 19 |           HASH JOIN OUTER                 |                        |    23 |  1426 |       |  2548   (3)| 00:00:01 |
+|* 20 |            HASH JOIN ANTI                 |                        |    23 |  1035 |       |  2545   (3)| 00:00:01 |
+|* 21 |             HASH JOIN                     |                        |  2337 | 95817 |       |    22   (0)| 00:00:01 |
+|* 22 |              TABLE ACCESS FULL            | HOUSES                 |     1 |    14 |       |     3   (0)| 00:00:01 |
+|* 23 |              TABLE ACCESS FULL            | STUDENTS               |  9346 |   246K|       |    19   (0)| 00:00:01 |
+|  24 |             VIEW                          | VW_NSO_1               |   190K|   745K|       |  2521   (3)| 00:00:01 |
+|* 25 |              HASH JOIN                    |                        |   190K|  3541K|       |  2521   (3)| 00:00:01 |
+|* 26 |               TABLE ACCESS FULL           | GRADES_ENUM            |     1 |     5 |       |     3   (0)| 00:00:01 |
+|  27 |                TABLE ACCESS BY INDEX ROWID| GRADES_ENUM            |     1 |     5 |       |     1   (0)| 00:00:01 |
+|* 28 |                 INDEX UNIQUE SCAN         | SYS_C008905            |     1 |       |       |     0   (0)| 00:00:01 |
+|  29 |                TABLE ACCESS BY INDEX ROWID| GRADES_ENUM            |     1 |     5 |       |     1   (0)| 00:00:01 |
+|* 30 |                 INDEX UNIQUE SCAN         | SYS_C008905            |     1 |       |       |     0   (0)| 00:00:01 |
+|* 31 |               TABLE ACCESS FULL           | GRADES                 |  1957K|    26M|       |  2505   (2)| 00:00:01 |
+|  32 |            TABLE ACCESS FULL              | QUIDDITCH_TEAM_MEMBERS |    97 |  1649 |       |     3   (0)| 00:00:01 |
+|  33 |          VIEW                             |                        |   502K|    20M|       |  7653   (3)| 00:00:01 |
+|  34 |           HASH GROUP BY                   |                        |   502K|  6866K|    45M|  7653   (3)| 00:00:01 |
+|* 35 |            HASH JOIN                      |                        |  1977K|    26M|       |  2511   (2)| 00:00:01 |
+|  36 |             TABLE ACCESS FULL             | GRADES_ENUM            |     6 |    30 |       |     3   (0)| 00:00:01 |
+|  37 |             JOIN FILTER USE               | :BF0000                |  1977K|    16M|       |  2495   (2)| 00:00:01 |
+|* 38 |              TABLE ACCESS FULL            | GRADES                 |  1977K|    16M|       |  2495   (2)| 00:00:01 |
+|* 39 |         TABLE ACCESS FULL                 | POINTS                 |  2956K|    45M|       |  8859   (1)| 00:00:01 |
+----------------------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("Q"."WORST_SUBJECT"="S2"."ID")
+   4 - access("Q"."BEST_SUBJECT"="S1"."ID" AND "Q"."MIN_GRADE"="G2"."VALUE" AND "Q"."MAX_GRADE"="G1"."VALUE")
+  14 - access("STUDENTS"."ID"="GRADES"."STUDENT_ID")
+  16 - access("STUDENTS"."ID"="POINTS"."STUDENT_ID")
+  17 - access("AVERAGES"."STUDENT_ID"="STUDENTS"."ID")
+  19 - access("STUDENTS"."ID"="QUIDDITCH_TEAM_MEMBERS"."STUDENT_ID"(+))
+  20 - access("STUDENTS"."ID"="ID")
+  21 - access("STUDENTS"."HOUSE_ID"="HOUSES"."ID")
+  22 - filter("HOUSES"."NAME"='Gryffindor')
+  23 - filter("STUDENTS"."YEAR">=1 AND "STUDENTS"."YEAR"<=7)
+  25 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  26 - filter("GRADES_ENUM"."VALUE"< (SELECT "GRADES_ENUM"."VALUE" FROM "GRADES_ENUM" "GRADES_ENUM" WHERE 
+              "GRADES_ENUM"."SYMBOL"='T') OR "GRADES_ENUM"."VALUE"> (SELECT "GRADES_ENUM"."VALUE" FROM "GRADES_ENUM" 
+              "GRADES_ENUM" WHERE "GRADES_ENUM"."SYMBOL"='O'))
+  28 - access("GRADES_ENUM"."SYMBOL"='T')
+  30 - access("GRADES_ENUM"."SYMBOL"='O')
+  31 - filter("GRADES"."AWARD_DATE"<=TO_DATE(' 2024-06-25 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  35 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  38 - filter(SYS_OP_BLOOM_FILTER(:BF0000,"GRADES"."STUDENT_ID"))
+  39 - filter("POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-25 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+
+================Points summary================
+Plan hash value: 563831406
+ 
+------------------------------------------------------------------------------------------------------------
+| Id  | Operation                            | Name        | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                     |             |  2986K|   535M|       |   158K  (1)| 00:00:07 |
+|   1 |  HASH GROUP BY                       |             |  2986K|   535M|   583M|   158K  (1)| 00:00:07 |
+|*  2 |   HASH JOIN                          |             |  2986K|   535M|       | 36250   (3)| 00:00:02 |
+|   3 |    TABLE ACCESS FULL                 | TEACHERS    |  1097 | 20843 |       |     5   (0)| 00:00:01 |
+|*  4 |    HASH JOIN                         |             |  2986K|   481M|       | 36225   (3)| 00:00:02 |
+|   5 |     TABLE ACCESS FULL                | TEACHERS    |  1097 | 20843 |       |     5   (0)| 00:00:01 |
+|*  6 |     HASH JOIN                        |             |  2986K|   427M|       | 36200   (3)| 00:00:02 |
+|   7 |      VIEW                            |             |     4 |    64 |       |  9091   (4)| 00:00:01 |
+|   8 |       SORT GROUP BY                  |             |     4 |   116 |       |  9091   (4)| 00:00:01 |
+|   9 |        VIEW                          |             |   858 | 24882 |       |  9091   (4)| 00:00:01 |
+|  10 |         HASH GROUP BY                |             |   858 | 19734 |       |  9091   (4)| 00:00:01 |
+|* 11 |          HASH JOIN                   |             |  2986K|    65M|       |  8898   (2)| 00:00:01 |
+|  12 |           TABLE ACCESS FULL          | STUDENTS    |  9346 | 65422 |       |    19   (0)| 00:00:01 |
+|* 13 |           TABLE ACCESS FULL          | POINTS      |  2986K|    45M|       |  8859   (1)| 00:00:01 |
+|* 14 |      HASH JOIN                       |             |  2986K|   381M|       | 27089   (3)| 00:00:02 |
+|  15 |       VIEW                           |             |     4 |   116 |       |  9095   (4)| 00:00:01 |
+|  16 |        SORT GROUP BY                 |             |     4 |   116 |       |  9095   (4)| 00:00:01 |
+|  17 |         VIEW                         |             |  3103 | 89987 |       |  9095   (4)| 00:00:01 |
+|  18 |          HASH GROUP BY               |             |  3103 | 83781 |       |  9095   (4)| 00:00:01 |
+|* 19 |           HASH JOIN                  |             |  2986K|    76M|       |  8902   (2)| 00:00:01 |
+|  20 |            TABLE ACCESS FULL         | STUDENTS    |  9346 | 65422 |       |    19   (0)| 00:00:01 |
+|* 21 |            TABLE ACCESS FULL         | POINTS      |  2986K|    56M|       |  8863   (1)| 00:00:01 |
+|* 22 |       HASH JOIN                      |             |  2986K|   299M|       | 17974   (3)| 00:00:01 |
+|  23 |        VIEW                          | VW_GBF_15   |  9346 |   812K|       |  9095   (4)| 00:00:01 |
+|* 24 |         HASH JOIN                    |             |  9346 |   930K|       |  9095   (4)| 00:00:01 |
+|  25 |          MERGE JOIN                  |             |     4 |   380 |       |  9076   (4)| 00:00:01 |
+|  26 |           TABLE ACCESS BY INDEX ROWID| HOUSES      |     4 |    56 |       |     2   (0)| 00:00:01 |
+|  27 |            INDEX FULL SCAN           | SYS_C008870 |     4 |       |       |     1   (0)| 00:00:01 |
+|* 28 |           SORT JOIN                  |             |     4 |   324 |       |  9074   (4)| 00:00:01 |
+|  29 |            VIEW                      |             |     4 |   324 |       |  9073   (4)| 00:00:01 |
+|  30 |             SORT GROUP BY            |             |     4 |   156 |       |  9073   (4)| 00:00:01 |
+|* 31 |              HASH JOIN               |             |  9346 |   355K|       |  9071   (4)| 00:00:01 |
+|  32 |               VIEW                   |             |  9346 |   155K|       |  9052   (4)| 00:00:01 |
+|  33 |                HASH GROUP BY         |             |  9346 |   146K|       |  9052   (4)| 00:00:01 |
+|* 34 |                 TABLE ACCESS FULL    | POINTS      |  2986K|    45M|       |  8859   (1)| 00:00:01 |
+|  35 |               TABLE ACCESS FULL      | STUDENTS    |  9346 |   200K|       |    19   (0)| 00:00:01 |
+|  36 |          TABLE ACCESS FULL           | STUDENTS    |  9346 | 65422 |       |    19   (0)| 00:00:01 |
+|* 37 |        TABLE ACCESS FULL             | POINTS      |  2986K|    45M|       |  8859   (1)| 00:00:01 |
+------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("T2"."ID"="T"."LEAST_FAVOURITE_TEACHER")
+   4 - access("T1"."ID"="T"."FAVOURITE_TEACHER")
+   6 - access("M"."HOUSE_ID"="ITEM_2")
+  11 - access("POINTS"."STUDENT_ID"="STUDENTS"."ID")
+  13 - filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  14 - access("T"."HOUSE_ID"="ITEM_2")
+  19 - access("STUDENTS"."ID"="POINTS"."STUDENT_ID")
+  21 - filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  22 - access("ITEM_1"="POINTS"."STUDENT_ID")
+  24 - access("HOUSES"."ID"="STUDENTS"."HOUSE_ID")
+  28 - access("S"."HOUSE_ID"="HOUSES"."ID")
+       filter("S"."HOUSE_ID"="HOUSES"."ID")
+  31 - access("STUDENTS"."ID"="Q"."STUDENT_ID")
+  34 - filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+  37 - filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+
+================Best students display================
+Plan hash value: 3883687736
+ 
+--------------------------------------------------------------------------------------------------
+| Id  | Operation                  | Name        | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+--------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT           |             |    10 |  1570 |       |    22M  (1)| 00:14:52 |
+|   1 |  SORT ORDER BY             |             |    10 |  1570 |       |    22M  (1)| 00:14:52 |
+|*  2 |   VIEW                     |             |    10 |  1570 |       |    22M  (1)| 00:14:52 |
+|*  3 |    WINDOW SORT PUSHED RANK |             |   631M|    45G|    52G|    22M  (1)| 00:14:52 |
+|   4 |     HASH GROUP BY          |             |   631M|    45G|    52G|    22M  (1)| 00:14:52 |
+|*  5 |      HASH JOIN             |             |   631M|    45G|    79M| 38144  (12)| 00:00:02 |
+|*  6 |       TABLE ACCESS FULL    | POINTS      |  2986K|    45M|       |  8859   (1)| 00:00:01 |
+|*  7 |       HASH JOIN            |             |  1977K|   115M|       | 14265   (2)| 00:00:01 |
+|*  8 |        HASH JOIN           |             |  9346 |   355K|       |    22   (0)| 00:00:01 |
+|   9 |         TABLE ACCESS FULL  | HOUSES      |     4 |    56 |       |     3   (0)| 00:00:01 |
+|  10 |         TABLE ACCESS FULL  | STUDENTS    |  9346 |   228K|       |    19   (0)| 00:00:01 |
+|  11 |        VIEW                |             |  1977K|    41M|       | 14229   (2)| 00:00:01 |
+|  12 |         HASH GROUP BY      |             |  1977K|    35M|    60M| 14229   (2)| 00:00:01 |
+|* 13 |          HASH JOIN         |             |  1977K|    35M|       |  2521   (3)| 00:00:01 |
+|  14 |           TABLE ACCESS FULL| GRADES_ENUM |     6 |    30 |       |     3   (0)| 00:00:01 |
+|* 15 |           TABLE ACCESS FULL| GRADES      |  1977K|    26M|       |  2505   (2)| 00:00:01 |
+--------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter("RANK"<=10)
+   3 - filter(ROW_NUMBER() OVER ( ORDER BY ROUND(SUM("MA"."AVG_GRADE")/COUNT("MA"."AVG_GRA
+              DE"),2) DESC ,NVL(SUM("P"."VALUE"),0) DESC )<=10)
+   5 - access("S"."ID"="P"."STUDENT_ID")
+   6 - filter("P"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') 
+              AND "P"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd hh24:mi:ss'))
+   7 - access("MA"."STUDENT_ID"="S"."ID")
+   8 - access("S"."HOUSE_ID"="H"."ID")
+  13 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  15 - filter("GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd 
+              hh24:mi:ss') AND "GRADES"."AWARD_DATE"<=TO_DATE(' 2024-06-28 00:00:00', 'syyyy-mm-dd 
+              hh24:mi:ss'))
+
+================Raise grades================
+Plan hash value: 3808460311
+ 
+-----------------------------------------------------------------------------------------------------
+| Id  | Operation                     | Name        | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------------------
+|   0 | MERGE STATEMENT               |             |  9346 | 37384 |       | 21043   (2)| 00:00:01 |
+|   1 |  MERGE                        | GRADES      |       |       |       |            |          |
+|   2 |   VIEW                        |             |       |       |       |            |          |
+|*  3 |    HASH JOIN                  |             |  9346 |   492K|       | 21043   (2)| 00:00:01 |
+|*  4 |     VIEW                      |             |  9346 |   255K|       | 18533   (2)| 00:00:01 |
+|*  5 |      WINDOW SORT PUSHED RANK  |             |  1097K|    21M|    33M| 18533   (2)| 00:00:01 |
+|*  6 |       HASH JOIN               |             |  1097K|    21M|       | 11415   (2)| 00:00:01 |
+|*  7 |        TABLE ACCESS FULL      | GRADES_ENUM |     6 |    30 |       |     3   (0)| 00:00:01 |
+|*  8 |        HASH JOIN              |             |  1097K|    16M|       | 11405   (2)| 00:00:01 |
+|   9 |         VIEW                  |             |  7467 | 29868 |       |  8890   (2)| 00:00:01 |
+|* 10 |          FILTER               |             |       |       |       |            |          |
+|  11 |           SORT GROUP BY       |             |  7467 |   320K|       |  8890   (2)| 00:00:01 |
+|* 12 |            HASH JOIN OUTER    |             |   149K|  6416K|       |  8881   (1)| 00:00:01 |
+|* 13 |             HASH JOIN         |             |   467 | 16812 |       |    22   (0)| 00:00:01 |
+|* 14 |              TABLE ACCESS FULL| HOUSES      |     1 |    14 |       |     3   (0)| 00:00:01 |
+|  15 |              TABLE ACCESS FULL| STUDENTS    |  9346 |   200K|       |    19   (0)| 00:00:01 |
+|  16 |             TABLE ACCESS FULL | POINTS      |  2986K|    22M|       |  8839   (1)| 00:00:01 |
+|* 17 |         TABLE ACCESS FULL     | GRADES      |  1373K|    15M|       |  2506   (2)| 00:00:01 |
+|  18 |     TABLE ACCESS FULL         | GRADES      |  1977K|    49M|       |  2497   (2)| 00:00:01 |
+-----------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   3 - access("G"."ID"="GRADE_ID")
+   4 - filter("GRADE_RANK"<=1)
+   5 - filter(ROW_NUMBER() OVER ( PARTITION BY "G"."STUDENT_ID" ORDER BY 
+              "GE"."VALUE","DBMS_RANDOM"."VALUE"())<=1)
+   6 - access("G"."VALUE"="GE"."SYMBOL")
+   7 - filter("GE"."SYMBOL"<>'O' AND "GE"."SYMBOL"<>'E')
+   8 - access("G"."STUDENT_ID"="ES"."STUDENT_ID")
+  10 - filter(NVL(SUM("P"."VALUE"),0)>=150)
+  12 - access("S"."ID"="P"."STUDENT_ID"(+))
+  13 - access("S"."HOUSE_ID"="H"."ID")
+  14 - filter(INSTR(',Ravenclaw,',','||"H"."NAME"||',')>0)
+  17 - filter("G"."VALUE"<>'O' AND "G"."VALUE"<>'E')
+
+

@@ -1,0 +1,39 @@
+================Remove points================
+Plan hash value: 785292234
+ 
+--------------------------------------------------------------------------------------------------
+| Id  | Operation                          | Name        | Rows  | Bytes | Cost (%CPU)| Time     |
+--------------------------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT                   |             |  1272K|    78M|   559  (24)| 00:00:01 |
+|   1 |  DELETE                            | POINTS      |       |       |            |          |
+|*  2 |   HASH JOIN RIGHT SEMI             |             |  1272K|    78M|   559  (24)| 00:00:01 |
+|   3 |    VIEW                            | VW_NSO_1    | 40138 |   509K|   130  (25)| 00:00:01 |
+|*  4 |     SORT GROUP BY                  |             | 40138 |  1019K|   130  (25)| 00:00:01 |
+|   5 |      VIEW                          |             | 40138 |  1019K|   130  (25)| 00:00:01 |
+|*  6 |       FILTER                       |             |       |       |            |          |
+|   7 |        HASH GROUP BY               |             | 40138 |  2038K|   130  (25)| 00:00:01 |
+|*  8 |         HASH JOIN                  |             | 40138 |  2038K|   127  (23)| 00:00:01 |
+|   9 |          TABLE ACCESS FULL         | GRADES_ENUM |     6 |    90 |     3   (0)| 00:00:01 |
+|* 10 |          TABLE ACCESS INMEMORY FULL| GRADES      | 40138 |  1450K|   124  (24)| 00:00:01 |
+|* 11 |    TABLE ACCESS INMEMORY FULL      | POINTS      |  1286K|    63M|   419  (21)| 00:00:01 |
+--------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("POINTS"."STUDENT_ID"="STUDENT_ID")
+   4 - filter(COUNT("Q"."SUBJECT_ID")>=4)
+   6 - filter(SUM("GRADES_ENUM"."VALUE")/COUNT("GRADES_ENUM"."VALUE")<4)
+   8 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  10 - inmemory("GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-01 00:00:00', 'syyyy-mm-dd 
+              hh24:mi:ss') AND "GRADES"."AWARD_DATE"<=TO_DATE(' 2023-09-07 00:00:00', 'syyyy-mm-dd 
+              hh24:mi:ss'))
+       filter("GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-01 00:00:00', 'syyyy-mm-dd 
+              hh24:mi:ss') AND "GRADES"."AWARD_DATE"<=TO_DATE(' 2023-09-07 00:00:00', 'syyyy-mm-dd 
+              hh24:mi:ss'))
+  11 - inmemory("POINTS"."VALUE">0)
+       filter("POINTS"."VALUE">0)
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)

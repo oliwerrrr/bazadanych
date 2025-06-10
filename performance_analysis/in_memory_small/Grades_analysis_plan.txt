@@ -1,0 +1,96 @@
+Buffer size : 1000000
+================Grades analysis================
+Plan hash value: 1960796000
+ 
+-------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                    | Name                   | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+-------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                             |                        |   106 | 37948 |       |  2446K (66)| 00:01:36 |
+|   1 |  SORT ORDER BY                               |                        |   106 | 37948 |       |  2446K (66)| 00:01:36 |
+|*  2 |   HASH JOIN                                  |                        |   106 | 37948 |       |  2446K (66)| 00:01:36 |
+|   3 |    TABLE ACCESS INMEMORY FULL                | SUBJECTS               |    76 |  6004 |       |     3   (0)| 00:00:01 |
+|*  4 |    HASH JOIN                                 |                        |   106 | 29574 |       |  2446K (66)| 00:01:36 |
+|   5 |     TABLE ACCESS INMEMORY FULL               | SUBJECTS               |    76 |  6004 |       |     3   (0)| 00:00:01 |
+|*  6 |     HASH JOIN                                |                        |   106 | 21200 |       |  2446K (66)| 00:01:36 |
+|   7 |      TABLE ACCESS FULL                       | GRADES_ENUM            |     6 |    90 |       |     3   (0)| 00:00:01 |
+|*  8 |      HASH JOIN                               |                        |   106 | 19610 |       |  2446K (66)| 00:01:36 |
+|   9 |       TABLE ACCESS FULL                      | GRADES_ENUM            |     6 |    90 |       |     3   (0)| 00:00:01 |
+|  10 |       VIEW                                   |                        |   106 | 18020 |       |  2446K (66)| 00:01:36 |
+|  11 |        SORT GROUP BY                         |                        |   106 | 33602 |       |  2446K (66)| 00:01:36 |
+|* 12 |         HASH JOIN RIGHT OUTER                |                        |    13G|  4118G|       |  1039K (19)| 00:00:41 |
+|  13 |          TABLE ACCESS FULL                   | QUIDDITCH_TEAM_MEMBERS |     1 |    47 |       |     3   (0)| 00:00:01 |
+|* 14 |          HASH JOIN                           |                        |    13G|  3508G|   101M|   946K (10)| 00:00:37 |
+|  15 |           VIEW                               |                        |  1666K|    82M|       |   231  (58)| 00:00:01 |
+|  16 |            HASH GROUP BY                     |                        |  1666K|   151M|       |   231  (58)| 00:00:01 |
+|* 17 |             HASH JOIN                        |                        |  1666K|   151M|       |   127  (23)| 00:00:01 |
+|  18 |              TABLE ACCESS FULL               | GRADES_ENUM            |     6 |    90 |       |     3   (0)| 00:00:01 |
+|  19 |              VIEW                            | VW_GBF_7               |  1666K|   127M|       |   113  (16)| 00:00:01 |
+|  20 |               HASH GROUP BY                  |                        |  1666K|    44M|       |   113  (16)| 00:00:01 |
+|  21 |                TABLE ACCESS INMEMORY FULL    | GRADES                 |  1666K|    44M|       |   112  (16)| 00:00:01 |
+|* 22 |           HASH JOIN                          |                        |    76M|    15G|    39M| 13423   (5)| 00:00:01 |
+|  23 |            TABLE ACCESS INMEMORY FULL        | GRADES                 |  1666K|    20M|       |   102   (7)| 00:00:01 |
+|* 24 |            HASH JOIN                         |                        |   422K|    82M|       |  6489   (2)| 00:00:01 |
+|  25 |             JOIN FILTER CREATE               | :BF0000                |  2292 |   380K|       |   138  (27)| 00:00:01 |
+|* 26 |              HASH JOIN ANTI                  |                        |  2292 |   380K|       |   138  (27)| 00:00:01 |
+|  27 |               JOIN FILTER CREATE             | :BF0001                |  2292 |   351K|       |     5  (20)| 00:00:01 |
+|* 28 |                HASH JOIN                     |                        |  2292 |   351K|       |     5  (20)| 00:00:01 |
+|  29 |                 JOIN FILTER CREATE           | :BF0002                |     1 |    47 |       |     3   (0)| 00:00:01 |
+|* 30 |                  TABLE ACCESS FULL           | HOUSES                 |     1 |    47 |       |     3   (0)| 00:00:01 |
+|  31 |                 JOIN FILTER USE              | :BF0002                |  9167 |   984K|       |     1   (0)| 00:00:01 |
+|* 32 |                  TABLE ACCESS INMEMORY FULL  | STUDENTS               |  9167 |   984K|       |     1   (0)| 00:00:01 |
+|  33 |               VIEW                           | VW_NSO_1               |   159K|  2028K|       |   133  (27)| 00:00:01 |
+|* 34 |                HASH JOIN                     |                        |   159K|  6085K|       |   133  (27)| 00:00:01 |
+|  35 |                 JOIN FILTER CREATE           | :BF0003                |     1 |    15 |       |     3   (0)| 00:00:01 |
+|* 36 |                  TABLE ACCESS FULL           | GRADES_ENUM            |     1 |    15 |       |     3   (0)| 00:00:01 |
+|  37 |                   TABLE ACCESS BY INDEX ROWID| GRADES_ENUM            |     1 |    15 |       |     2   (0)| 00:00:01 |
+|* 38 |                    INDEX UNIQUE SCAN         | SYS_C009232            |     1 |       |       |     1   (0)| 00:00:01 |
+|  39 |                   TABLE ACCESS BY INDEX ROWID| GRADES_ENUM            |     1 |    15 |       |     2   (0)| 00:00:01 |
+|* 40 |                    INDEX UNIQUE SCAN         | SYS_C009232            |     1 |       |       |     1   (0)| 00:00:01 |
+|  41 |                 JOIN FILTER USE              | :BF0001                |  1638K|    37M|       |   119  (21)| 00:00:01 |
+|  42 |                  JOIN FILTER USE             | :BF0003                |  1638K|    37M|       |   119  (21)| 00:00:01 |
+|* 43 |                   TABLE ACCESS INMEMORY FULL | GRADES                 |  1638K|    37M|       |   119  (21)| 00:00:01 |
+|  44 |             JOIN FILTER USE                  | :BF0000                |  1755K|    58M|       |  6339   (1)| 00:00:01 |
+|* 45 |              TABLE ACCESS INMEMORY FULL      | POINTS                 |  1755K|    58M|       |  6339   (1)| 00:00:01 |
+-------------------------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("Q"."WORST_SUBJECT"="S2"."ID")
+   4 - access("Q"."BEST_SUBJECT"="S1"."ID")
+   6 - access("Q"."MIN_GRADE"="G2"."VALUE")
+   8 - access("Q"."MAX_GRADE"="G1"."VALUE")
+  12 - access("STUDENTS"."ID"="QUIDDITCH_TEAM_MEMBERS"."STUDENT_ID"(+))
+  14 - access("AVERAGES"."STUDENT_ID"="STUDENTS"."ID")
+  17 - access("ITEM_1"="GRADES_ENUM"."SYMBOL")
+  22 - access("STUDENTS"."ID"="GRADES"."STUDENT_ID")
+  24 - access("STUDENTS"."ID"="POINTS"."STUDENT_ID")
+  26 - access("STUDENTS"."ID"="ID")
+  28 - access("STUDENTS"."HOUSE_ID"="HOUSES"."ID")
+  30 - filter("HOUSES"."NAME"='Gryffindor')
+  32 - inmemory("STUDENTS"."YEAR">=1 AND "STUDENTS"."YEAR"<=7 AND SYS_OP_BLOOM_FILTER(:BF0002,"STUDENTS"."HOUSE_ID"))
+       filter("STUDENTS"."YEAR">=1 AND "STUDENTS"."YEAR"<=7 AND SYS_OP_BLOOM_FILTER(:BF0002,"STUDENTS"."HOUSE_ID"))
+  34 - access("GRADES"."VALUE"="GRADES_ENUM"."SYMBOL")
+  36 - filter("GRADES_ENUM"."VALUE"< (SELECT "GRADES_ENUM"."VALUE" FROM "GRADES_ENUM" "GRADES_ENUM" WHERE 
+              "GRADES_ENUM"."SYMBOL"='T') OR "GRADES_ENUM"."VALUE"> (SELECT "GRADES_ENUM"."VALUE" FROM "GRADES_ENUM" "GRADES_ENUM" 
+              WHERE "GRADES_ENUM"."SYMBOL"='O'))
+  38 - access("GRADES_ENUM"."SYMBOL"='T')
+  40 - access("GRADES_ENUM"."SYMBOL"='O')
+  43 - inmemory("GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "GRADES"."AWARD_DATE"<=TO_DATE(' 2024-06-25 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              SYS_OP_BLOOM_FILTER_LIST(SYS_OP_BLOOM_FILTER(:BF0003,"GRADES"."VALUE"),SYS_OP_BLOOM_FILTER(:BF0001,"GRADES"."STUDENT_ID
+              ")))
+       filter("GRADES"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "GRADES"."AWARD_DATE"<=TO_DATE(' 2024-06-25 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              SYS_OP_BLOOM_FILTER_LIST(SYS_OP_BLOOM_FILTER(:BF0003,"GRADES"."VALUE"),SYS_OP_BLOOM_FILTER(:BF0001,"GRADES"."STUDENT_ID
+              ")))
+  45 - inmemory("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-25 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              SYS_OP_BLOOM_FILTER(:BF0000,"POINTS"."STUDENT_ID"))
+       filter("POINTS"."AWARD_DATE">=TO_DATE(' 2023-09-02 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              "POINTS"."AWARD_DATE"<=TO_DATE(' 2024-06-25 00:00:00', 'syyyy-mm-dd hh24:mi:ss') AND 
+              SYS_OP_BLOOM_FILTER(:BF0000,"POINTS"."STUDENT_ID"))
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
